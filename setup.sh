@@ -106,6 +106,12 @@ then
 	fi
 	
 	echo -e "***************************************\n"
+
+	# Creates a directroy for saving detailed classification result
+	if [ ! -d "result" ]
+	then
+		mkdir "result"
+	fi
 	
 	if [ -e ltsvm.sh ]
 	then

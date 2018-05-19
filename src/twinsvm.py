@@ -9,6 +9,9 @@ License: GNU General Public License v3.0
 Module: twinsvm.py
 In this module, functios is defined for training and testing TwinSVM classifier.
 
+TwinSVM classifier generates two non-parallel hyperplanes.
+For more info, refer to the original papar.
+Khemchandani, R., & Chandra, S. (2007). Twin support vector machines for pattern classification. IEEE Transactions on pattern analysis and machine intelligence, 29(5), 905-910.
 """
 
 
