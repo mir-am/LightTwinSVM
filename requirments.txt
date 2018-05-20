@@ -1,0 +1,7 @@
+# The folliwing Python pacakges is needed for building and running LightTwinSVM program
+numpy
+scipy
+scikit-learn
+pandas
+pybind11
+xlsxwriter
