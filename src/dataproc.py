@@ -38,7 +38,7 @@ def conv_str_fl(data):
     return temp_data
 
 
-def read_data(filename, ignore_header=False):
+def read_data(filename, header=True):
     
     """
         It converts CSV file to NumPy arrays for further operations like training
@@ -59,8 +59,8 @@ def read_data(filename, ignore_header=False):
     
     data_csv = csv.reader(data, delimiter=',')
     
-    # Ignore hedaer names
-    if ignore_header:
+    # Ignore header names
+    if not header:
         
         data_array = np.array(list(data_csv))
         
@@ -68,7 +68,6 @@ def read_data(filename, ignore_header=False):
         
         data_array = np.array(list(data_csv)[1:]) # [1:] for removing headers
     
-    #Close file
     data.close()
     
     # Shuffle data

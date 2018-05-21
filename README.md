@@ -27,7 +27,7 @@ In order to build and run the program, the following Python packages are needed:
 In order to build C++ extension module(Optimizer), the following tools and libraries are required:
 - [GNU C++ Compiler](https://gcc.gnu.org/)
 - [Armadillo C++ Linear Algebra Library](http://arma.sourceforge.net/)
-- [LAPACK](http://www.netlib.org/lapack/)and[BLAS](http://www.netlib.org/blas/)Library
+- [LAPACK](http://www.netlib.org/lapack/) and [BLAS](http://www.netlib.org/blas/) Library
 
 Currently, Supported operating systems are as follows:
 - Debian-based Linux systems (Ubuntu 16.04, Ubuntu 17.10)
@@ -36,10 +36,10 @@ Currently, Supported operating systems are as follows:
 **A Linux shell is created to help users download required dependencies and install program automatically.** However, make sure that [Git](https://git-scm.com/) and GNU C++ compiler is installed on your system.
 
 To install the program, open a terminal and execute the following commands:
-'''
+```
 git clone https://github.com/mir-am/LightTwinSVM.git
 cd LightTwinSVM && ./setup.sh
-'''
+```
 
 ## User Guide
 
