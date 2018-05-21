@@ -6,6 +6,8 @@
 # License: GNU General Public License v3.0
 
 # This shell script helps users install the denependencies and test the program.
+# Counting success of each step. Installation process consists of 7 steps.
+step=0
 
 
 echo -e "The Installation of LightTwinSVM program:"
@@ -23,20 +25,22 @@ if [ $? == 0 ]
 then
 
 	echo -e "Python 3.4 or newer detected on your system..."
-
+	((step++))
+	
 	# Check wether pip is installed.
 	pip_check=$(which pip3)
 	
 	if [ $? == 0 ]
 	then
-		
 		echo "pip tool is detected..."
 		
+		((step++))
 	else
 
 		echo "Could not detect pip tool and will be installed. "
 		sudo apt-get install python3-pip -y
-
+		
+		((step++))
 	fi
 	
 	# Installing Python packages by pip tool for users
@@ -45,6 +49,8 @@ then
 	
 	pip3 install -r "requirments.txt" --user
 	
+	((step++))
+	
 	echo "Checks existence of Python's Tkinter..."
 	
 	py_tk=$(python3 -c 'import tkinter')
@@ -52,6 +58,8 @@ then
 	if [ $? == 0 ]
 	then
 		echo "Found python3-tk on your system..."
+		
+		((step++))
 	else
 		echo "Could not find Tkinter and will be installed."
 		
@@ -63,6 +71,8 @@ then
 		then
 			sudo yum install python3-tkinter -y
 		fi
+		
+		((step++))
 	fi
 
 	echo "Looking for Python 3 dev. package..."
@@ -72,6 +82,8 @@ then
 	if [ $? == 0 ]
 	then
 		echo "Found Python 3 dev on your system..."
+		
+		((step++))
 	else
 		echo "Could not find Python 3 dev and will be installed."
 		
@@ -83,6 +95,8 @@ then
 		then	
 			sudo yum install python3-devel -y
 		fi
+		
+		((step++))
 	fi
 	
 	echo -e "***************************************\n"
@@ -95,6 +109,8 @@ then
 	if [ $? == 0 ]
 	then
 		echo "Found LAPACK library on your system..."
+		
+		((step++))
 	else
 		echo "Could not find LAPACK on your system..."
 		
@@ -104,6 +120,8 @@ then
 		else
 			sudo yum install lapack-devel blas-devel -y
 		fi
+		
+		((step++))
 	fi
 	
 	ext_module="src/clippdcd$(python3-config --extension-suffix)"
@@ -111,6 +129,8 @@ then
 	if [ -e $ext_module ]
 	then
 		echo "Found ClippDCD optimizer (C++ extension module.)"
+		
+		((step++))
 	else
 			
 		if [ -d "temp" ]
@@ -126,61 +146,69 @@ then
 		# Compiles C++ extension module
 		c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
 		
+		echo "The C++ extension moudle is generated..."
+		((step++))
 	fi
 	
 	echo -e "***************************************\n"
-
-	# Creates a directroy for saving detailed classification result
-	if [ ! -d "result" ]
-	then
-		mkdir "result"
-	fi
 	
-	if [ -e ltsvm.sh ]
+	if [ $step -eq  7 ]
 	then
-		echo -e "A shell script already created for running program.\nat this address:$(pwd)"
+	
+		# Creates a directroy for saving detailed classification result
+		if [ ! -d "result" ]
+		then
+			mkdir "result"
+		fi
+		
+		if [ -e ltsvm.sh ]
+		then
+			echo -e "A shell script already created for running program.\nat this address:$(pwd)"
+		else
+		
+			echo "#!/bin/bash
+	python3 src/main.py" >> ltsvm.sh
+			
+			chmod +x ltsvm.sh
+			
+			echo -e "A shell script \"ltsvm.sh\" is created to launch the LightTwinSVM program.\n at this address:$(pwd)"
+		fi
+		
+		
+		echo "The installation was successfully completed... "
+		
+		end=$(date +%s)
+		runtime=$((end-start))
+		echo "The installation finished in $runtime seconds."
+		echo -e "***************************************\n"
+		
+		echo -e "Do you want to delete temp directory?It contains Armadillo library's git repository.[y/n]"
+		read -p "" choice
+		
+		if [[ $choice =~ ^[Yy]$ ]]
+		then
+			rm -rf temp
+			echo "The temp directory deleted!"
+		fi
+		
+		echo -e "Do you want to run tests to make sure that the program works?\nIt takes several minutes.[y/n]"
+		read -p "" test_choice
+		
+		if [[ $test_choice =~ ^[Yy]$ ]]
+		then
+			echo "Unit test started..."
+			
+			python3 ./src/test_program.py -v
+		fi
+		
+		echo -e "***************************************\n"
+		echo -e "To run the program, execute the shell script \"ltsvm.sh\" at this address:\n$(pwd)"
+	
 	else
-	
-		echo "#!/bin/bash
-python3 src/main.py" >> ltsvm.sh
-		
-		chmod +x ltsvm.sh
-		
-		echo -e "A shell script \"ltsvm.sh\" is created to launch the LightTwinSVM program.\n at this address:$(pwd)"
+		echo "The installation failed... Number of compeleted steps: $step"	
 	fi
-	
-	
-	echo "The installation was successfully completed... "
-	
-	end=$(date +%s)
-	runtime=$((end-start))
-	echo "The installation finished in $runtime seconds."
-	echo -e "***************************************\n"
-	
-	echo -e "Do you want to delete temp directory?It Armadillo library's git repository.[y/n]"
-	read -p "" choice
-	
-	if [[ $choice =~ ^[Yy]$ ]]
-	then
-		rm -rf temp
-		echo "The temp directory deleted!"
-	fi
-	
-	echo -e "Do you want to run tests to make sure that the program works?\nIt takes several minutes.[y/n]"
-	read -p "" test_choice
-	
-	if [[ $test_choice =~ ^[Yy]$ ]]
-	then
-		echo "Unit test started..."
-		
-		python3 ./src/test_program.py -v
-	fi
-	
-	echo -e "***************************************\n"
-	echo -e "To run the program, Execute the shell script \"ltsvm.sh\" at this address:\n$(pwd)"
 
 else
-
 	echo "Could not detect Python 3 interpreter. Please install Python 3.4 or newer."
 fi
 

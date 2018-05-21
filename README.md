@@ -17,6 +17,11 @@ The ClippDCD algorithm was proposed by: <br />
 Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algorithm for solving support vector machines. Knowledge-Based Systems, 71, 266-278.
 
 ## Installation Guide
+Currently, supported operating systems are as follows:
+- Debian-based Linux systems (Ubuntu 16.04, Ubuntu 17.10 and Linux Mint 18)
+- RPM-based Linux systems (Fedora)
+
+First of all, [Python](https://www.python.org/) 3.4 interpreter or newer is required. Python 3 is usually installed by default on most Linux distributions.
 In order to build and run the program, the following Python packages are needed:
 - [NumPy](https://www.numpy.org)
 - [SciPy](https://www.scipy.org/)
@@ -28,10 +33,6 @@ In order to build C++ extension module(Optimizer), the following tools and libra
 - [GNU C++ Compiler](https://gcc.gnu.org/)
 - [Armadillo C++ Linear Algebra Library](http://arma.sourceforge.net/)
 - [LAPACK](http://www.netlib.org/lapack/) and [BLAS](http://www.netlib.org/blas/) Library
-
-Currently, Supported operating systems are as follows:
-- Debian-based Linux systems (Ubuntu 16.04, Ubuntu 17.10)
-- RPM-based Linux systems (Fedora)
 
 **A Linux shell is created to help users download required dependencies and install program automatically.** However, make sure that [Git](https://git-scm.com/) and GNU C++ compiler is installed on your system.
 
