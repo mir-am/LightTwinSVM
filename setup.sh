@@ -113,18 +113,18 @@ then
 		echo "Found ClippDCD optimizer (C++ extension module.)"
 	else
 			
-		if [ -d "$./armadillo-code" ]
+		if [ -d "temp" ]
 		then
 			echo "Found Armadillo repository. No need to clone again."
 			
 		else
 			# clones Armadillo which is a C++ Linear Algebra library
 			# Armadillo is licensed under the Apache License, Version 2.0
-			git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git /src/optimizer
+			git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git temp
 		fi
 		
 		# Compiles C++ extension module
-		c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I .src/optimizer/armadillo-code/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
+		c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
 		
 	fi
 	
@@ -157,13 +157,13 @@ python3 src/main.py" >> ltsvm.sh
 	echo "The installation finished in $runtime seconds."
 	echo -e "***************************************\n"
 	
-	echo -e "Do you want to delete the temporary install directory?It contains install script and Armadillo library's git repository.[y/n]"
+	echo -e "Do you want to delete temp directory?It Armadillo library's git repository.[y/n]"
 	read -p "" choice
 	
 	if [[ $choice =~ ^[Yy]$ ]]
 	then
-		rm -rf install2
-		echo "The install temporary directory deleted!"
+		rm -rf temp
+		echo "The temp directory deleted!"
 	fi
 	
 	echo -e "Do you want to run tests to make sure that the program works?\nIt takes several minutes.[y/n]"

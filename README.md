@@ -18,12 +18,28 @@ Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algori
 
 ## Installation Guide
 In order to build and run the program, the following Python packages are needed:
-- [NumPy](www.numpy.org)
+- [NumPy](https://www.numpy.org)
 - [SciPy](https://www.scipy.org/)
 - [Scikit-learn](http://scikit-learn.org/stable/index.html)
 - [Pandas](https://pandas.pydata.org/)
 - [Pybind11](https://pybind11.readthedocs.io/en/stable/intro.html)
 
+In order to build C++ extension module(Optimizer), the following tools and libraries are required:
+- [GNU C++ Compiler](https://gcc.gnu.org/)
+- [Armadillo C++ Linear Algebra Library](http://arma.sourceforge.net/)
+- [LAPACK](http://www.netlib.org/lapack/)and[BLAS](http://www.netlib.org/blas/)Library
+
+Currently, Supported operating systems are as follows:
+- Debian-based Linux systems (Ubuntu 16.04, Ubuntu 17.10)
+- RPM-based Linux systems (Fedora)
+
+**A Linux shell is created to help users download required dependencies and install program automatically.** However, make sure that [Git](https://git-scm.com/) and GNU C++ compiler is installed on your system.
+
+To install the program, open a terminal and execute the following commands:
+'''
+git clone https://github.com/mir-am/LightTwinSVM.git
+cd LightTwinSVM && ./setup.sh
+'''
 
 ## User Guide
 
