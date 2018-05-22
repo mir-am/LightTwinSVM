@@ -108,29 +108,29 @@ License: GNU General Public License v3.0
                 start_t = time.time()
                 
                 # Reading and processing user dataset
-				try:
+                try:
+    				     
+                    header = False
 					
-					header = False
+					     # First assume that dataset has no header names.
+                    X_train, y_train, file_name = read_data(dataset_path, header)
+
+                except ValueError:
+
+                    print("Lookslike your dataset has header names.")
+
+                    header = True
+                    start_time = time.time()
 					
-					# First assume that dataset has no header names.
-					X_train, y_train, file_name = read_data(dataset_path, header)
-
-				except ValueError:
-
-					print("Lookslike your dataset has header names.")
-
-					header = True
-					start_t = time.time()
-					
-					X_train, y_train, file_name = read_data(dataset_path, header)
+                    X_train, y_train, file_name = read_data(dataset_path, header)
                         
                 
                 print("Your dataset \"%s\" is successfully loaded in %.2f seconds..." % \
-                      (file_name, time.time() - start_t))
+                     (file_name, time.time() - start_t))
                 
                 print("No. of samples: %d|No. of features: %d|No. of classes: %d|Header: %s\n" % \
-                      (X_train.shape[0], X_train.shape[1], np.unique(y_train).size, \
-                      'Yes' if header else 'No'))
+                     (X_train.shape[0], X_train.shape[1], np.unique(y_train).size, \
+                     'Yes' if header else 'No'))
             
             else:
             

@@ -42,12 +42,13 @@ git clone https://github.com/mir-am/LightTwinSVM.git
 cd LightTwinSVM && ./setup.sh
 ```
 If the installation was successful, you'd be asked to delete temporary directory for installation. You can also run unit tests to check functionalities of the program. Finally, a Linux shell "ltsvm.sh" is created to run the program.
-After the successful installation, LightTwinSVM program should look like this in terminal:
+After the successful installation, LightTwinSVM program should look like this in terminal: <br />
 ![alt text](https://raw.githubusercontent.com/mir-am/LightTwinSVM/misc/img/LightTwinSVM.png)
 
 ## User Guide
-LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below:
-**Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset.
+LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
+**Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. Currently, CSV files are supported. <br />
+**Step 2:** Choose a kernel function between Linear and Gaussin(RBF). RBF kernel often produces better classification result but takes more time. <br />
 
 ## Dataset Format
 
