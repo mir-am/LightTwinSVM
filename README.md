@@ -48,7 +48,32 @@ After the successful installation, LightTwinSVM program should look like this in
 ## User Guide
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
 **Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. Currently, CSV files are supported. <br />
-**Step 2:** Choose a kernel function between Linear and Gaussin(RBF). RBF kernel often produces better classification result but takes more time. <br />
+**Step 2:** Choose a kernel function between Linear and Gaussin (RBF). RBF kernel often produces better classification result but takes more time.
+<br />
+```
+Step 2/4: Choose a kernel function:(Just type the number. e.g 1)
+1-Linear
+2-RBF
+-> 2
+```
+**Step 3:** To evaluate TwinSVM performance, You can either use [K-Fold cross validation](https://towardsdatascience.com/cross-validation-in-machine-learning-72924a69872f) or split your data into training and test sets. <br />
+```
+Step 3/4: Choose a test methodolgy:(Just type the number. e.g 1)
+1-K-fold cross validation
+2-Train/test split
+-> 1
+Determine number of folds for cross validaton: (e.g. 5)
+-> 5
+```
+**Step 4:** You need to determine the range of C penlaty parameter and gamma (If RBF kernel selected.) for exhaustive grid search. <br /> 
+An example:
+```
+Step 4/4:Type the range of C penalty parameter for grid search:
+(Two integer numbers separated by space. e.g. -> -5 5
+-> -4 4
+```
+After completing the above steps, the exhaustive search will be started. When the search process is completed, a detailed classification result will be saved in a spreadsheet file. In this file, all the common evalaution metrics(e.g Accuracy, Recall, Percision and F1) are provided.
+ 
 
 ## Dataset Format
 
