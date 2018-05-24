@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # LightTwinSVM Program - Simple and Fast
-# Version: 0.1 Alpha (May 9, 2018)
+# Version: 0.1.0-alpha - 2018-05-24
 # Developer: Mir, A. (mir-am@hotmail.com)
 # License: GNU General Public License v3.0
 
