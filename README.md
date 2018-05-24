@@ -48,7 +48,7 @@ After the successful installation, LightTwinSVM program should look like this in
 ## User Guide
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
 **Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. Currently, CSV files are supported. <br />
-![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)
+![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)<br />
 **Step 2:** Choose a kernel function between Linear and Gaussin (RBF). RBF kernel often produces better classification result but takes more time.
 <br />
 ```
@@ -73,11 +73,18 @@ Step 4/4:Type the range of C penalty parameter for grid search:
 (Two integer numbers separated by space. e.g. -> -5 5
 -> -4 4
 ```
-After completing the above steps, the exhaustive search will be started. When the search process is completed, a detailed classification result will be saved in a spreadsheet file. In this file, all the common evalaution metrics(e.g Accuracy, Recall, Percision and F1) are provided.<br />
+After completing the above steps, the exhaustive search will be started. When the search process is completed, a detailed classification result will be saved in a spreadsheet file. In this file, all the common evalaution metrics(e.g Accuracy, Recall, Precision and F1) are provided.<br />
 A instace of spreadsheet file containing classification result can be seen [here](https://github.com/mir-am/LightTwinSVM/blob/misc/TSVM_RBF_5-F-CV_pima-indian_2018-05-23%2013:21.csv).
  
 
 ## Dataset Format
+The file format should be comma separated value (CSV). Make sure that your dataset is consistent with the following rules:
+1. First row can be header names. (It's optional.)
+2. Frist column should be labels of samples. Moreover, labels of positive and negative samples should be 1 and -1, respectively.
+3. All the values in dataset except headernames should be numerical. Nominal values are not allowed. <br />
+To help you prepare your dataset and test the program, two datasets are inculded [here](https://github.com/mir-am/LightTwinSVM/tree/master/dataset).
+
+## Support
 
 ## Numerical Experiments
 
