@@ -85,15 +85,15 @@ The file format should be comma separated value (CSV). Make sure that your datas
 To help you prepare your dataset and test the program, two datasets are inculded [here](https://github.com/mir-am/LightTwinSVM/tree/master/dataset).
 
 ## Support
-**Have a question about the software?**<br / >
-You can contact me via [email](mailto:mir-am@hotmail.com). Feedbacks and suggestions for improvements are welcome.<br / >
+**Have a question about the software?**<br />
+You can contact me via [email](mailto:mir-am@hotmail.com). Feedbacks and suggestions for improvements are welcome.<br />
 
 **Have a problem with the software or found a bug?**<br />
 To let me know and fix it, please open an issue [here](https://github.com/mir-am/LightTwinSVM/issues). <br />
 To report a problem or bug, please provide the following information:<br />
-1- Error messages
-2- Output of the program.
-3- Explain how you produce the problem if possible.
+1- Error messages<br />
+2- Output of the program.<br />
+3- Explain how to produce the problem if possible.
 
 
 ## Numerical Experiments
