@@ -3,12 +3,22 @@
 # Developer: Mir, A. (mir-am@hotmail.com)
 # License: GNU General Public License v3.0
 
-language: python
-python:
-- "3.6"
+dist: trusty
+sudo: false
 
--before_install:
-- sudo apt-get install python3-tk python3-dev liblapack-dev libblas-dev -y
+language: python
+virtualenv:
+  system_site_packages: true
+#python:
+#- "3.6"
+
+addons:
+  apt:
+    packages:
+    - liblapack-dev
+    - libblas-dev
+    - python3-dev
+    - python3-tk
 
 install:
 - pip install -r requirments.txt
@@ -17,3 +27,5 @@ install:
 
 script:
 - ls -al src
+- python3-config --extension-suffix
+- python3 ./src/test_program.py
