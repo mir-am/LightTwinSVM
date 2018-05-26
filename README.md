@@ -1,9 +1,8 @@
-## Content
-<center>
-<h1><b>LightTwinSVM</b></h1>
-<h3>A simple, light-weight and fast implementation of Twin Support Vector Machine </h3>
+# LightTwinSVM
+
+<h3>A simple, light-weight and fast implementation of standard Twin Support Vector Machine </h3>
 <a href="https://opensource.org/licenses/GPL-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg?style=flat-square" alt="License"></a>
-</center>
+<br />
 
 1. [Introduction](#intro)
 2. [Installation Guide](#installation-guide)
