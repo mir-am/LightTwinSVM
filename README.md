@@ -1,5 +1,19 @@
+## Content
+<center>
+<h1><b>LightTwinSVM</b></h1>
+<h3>A simple, light-weight and fast implementation of Twin Support Vector Machine </h3>
+<a href="https://opensource.org/licenses/GPL-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg?style=flat-square" alt="License"></a>
+</center>
+
+1. [Introduction](#intro)
+2. [Installation Guide](#installation-guide)
+3. [User Guide](#user-guide)
+4. [Dataset Format](#dataset-format)
+5. [Support](#support)
+6. [Numerical Experiments](#numerical-experiments)
+
 ## Intro
-LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. Anyone who is interested in machine learning and classification can use this program for their work/projects.
+LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
  
 The main features of the program are the following:
 - A simple console program for running TwinSVM classifier
@@ -91,9 +105,9 @@ You can contact me via [email](mailto:mir-am@hotmail.com). Feedbacks and suggest
 **Have a problem with the software or found a bug?**<br />
 To let me know and fix it, please open an issue [here](https://github.com/mir-am/LightTwinSVM/issues). <br />
 To report a problem or bug, please provide the following information:<br />
-1- Error messages<br />
-2- Output of the program.<br />
-3- Explain how to produce the problem if possible.
+1. Error messages<br />
+2. Output of the program.<br />
+3. Explain how to produce the problem if possible.
 
 
 ## Numerical Experiments
