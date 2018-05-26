@@ -1,0 +1,18 @@
+# LightTwinSVM Program - Simple and Fast
+# Version: 0.1.0-alpha - 2018-05-24
+# Developer: Mir, A. (mir-am@hotmail.com)
+# License: GNU General Public License v3.0
+
+language: python
+python:
+- "3.6"
+
+-before_install:
+- sudo apt-get install -qq python3-tk python3-dev liblapack-dev libblas-dev -y
+
+install:
+- pip install -r requirments.txt
+- git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git temp
+
+script:
+- ls temp
