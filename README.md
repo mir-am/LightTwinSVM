@@ -24,6 +24,7 @@ The main features of the program are the following:
 - K-fold cross validation supported.
 - Training/Test split supported.
 - It supports grid search over C and gamma parameters.
+- CSV and LIBSVM data files are supported.
 - Detailed classification result will be saved in a spreadsheet file.
 
 Twin Support Vector Machine classifier proposed by: <br />
@@ -82,7 +83,7 @@ Step 3/4: Choose a test methodolgy:(Just type the number. e.g 1)
 Determine number of folds for cross validaton: (e.g. 5)
 -> 5
 ```
-**Step 4:** You need to determine the range of C penlaty parameter and gamma (If RBF kernel selected.) for exhaustive grid search. <br /> 
+**Step 4:** You need to determine the range of C penalty parameter and gamma (If RBF kernel selected.) for exhaustive grid search. <br /> 
 An example:
 ```
 Step 4/4:Type the range of C penalty parameter for grid search:
@@ -94,11 +95,12 @@ A instace of spreadsheet file containing classification result can be seen [here
  
 
 ## Dataset Format
-The file format should be comma separated value (CSV). Make sure that your dataset is consistent with the following rules:
+- **LIBSVM** data files are supported. Note that the extension of this file should be '*.libsvm'.
+- For **comma separated value (CSV)** file, make sure that your dataset is consistent with the following rules:
 1. First row can be header names. (It's optional.)
 2. Frist column should be labels of samples. Moreover, labels of positive and negative samples should be 1 and -1, respectively.
 3. All the values in dataset except headernames should be numerical. Nominal values are not allowed. <br />
-To help you prepare your dataset and test the program, two datasets are inculded [here](https://github.com/mir-am/LightTwinSVM/tree/master/dataset).
+To help you prepare your dataset and test the program, three datasets are inculded [here](https://github.com/mir-am/LightTwinSVM/tree/master/dataset).
 
 ## Support
 **Have a question about the software?**<br />
