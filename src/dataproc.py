@@ -14,6 +14,7 @@ In this module, functions for reading and processing datasets are defined.
 
 
 from os.path import splitext, split
+from sklearn.datasets import load_svmlight_file
 import numpy as np
 import csv
 
@@ -83,59 +84,22 @@ def read_data(filename, header=True):
     return data_train, data_labels, file_name 
 
 
-# Read dataset in LIBSVM format and convert to CSV
-def libsvm_read(filename, out_file=None):
-    
-    # Open file
-    data = open(filename, 'r')
-    
-    # Open CSV file
-    data_csv = list(csv.reader(data, delimiter=' '))
-    
-    # Append converted to a list - Only features
-    convt_list = []
-    
-    # Append label of samples
-    labels = []
-    
-    # number of features + class
-    num_f = len(data_csv[0])
-    
-    # Intialiaze array
-    #data_array = np.zeros((len(data_csv), num_f - 1), dtype=np.float)
-    
-    for i in range(len(data_csv)):
-        
-        # Store row in a list
-        row_list = []
-        
-        # Append to label to row
-        row_list.append(data_csv[i][0])
-                
-        # Column
-        for j in range(len(data_csv[i]) - 1):
-            
-            #print('(%d, %d)' % (i, j))
-        
-            # Get number
-            row_list.append(data_csv[i][j + 1].split(':')[1])
-            
-                
-        convt_list.append(row_list)
-        print("Processed %d sample..." % i)        
+def read_libsvm(filename):
 
-           
-    data.close()
-    
-    # Convert to csv file
-    with open(out_file, 'w', newline='') as out_csv:
-        
-        wr = csv.writer(out_csv, quoting=csv.QUOTE_ALL)
-        
-        for i in range(len(convt_list)):
-            
-            wr.writerow(convt_list[i])
-    
-    
-    return data_csv, convt_list, labels
-    
+	"""
+	It reads LIBSVM data files for doing classification with TwinSVM
+	Input:
+		file_name: Path to the dataset file
+	
+	output:
+    	data_samples: Training samples in NumPy array
+    	data_labels: labels of samples in NumPy array
+        file_name: Name of dataset
+	"""
+
+	libsvm_data = load_svmlight_file(filename)
+	file_name = splitext(split(filename)[-1])[0]
+	
+	# Converting sparse CSR matrix to NumPy array
+	return libsvm_data[0].toarray(), libsvm_data[1].astype(np.int), file_name
+

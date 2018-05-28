@@ -14,7 +14,7 @@ User interface of LightTwinSVM program is implemented in this module.
 
 
 from eval_classifier import grid_search
-from dataproc import read_data
+from dataproc import read_data, read_libsvm
 from tkinter import Tk, filedialog
 from os import path
 import time
@@ -99,38 +99,44 @@ License: GNU General Public License v3.0
             root = Tk()
             root.withdraw()
             dataset_path = filedialog.askopenfilename(title="Choose your dataset", \
-                                                   filetypes=(('CSV file', '*.csv'),))
+                                                   filetypes=(('CSV file', '*.csv'), ('LIBSVM data file', '*.libsvm'),))
             
             if dataset_path != () and path.isfile(dataset_path):
             
-                #print(dataset_path)
+                file_name, file_ext = path.splitext(dataset_path)
                 
                 start_t = time.time()
+
+                if file_ext == '.csv':
                 
-                # Reading and processing user dataset
-                try:
-    				     
-                    header = False
-					
-					     # First assume that dataset has no header names.
-                    X_train, y_train, file_name = read_data(dataset_path, header)
+		    # Reading and processing user dataset
+                    try:
+						     
+                        header = False
+						
+		       # First assume that dataset has no header names.
+                        X_train, y_train, file_name = read_data(dataset_path, header)
 
-                except ValueError:
+                    except ValueError:
 
-                    print("Lookslike your dataset has header names.")
+                        print("Lookslike your dataset has header names.")
 
-                    header = True
-                    start_time = time.time()
-					
-                    X_train, y_train, file_name = read_data(dataset_path, header)
-                        
+                        header = True
+                        start_t = time.time()
+						
+                        X_train, y_train, file_name = read_data(dataset_path, header)
+                
+                elif file_ext == '.libsvm':
+
+                    X_train, y_train, file_name = read_libsvm(dataset_path)
+        
                 
                 print("Your dataset \"%s\" is successfully loaded in %.2f seconds..." % \
                      (file_name, time.time() - start_t))
                 
-                print("No. of samples: %d|No. of features: %d|No. of classes: %d|Header: %s\n" % \
+                print("No. of samples: %d|No. of features: %d|No. of classes: %d|Datatype: %s\n" % \
                      (X_train.shape[0], X_train.shape[1], np.unique(y_train).size, \
-                     'Yes' if header else 'No'))
+                     'CSV' if file_ext == '.csv' else 'LIBSVM'))
             
             else:
             
