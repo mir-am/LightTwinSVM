@@ -22,7 +22,7 @@ from datetime import datetime
 import numpy as np
 import pandas as pd
 import os
-import time
+# import time
 
 
 def eval_metrics(y_true, y_pred):
@@ -267,7 +267,8 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
 	# Dispaly headers and progress bar
     print("TSVM-%s    Dataset: %s    Total Search Elements: %d" % (kernel_type, \
           file_name, search_total))
-    progress_bar_gs(0, search_total, '0:00:00', (0.0, 0.0), (0.0, 0.0), prefix='', suffix='')
+    progress_bar_gs(0, search_total, '0:00:00', (0.0, 0.0), (0.0, 0.0), prefix='', \
+                    suffix='')
 
     start_time = datetime.now()
     
@@ -296,7 +297,8 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
                 max_acc_std = acc_std       
             
             elapsed_time = datetime.now() - start_time
-            progress_bar_gs(run, search_total, time_fmt(elapsed_time.seconds), (acc, acc_std), (max_acc, max_acc_std), prefix='', suffix='')
+            progress_bar_gs(run, search_total, time_fmt(elapsed_time.seconds), \
+                            (acc, acc_std), (max_acc, max_acc_std), prefix='', suffix='')
             #print("TSVM-%s|Run: %d|%d|Data:%s|C1:2^%d, C2:2^%d%s|B-Acc:%.2f+-%.2f|Acc: %.2f+-%.2f|Time: %.2f Sec." % \
             #     (kernel_type, run, search_total, file_name, np.log2(element[0]), np.log2(element[1]), ',u:2^%d' % \
             #       np.log2(element[2]) if kernel_type == 'RBF' else '', max_acc, max_acc_std, acc, acc_std, \
@@ -354,4 +356,3 @@ def save_result(file_name, col_names, gs_result):
     excel_file.save()
     
     return os.path.abspath(file_name)  
-     

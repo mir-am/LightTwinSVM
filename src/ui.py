@@ -88,7 +88,7 @@ License: GNU General Public License v3.0
     
     while True:
         
-        print("Step 1/4: Please select your dataset... (Only CSV file supported.)")
+        print("Step 1/4: Please select your dataset... (CSV and LIBSVM file supported.)")
         
         # Step 1: User selects his/her dataset
         while True:
@@ -99,7 +99,7 @@ License: GNU General Public License v3.0
             root = Tk()
             root.withdraw()
             dataset_path = filedialog.askopenfilename(title="Choose your dataset", \
-                                                   filetypes=(('CSV file', '*.csv'), ('LIBSVM data file', '*.libsvm'),))
+                           filetypes=(('CSV file', '*.csv'), ('LIBSVM data file', '*.libsvm'),))
             
             if dataset_path != () and path.isfile(dataset_path):
             
@@ -109,12 +109,12 @@ License: GNU General Public License v3.0
 
                 if file_ext == '.csv':
                 
-		    # Reading and processing user dataset
+		           # Reading and processing user dataset
                     try:
 						     
                         header = False
 						
-		       # First assume that dataset has no header names.
+                        # First assume that dataset has no header names.
                         X_train, y_train, file_name = read_data(dataset_path, header)
 
                     except ValueError:
@@ -267,5 +267,4 @@ License: GNU General Public License v3.0
         else:
             
             continue
-
-   
+        
