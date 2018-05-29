@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [0.2.0-alpha] - 
 ### Added
 - [LIBSVM](https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/) data is now supported.
+- A customized progress bar for grid search
 
 ## [0.1.0-alpha] - 2018-05-24
 ### Added

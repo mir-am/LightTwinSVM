@@ -14,14 +14,15 @@ train/test split, grid search and generating the detailed result.
 
 
 from twinsvm import TSVM
+from misc import progress_bar_gs, time_fmt
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from itertools import product
+from datetime import datetime
 import numpy as np
 import pandas as pd
 import os
 import time
-import datetime
 
 
 def eval_metrics(y_true, y_pred):
@@ -262,6 +263,13 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
     
     # Total number of search elements
     search_total = len(search_space)
+
+	# Dispaly headers and progress bar
+    print("TSVM-%s    Dataset: %s    Total Search Elements: %d" % (kernel_type, \
+          file_name, search_total))
+    progress_bar_gs(0, search_total, '0:00:00', (0.0, 0.0), (0.0, 0.0), prefix='', suffix='')
+
+    start_time = datetime.now()
     
     run = 1   
     
@@ -270,14 +278,14 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
             
         try:
                     
-            start_time = time.time()
+            #start_time = time.time()
                                       
             # Save result after each run
             #acc, acc_std, result = cv_validate(kernel_type, train_data, labels, k, *element)
             acc, acc_std, result = test_function[test_method[0]](kernel_type, train_data, \
                                                 labels, test_method[1], *element)
             
-            end = time.time()
+            #end = time.time()
                        
             result_list.append(result)
             
@@ -287,10 +295,12 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
                 max_acc = acc
                 max_acc_std = acc_std       
             
-            print("TSVM-%s|Run: %d|%d|Data:%s|C1:2^%d, C2:2^%d%s|B-Acc:%.2f+-%.2f|Acc: %.2f+-%.2f|Time: %.2f Sec." % \
-                  (kernel_type, run, search_total, file_name, np.log2(element[0]), np.log2(element[1]), ',u:2^%d' % \
-                   np.log2(element[2]) if kernel_type == 'RBF' else '', max_acc, max_acc_std, acc, acc_std, \
-                   end - start_time))  
+            elapsed_time = datetime.now() - start_time
+            progress_bar_gs(run, search_total, time_fmt(elapsed_time.seconds), (acc, acc_std), (max_acc, max_acc_std), prefix='', suffix='')
+            #print("TSVM-%s|Run: %d|%d|Data:%s|C1:2^%d, C2:2^%d%s|B-Acc:%.2f+-%.2f|Acc: %.2f+-%.2f|Time: %.2f Sec." % \
+            #     (kernel_type, run, search_total, file_name, np.log2(element[0]), np.log2(element[1]), ',u:2^%d' % \
+            #       np.log2(element[2]) if kernel_type == 'RBF' else '', max_acc, max_acc_std, acc, acc_std, \
+            #       end - start_time))  
             
             run = run + 1
     
@@ -299,13 +309,13 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
             
             run = run + 1
                 
-            print("TSVM-%s|Run: %d|%d|Data:%s|C1:2^%d, C2:2^%d%s|B-Acc:%.2f+-%.2f|Linear Algebra Error!" % \
-                  (kernel_type, run, search_total, file_name, np.log2(element[0]), np.log2(element[1]), ',u:2^%d' % \
-                   np.log2(element[2]) if kernel_type == 'RBF' else '', max_acc, max_acc_std))
+            #print("TSVM-%s|Run: %d|%d|Data:%s|C1:2^%d, C2:2^%d%s|B-Acc:%.2f+-%.2f|Linear Algebra Error!" % \
+                  #(kernel_type, run, search_total, file_name, np.log2(element[0]), np.log2(element[1]), ',u:2^%d' % \
+                   #np.log2(element[2]) if kernel_type == 'RBF' else '', max_acc, max_acc_std))
     
     output_file = os.path.join(output_path, "TSVM_%s_%s_%s_%s.xlsx") % (kernel_type, "%d-F-CV" % test_method[1] if test_method[0] == 'CV' \
                   else 'Tr%d-Te%d' % (100 - test_method[1], test_method[1]), file_name, \
-                  datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))    
+                  datetime.now().strftime('%Y-%m-%d %H:%M'))    
         
     return save_result(output_file, test_method[0], result_list)
 
