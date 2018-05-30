@@ -35,7 +35,7 @@ Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algori
 
 ## Installation Guide
 Currently, supported operating systems are as follows:
-- Debian-based Linux systems (Ubuntu 16.04, Ubuntu 17.10 and Linux Mint 18)
+- Debian-based Linux systems (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10 and Linux Mint 18)
 - RPM-based Linux systems (Fedora)
 
 First of all, [Python](https://www.python.org/) 3.4 interpreter or newer is required. Python 3 is usually installed by default on most Linux distributions.

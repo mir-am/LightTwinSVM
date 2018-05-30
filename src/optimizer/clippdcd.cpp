@@ -1,6 +1,6 @@
 /*
 LightTwinSVM Program - Simple and Fast
-Version: 0.1.0-alpha - 2018-05-24
+Version: 0.2.0-alpha - 2018-05-30
 Developer: Mir, A. (mir-am@hotmail.com)
 License: GNU General Public License v3.0
 
