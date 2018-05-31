@@ -12,7 +12,7 @@ Building C++ extension module for Windows OS using Cython
 Externel dependencies:
 - Armadillo C++ Linear Agebra Library (http://arma.sourceforge.net)
 - LAPACK and BLAS libaray (http://www.netlib.org/lapack)
-
+- Cython (http://cython.org/)
 """
 
 from distutils.core import setup, Extension
@@ -20,10 +20,18 @@ from Cython.Build import cythonize
 import numpy as np
 
 
-setup(ext_modules = cythonize(Extension(
+setup(name='clippdcd',
+      version='0.2.0',
+      author='Mir, A.',
+      author_email='mir-am@hotmail.com',
+      url='https://github.com/mir-am/LightTwinSVM',
+      description='ClippDCD opimizer implemented in C++ and improved by Mir, A.',
+      ext_modules=cythonize(Extension(
         "clippdcd",
         sources=["clippdcd.pyx", "clippdcd_opt.cpp"],
         language="c++",
-        libraries=['lapack' ,'blas'],
+        libraries=['lapack', 'blas'],
         library_dirs=['.\lib'],
-        )), include_dirs=[np.get_include(), './armadillo-code/include'])
+        )),
+      include_dirs=[np.get_include(), './armadillo-code/include'])
+      

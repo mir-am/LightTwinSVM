@@ -13,7 +13,6 @@ Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algori
 This C++ extension depends on the follwing libraries:
 - Armadillo C++ Linear Agebra Library (http://arma.sourceforge.net)
 - pybind11 for creating python bindings on Linux (https://pybind11.readthedocs.io)
-- Cython for building C++ extension module on Windows (http://cython.org/)
 
 Change log:
 Mar 21, 2018: A bug related to the WLTSVM classifier was fixed. the bug caused poor accuracy. 
@@ -25,14 +24,16 @@ May 4, 2018: A trick for improving dot product computation. It imporves speed by
 
 */
 
-#include <vector>
+#include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
+#include "clippdcd_opt.h"
+#include "clippdcd_opt.cpp"
 
-// For consistency between Cython and Pybind11
-// and same interface for Python will be generated.
-#ifdef __unix__
-    #define clippdcd_func_name clippDCD_optimizer
-#elif defined _WIN64
-    #define clippdcd_func_name clippDCDOptimizer
-#endif
+#define MAX_ITER 15000
 
-std::vector<double> clippdcd_func_name(std::vector<std::vector<double> > &dual, const double c);
+PYBIND11_MODULE(clippdcd, m) {
+    m.doc() = "ClippDCD opimizer implemented in C++ and improved by Mir, A.";
+
+    m.def("clippDCD_optimizer", &clippDCD_optimizer, "ClippDCD algorithm - solves dual optimization problem");
+}
+

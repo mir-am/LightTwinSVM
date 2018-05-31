@@ -1,6 +1,6 @@
 /*
 LightTwinSVM Program - Simple and Fast
-Version: 0.1.0-alpha - 2018-05-24
+Version: 0.2.0-alpha - 2018-05-30
 Developer: Mir, A. (mir-am@hotmail.com)
 License: GNU General Public License v3.0
 
@@ -34,7 +34,7 @@ May 4, 2018: A trick for improving dot product computation. It imporves speed by
 
 using namespace arma;
 
-std::vector<double> clippDCDOptimizer(std::vector<std::vector<double> > &dual, const double c)
+std::vector<double> clippdcd_func_name(std::vector<std::vector<double> > &dual, const double c)
 {
     // Type conversion - STD vector -> arma mat
     mat dualMatrix = zeros<mat>(dual.size(), dual.size());

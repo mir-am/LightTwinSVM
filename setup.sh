@@ -144,7 +144,7 @@ then
 		fi
 		
 		# Compiles C++ extension module
-		c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
+		c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
 		
 		echo "The C++ extension moudle is generated..."
 		((step++))
@@ -167,7 +167,7 @@ then
 		else
 		
 			echo "#!/bin/bash
-	python3 src/main.py" >> ltsvm.sh
+python3 src/main.py" >> ltsvm.sh
 			
 			chmod +x ltsvm.sh
 			
