@@ -318,8 +318,17 @@ def grid_search(test_method, kernel_type, train_data, labels, c_l_bound, c_u_bou
     output_file = os.path.join(output_path, "TSVM_%s_%s_%s_%s.xlsx") % (kernel_type, "%d-F-CV" % test_method[1] if test_method[0] == 'CV' \
                   else 'Tr%d-Te%d' % (100 - test_method[1], test_method[1]), file_name, \
                   datetime.now().strftime('%Y-%m-%d %H-%M'))    
-        
-    return save_result(output_file, test_method[0], result_list)
+
+    # In some cases, result directory is missing, so it should be created.
+    try:
+
+        return save_result(output_file, test_method[0], result_list)
+
+    except FileNotFoundError:
+
+        os.makedirs('result')
+
+        return save_result(output_file, test_method[0], result_list)
 
 
 def save_result(file_name, col_names, gs_result):
