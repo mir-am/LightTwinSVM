@@ -3,8 +3,8 @@
 <h3>A simple, light-weight and fast implementation of standard Twin Support Vector Machine </h3>
 <p align="center">
 <a href="https://opensource.org/licenses/GPL-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License"></a>
-<img src="https://img.shields.io/pypi/pyversions/Django.svg" alt="Python Versions">
-<img src="https://img.shields.io/github/release/mir-am/LightTwinSVM.svg" alt="latest release version">
+<a href=""><img src="https://img.shields.io/pypi/pyversions/Django.svg" alt="Python Versions"></a>
+<a href="https://github.com/mir-am/LightTwinSVM/releases"><img src="https://img.shields.io/github/release/mir-am/LightTwinSVM/all.svg" alt="latest release version"></a>
 <a href="https://travis-ci.org/mir-am/LightTwinSVM.svg?branch=master"><img src="https://api.travis-ci.org/mir-am/LightTwinSVM.svg?branch=master" alt="Travis-CI"></a>
 </p>
 <br />
