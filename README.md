@@ -3,7 +3,8 @@
 <h3>A simple, light-weight and fast implementation of standard Twin Support Vector Machine </h3>
 <p align="center">
 <a href="https://opensource.org/licenses/GPL-3.0"><img src="https://img.shields.io/badge/License-GPL%20v3-blue.svg" alt="License"></a>
-<a href=""><img src="https://img.shields.io/pypi/pyversions/Django.svg" alt="Python Versions"></a>
+<img src="https://img.shields.io/pypi/pyversions/Django.svg" alt="Python Versions">
+<img src="https://img.shields.io/github/release/mir-am/LightTwinSVM.svg" alt="latest release version">
 <a href="https://travis-ci.org/mir-am/LightTwinSVM.svg?branch=master"><img src="https://api.travis-ci.org/mir-am/LightTwinSVM.svg?branch=master" alt="Travis-CI"></a>
 </p>
 <br />
@@ -38,7 +39,9 @@ Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algori
 Currently, supported operating systems are as follows:
 - Debian-based Linux systems (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10 and Linux Mint 18)
 - RPM-based Linux systems (Fedora)
+- Microsoft Windows (It's experimental.)
 
+### Linux
 First of all, [Python](https://www.python.org/) 3.4 interpreter or newer is required. Python 3 is usually installed by default on most Linux distributions.
 In order to build and run the program, the following Python packages are needed:
 - [NumPy](https://www.numpy.org)
