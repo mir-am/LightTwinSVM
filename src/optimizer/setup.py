@@ -30,8 +30,8 @@ setup(name='clippdcd',
         "clippdcd",
         sources=["clippdcd.pyx", "clippdcd_opt.cpp"],
         language="c++",
-        libraries=['lapack', 'blas'],
-        library_dirs=['.\lib'],
+        libraries=['lapack_win64_MT', 'blas_win64_MT'],
+        library_dirs=['.\\armadillo-code\\examples\\lib_win64'],
         )),
       include_dirs=[np.get_include(), './armadillo-code/include'])
       
