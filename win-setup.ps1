@@ -23,7 +23,7 @@ echo "Step 2 completed... (Generated extension module)"
 # Name of Python extension module
 $py_ext = (python -c "from distutils.sysconfig import get_config_var; print(get_config_var('EXT_SUFFIX'))")
 
-#mv "clippdcd$py_ext" ..\
+mv "clippdcd$py_ext" ..\
 cd ..\
 
 # Step 3:
