@@ -42,6 +42,21 @@ class TSVM:
         # Two hyperplanes attributes
         self.w1, self.b1, self.w2, self.b2 = None, None, None, None
         
+    def set_parameter(self, c1=2**0, c2=2**0, gamma=2**0):
+        
+        """
+        It changes the parametes for TSVM classifier.
+        DO NOT USE THIS METHOD AFTER INSTANTIATION OF TSVM CLASS!
+        THIS METHOD CREATED ONLY FOR Validator CLASS.
+        Input:
+            c1, c2: Penalty parameters
+            gamma: RBF function parameter
+        """
+
+        self.C1 = c1
+        self.C2 = c2
+        self.u = gamma
+
     def fit(self, X_train, y_train):
         
         """

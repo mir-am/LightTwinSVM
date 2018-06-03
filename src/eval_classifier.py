@@ -98,7 +98,126 @@ def eval_metrics(y_true, y_pred):
 
     return tp, tn, fp, fn, accuracy * 100 , recall_p * 100, precision_p * 100, f1_p * 100, \
            recall_n * 100, precision_n * 100, f1_n * 100
-           
+
+         
+class Validator:
+    
+    """
+    It applies a test method such as cross validation on a classifier like TSVM
+    """
+    
+    def __init__(self, X_train, y_train, validator_type, obj_tsvm):
+        
+        """
+        It constructs and returns a validator 
+        Input:
+            X_train: Samples in dataset (2-d NumPy array)
+            y_train: Labels of samples in dataset (1-d NumPy array)
+            validator_type: Type of test methodology and its parameter.(Tuple - ('CV', 5))
+            obj_tsvm:  Instance of TSVM classifier. (TSVM class)
+            
+        """
+        
+        self.train_data = X_train
+        self.labels_data = y_train
+        self.validator = validator_type
+        self.obj_TSVM = obj_tsvm
+    
+    def cv_validator(self, c1=2**0, c2=2**0, gamma=2**0):
+        
+        """
+        It applies cross validation on instance of TSVM classifier
+        
+        """
+        
+        # Set parameters of TSVM classifer
+        self.obj_TSVM.set_parameters(c1, c2, gamma)
+        
+        # K-Fold Cross validation, divide data into K subsets
+        k_fold = KFold(self.validator)    
+
+        # Store result after each run
+        mean_accuracy = []
+        # Postive class
+        mean_recall_p, mean_precision_p, mean_f1_p = [], [], []
+        # Negative class
+        mean_recall_n, mean_precision_n, mean_f1_n = [], [], []
+        
+        # Count elements of confusion matrix
+        tp, tn, fp, fn = 0, 0, 0, 0
+        
+        # Train and test TSVM classifier K times
+        for train_index, test_index in k_fold.split(self.train_data):
+
+            # Extract data based on index created by k_fold
+            X_train = np.take(self.train_data, train_index, axis=0) 
+            X_test = np.take(self.train_data, test_index, axis=0)
+
+            y_train = np.take(self.labels_data, train_index, axis=0)
+            y_test = np.take(self.labels_data, test_index, axis=0)
+
+            # fit - create two non-parallel hyperplanes
+            self.obj_TSVM.fit(X_train, y_train)
+
+            # Predict
+            output = self.obj_TSVM.predict(X_test)
+
+            accuracy_test = eval_metrics(y_test, output)
+
+            mean_accuracy.append(accuracy_test[4])
+            # Positive cass
+            mean_recall_p.append(accuracy_test[5])
+            mean_precision_p.append(accuracy_test[6])
+            mean_f1_p.append(accuracy_test[7])
+            # Negative class    
+            mean_recall_n.append(accuracy_test[8])
+            mean_precision_n.append(accuracy_test[9])
+            mean_f1_n.append(accuracy_test[10])
+
+            # Count
+            tp = tp + accuracy_test[0]
+            tn = tn + accuracy_test[1]
+            fp = fp + accuracy_test[2]
+            fn = fn + accuracy_test[3]
+
+        # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
+        # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14, iter=15    
+        return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
+               np.std(mean_accuracy), np.mean(mean_recall_p), np.std(mean_recall_p), \
+               np.mean(mean_precision_p), np.std(mean_precision_p), np.mean(mean_f1_p), \
+               np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
+               np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
+               np.std(mean_f1_n), tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
+    
+    
+    def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
+        
+        """
+        It trains TwinSVM classifier on random training set and tests the classifier
+        on test set.
+        """
+
+        # Set parameters of TSVM classifer
+        self.obj_TSVM.set_parameters(c1, c2, gamma)
+
+        X_train, X_test, y_train, y_test = train_test_split(self.train_data, \
+                                           self.labels_data, test_size=self.validator[1], \
+                                           random_state=42)
+
+        # fit - create two non-parallel hyperplanes
+        self.obj_TSVM.fit(X_train, y_train)
+
+        output = self.obj_TSVM.predict(X_test)
+
+        tp, tn, fp, fn, accuracy, recall_p, precision_p, f1_p, recall_n, precision_n, \
+        f1_n = eval_metrics(y_test, output)
+
+       # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
+       # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14,   
+        return accuracy, 0.0, [accuracy, recall_p, precision_p, f1_p, recall_n, \
+               precision_n, f1_n, tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
+        
+        
            
 def cv_validate(kernel_type, train_data, labels_data, k_fold, c1=2**0, c2=2**0, \
                 gamma=2**0):
@@ -216,8 +335,7 @@ def split_train_test(kernel_type, train_data, labels_data, test_percent, c1=2**0
     
     tp, tn, fp, fn, accuracy, recall_p, precision_p, f1_p, recall_n, precision_n, \
     f1_n = eval_metrics(y_test, output)
-    
-     
+
    # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
    # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14,   
     return accuracy, 0.0, [accuracy, recall_p, precision_p, f1_p, recall_n, precision_n, \
@@ -347,21 +465,21 @@ def save_result(file_name, col_names, gs_result):
             returns path of spreadsheet file
     
     """
-    
+
     column_names = {'CV': ['accuracy', 'acc_std', 'recall_p', 'r_p_std', 'precision_p', 'p_p_std', \
                            'f1_p', 'f1_p_std', 'recall_n', 'r_n_std', 'precision_n', 'p_n_std', 'f1_n',\
                            'f1_n_std', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma'],
                     't_t_split': ['accuracy', 'recall_p', 'precision_p', 'f1_p', 'recall_n', 'precision_n', \
                                   'f1_n', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma']}
                     
-                    
+
     excel_file = pd.ExcelWriter(file_name, engine='xlsxwriter')
     
     # panda data frame
     result_frame = pd.DataFrame(gs_result, columns=column_names[col_names]) 
 
     result_frame.to_excel(excel_file, sheet_name='Sheet1', index=False)
-    
+
     excel_file.save()
-    
+
     return os.path.abspath(file_name)  
