@@ -368,7 +368,7 @@ def save_result(file_name, validator_obj, gs_result, output_path):
 def initializer(user_input_obj):
 
     """
-    It get user input and passes function and classes arguments to run the program
+    It gets user input and passes function and classes arguments to run the program
     Input:
         user_input_obj: User input (UserInput class)
     """
