@@ -21,7 +21,7 @@ import numpy as np
 
 
 class TSVM:
-    
+
     def __init__(self, kernel_type='linear',c1=2**0, c2=2**0, gamma=2**0):
         
         """

@@ -12,85 +12,192 @@ In this module, unit test is defined for checking the integrity of installation.
 
 """
 
-from eval_classifier import grid_search
+from eval_classifier import Validator, initializer
+from ui import UserInput
 from dataproc import read_data, read_libsvm
+from twinsvm import TSVM
 import unittest
+
+
+def print_test_info(test_input):
+
+    """
+    It runs the test and prints info about it.
+    """
+
+    test_info = (test_input.filename, test_input.kernel_type, '%d-Fold-CV' % \
+                 test_input.test_method_tuple[1] if test_input.test_method_tuple[0] == 'CV' else \
+                 'Tr%d' % (test_input.test_method_tuple[1]), test_input.lower_b_c, \
+                 test_input.upper_b_c, ',u:2^%d-2^%d' % (test_input.lower_b_u, \
+                 test_input.upper_b_u) if test_input.kernel_type == 'RBF' else '')
+
+    print("Data: %s|Kernel: %s|Test: %s|C:2^%d-2^%d%s" % test_info)
+
+    initializer(test_input)
+
+    print("*******************************************************")
 
 
 class TestProgram(unittest.TestCase):
 
     """
-        It checks different functionalities of the program.    
+        It checks different functionalities of the program.
     """
-    
+
     def __init__(self, *args, **kwargs):
-        
+
         super().__init__(*args, **kwargs)
-        
+
+        self.input = UserInput()
+
         # Default settings for unit test
         # Dataset
-        self.training_data, self.labels, self.file_name = read_data("./dataset/pima-indian.csv")
+        self.input.X_train, self.input.y_train, self.input.filename = read_data("./dataset/pima-indian.csv")
         # Lower and upper bounds of parameters
-        self.c_l_b, self.c_u_b = -2, 2
-        self.rbf_l_b, self.rbf_u_b = -2, 2
+        self.input.lower_b_c, self.input.upper_b_c = -2, 2
+        self.input.lower_b_u, self.input.upper_b_u = -2, 2
+        self.input.filename = 'UnitTest_' + self.input.filename
+        self.input.result_path = './result'
+
         self.k_folds = 5
         self.train_set_size = 90
-        self.output_file = 'UnitTest'
-        self.result_path = './result'
-        
+
+    def test_train_TSVM_linear(self):
+
+        """
+        It trains TSVM classifier with Linear kernel
+        """
+
+        # Default arguments
+        tsvm_classifier = TSVM()
+        tsvm_classifier.fit(self.input.X_train, self.input.y_train)
+        tsvm_classifier.predict(self.input.X_train)
+
+    def test_train_TSVM_RBF(self):
+
+        """
+        It trains TSVM classifier with RBF kernel
+        """
+
+        # Default arguments
+        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier.fit(self.input.X_train, self.input.y_train)
+        tsvm_classifier.predict(self.input.X_train)
+
+    def test_linear_Validator_CV(self):
+
+        """
+        It applies cross validation on Linear TSVM
+        """
+
+        tsvm_classifier = TSVM()
+        validate = Validator(self.input.X_train, self.input.y_train, ('CV', \
+                             self.k_folds), tsvm_classifier)
+
+        func = validate.choose_validator()
+        func()
+
+    def test_RBF_Validator_CV(self):
+
+        """
+        It applies cross validation on non-Linear TSVM
+        """
+
+        tsvm_classifier = TSVM(kernel_type='RBF')
+        validate = Validator(self.input.X_train, self.input.y_train, ('CV', \
+                             self.k_folds), tsvm_classifier)
+
+        func = validate.choose_validator()
+        func()
+
+    def test_linear_Validator_ttsplit(self):
+
+        """
+        It applies train/test split on Linear TSVM
+        """
+
+        tsvm_classifier = TSVM(kernel_type='linear')
+        validate = Validator(self.input.X_train, self.input.y_train, ('t_t_split', \
+                             self.train_set_size), tsvm_classifier)
+
+        func = validate.choose_validator()
+        func()
+
+    def test_RBF_Validator_ttsplit(self):
+
+        """
+        It applies train/test split in non-linear TSVM
+        """
+        tsvm_classifier = TSVM(kernel_type='RBF')
+        validate = Validator(self.input.X_train, self.input.y_train, ('t_t_split', \
+                             self.train_set_size), tsvm_classifier)
+
+        func = validate.choose_validator()
+        func()
+
     def test_linear_CV_gridsearch(self):
-        
+
         """
             It checks Linear kernel, CrossValidation and grid search.
         """
-        
-        grid_search(('CV', self.k_folds), 'linear', self.training_data, self.labels, \
-                    self.c_l_b, self.c_u_b, self.rbf_l_b, self.rbf_u_b, 1, self.output_file, \
-                    self.result_path)
-        
+
+        self.input.kernel_type = 'linear'
+        self.input.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input)
+
     def test_linear_ttsplit_gridsearch(self):
-        
+
         """
             It checks Linear kernel, Train/Test split and grid search.
         """
-        
-        grid_search(('t_t_split', self.train_set_size), 'linear', self.training_data, self.labels, \
-                    self.c_l_b, self.c_u_b, self.rbf_l_b, self.rbf_u_b, 1, self.output_file, \
-                    self.result_path)
-        
+
+        self.input.kernel_type = 'linear'
+        self.input.test_method_tuple = ('t_t_split', self.train_set_size)
+
+        print_test_info(self.input)
+
     def test_RBF_CV_gridsearch(self):
-        
+
         """
             It checks RBF kernel, CrossValidation and grid search.
         """
-        
-        grid_search(('CV', self.k_folds), 'RBF', self.training_data, self.labels, \
-                    self.c_l_b, self.c_u_b, self.rbf_l_b, self.rbf_u_b, 1, self.output_file, \
-                    self.result_path)
+
+        self.input.kernel_type = 'RBF'
+        self.input.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input)
 
     def test_RBF_ttsplit_gridsearch(self):
-        
+
         """
             It checks RBF kernel, Train/Test split and grid search.
         """
-        
-        grid_search(('t_t_split', self.train_set_size), 'RBF', self.training_data, self.labels, \
-                    self.c_l_b, self.c_u_b, self.rbf_l_b, self.rbf_u_b, 1, self.output_file, \
-                    self.result_path)
+
+        self.input.kernel_type = 'RBF'
+        self.input.test_method_tuple = ('t_t_split', self.train_set_size)
+
+        print_test_info(self.input)
 
     def test_LIBSVM_linear_CV_girdsearch(self):
-        
+
         """
         It checks linear kenel, CrossValidatiob and grid search with LIBSVM data
         """
-        
-        X_train, y_train, file_name = read_libsvm("./dataset/heart.libsvm")
 
-        grid_search(('CV', self.k_folds), 'linear', X_train, y_train, self.c_l_b, \
-                    self.c_u_b, self.rbf_l_b, self.rbf_u_b, 1, self.output_file, \
-                    self.result_path)
-   
+        self.input.kernel_type = 'linear'
+        self.input.test_method_tuple = ('CV', self.k_folds)
+
+        # Keep dataset for other tests.
+        temp = (self.input.X_train, self.input.y_train, self.input.filename)
+
+        self.input.X_train, self.input.y_train, self.input.filename = read_libsvm("./dataset/heart.libsvm")
+
+        print_test_info(self.input)
+
+        self.input.X_train, self.input.y_train, self.input.filename = temp
+
 
 if __name__ == '__main__':
-    
+
     unittest.main()
