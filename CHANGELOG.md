@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.3.0-alpha] - 2018-06-03
+### Added
+- Experimental support for Windows OS.
+
 ## [0.2.0-alpha] - 2018-05-30 
 ### Added
 - [LIBSVM](https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/) data is now supported.
