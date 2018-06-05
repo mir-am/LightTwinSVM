@@ -5,34 +5,64 @@
 
 # A power shell script for generating pre-bulit Windows binary.
 
+$startTime = (Get-Date)
+
 cd .\src\optimizer
 
 # Step 1:
-# clone Armadillo which is a C++ Linear Algebra library
-# Armadillo is licensed under the Apache License, Version 2.0
-git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git
+if (Test-Path -Path ".\armadillo-code"){
+
+    echo "Found armadillo repo. No need to clone again."
+
+}
+else{
+
+    # clone Armadillo which is a C++ Linear Algebra library
+    # Armadillo is licensed under the Apache License, Version 2.0
+    git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git
+
+}
 
 echo "Step 1 completed... (Cloned Armadillo Library)"
 
-# Step 2: 
-# Generate C++ extension module (Optimizer) using Cython
-python setup.py build_ext --inplace
-
-echo "Step 2 completed... (Generated extension module)"
-
+# Step 2:
 # Name of Python extension module
 $py_ext = (python -c "from distutils.sysconfig import get_config_var; print(get_config_var('EXT_SUFFIX'))")
 
-mv "clippdcd$py_ext" ..\
+if (Test-Path -Path "..\clippdcd$py_ext"){
+    
+    echo "Found C++ extension module. No need to build again."
+
+}else{
+
+    # Generate C++ extension module (Optimizer) using Cython
+    python setup.py build_ext --inplace
+
+    mv "clippdcd$py_ext" ..\
+
+}
+
 cd ..\
 
+echo "Step 2 completed... (Generated extension module)"
+
 # Step 3:
-# Generate pre-bulit Windows binary using PyInstaller 3.4-dev
-pyinstaller -F pyinstaller_spec.spec
+if (Test-Path -Path ".\dist\LightTwinSVM.exe"){
+
+    echo "Found pre-built Windows binary."
+
+}else{
+
+    # Generate pre-bulit Windows binary using PyInstaller 3.4-dev
+    pyinstaller -F pyinstaller_spec.spec
+
+}
 
 echo "Step 3 completed... (pre-bulit Windows binary)"
 
-cd .\dist
-pwd
+$elapsedTime = (((Get-Date) - $startTime).TotalSeconds).ToString("0.000")
+echo "The installation finished in $elapsedTime seconds."
 
-& ".\LightTwinSVM.exe"
+#cd .\dist
+
+#& ".\LightTwinSVM.exe"
