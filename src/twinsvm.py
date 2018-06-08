@@ -22,11 +22,11 @@ import numpy as np
 
 class TSVM:
 
-    def __init__(self, kernel_type='linear',c1=2**0, c2=2**0, gamma=2**0):
-        
+    def __init__(self, kernel_type='linear', rect_kernel=1, c1=2**0, c2=2**0, \
+                 gamma=2**0):
+
         """
             Input:
-            
             Kernel_type: 1->Linear, 2->RBF(Gaussion)
             c1, c2: Penalty parameters
             gamma: RBF function parameter
@@ -37,6 +37,7 @@ class TSVM:
         self.C2 = c2
         self.u = gamma
         self.kernel_t = kernel_type
+        self.rectangular_size = rect_kernel
         self.mat_C_t = None
         
         # Two hyperplanes attributes
@@ -93,8 +94,8 @@ class TSVM:
             
             # class 1 & class -1
             mat_C = np.row_stack((mat_A, mat_B))
-        
-            self.mat_C_t = np.transpose(mat_C)
+
+            self.mat_C_t = np.transpose(mat_C)[:, :int(mat_C.shape[0] * self.rectangular_size)]
             
             mat_H = np.column_stack((rbf_kernel(mat_A, self.mat_C_t, self.u), mat_e1))
         

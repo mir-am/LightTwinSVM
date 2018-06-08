@@ -373,7 +373,7 @@ def initializer(user_input_obj):
         user_input_obj: User input (UserInput class)
     """
 
-    tsvm_obj = TSVM(user_input_obj.kernel_type)
+    tsvm_obj = TSVM(user_input_obj.kernel_type, user_input_obj.rect_kernel)
 
     validate = Validator(user_input_obj.X_train, user_input_obj.y_train, \
                          user_input_obj.test_method_tuple, tsvm_obj)

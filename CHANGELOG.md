@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.4.0-alpha] - 2018-06-08
+### Added
+- Experimental support for Rectangular kenrnel.
+
+### Changed
+- eval_classfier.py, twinsvm.py and ui.py modules are re-written and improved.
+
 ## [0.3.0-alpha] - 2018-06-03
 ### Added
 - Experimental support for Windows OS.

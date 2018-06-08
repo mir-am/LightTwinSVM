@@ -34,6 +34,7 @@ class UserInput:
         self.filename = None
         self.result_path = './result'
         self.kernel_type = None
+        self.rect_kernel = 1  # Percentage of samples for Rectangular kernel
         self.test_method_tuple = None
         self.lower_b_c, self.upper_b_c = None, None
         # Lower and upper bounds of gamma parameter
@@ -158,7 +159,7 @@ License: GNU General Public License v3.0
         # Step 2: Select a kernel function type
         while True:
 
-            print("Step 2/4: Choose a kernel function:(Just type the number. e.g 1)\n1-Linear\n2-RBF")
+            print("Step 2/4: Choose a kernel function:(Just type the number. e.g 1)\n1-Linear\n2-RBF\n3-RBF(Rectangular kernel)")
 
             kernel_choice = input("-> ")
 
@@ -169,6 +170,22 @@ License: GNU General Public License v3.0
             elif '2' in kernel_choice:
 
                 user_input.kernel_type = 'RBF'
+
+            elif '3' in kernel_choice:
+
+                user_input.kernel_type = 'RBF'
+
+                print("Determine percentage of samples for rectangular kernel: (e.g. 80)")
+
+                rect_size = int(input("-> "))
+
+                if not(rect_size >= 1 and rect_size <= 99):
+
+                        print("The percentage of samples should be between 1 and 99 percent. Try again.\n")
+
+                        continue
+
+                user_input.rect_kernel = rect_size / 100
 
             else:
 
@@ -244,7 +261,8 @@ License: GNU General Public License v3.0
 
         print("Do you confirm the following settings for running TwinSVM classifier?(y/n)")   
         print("Dataset: %s\nKernel function: %s\nTest method: %s\nRange of parameters for grid search:\nC: 2^%d to 2^%d%s "  \
-              % (user_input.filename, user_input.kernel_type, "%d-Fold cross validation" % user_input.test_method_tuple[1] \
+              % (user_input.filename, user_input.kernel_type if user_input.rect_kernel == 1 else "Rectangular kernel (Using %d percent of samples)" \
+                 % int(user_input.rect_kernel * 100), "%d-Fold cross validation" % user_input.test_method_tuple[1] \
                  if user_input.test_method_tuple[0] == 'CV' else "Train/test split (%d%%/%d%%)" % \
                  (train_set_percent, 100 - train_set_percent), user_input.lower_b_c, user_input.upper_b_c, \
                  " | Gamma: 2^%d to 2^%d" % (user_input.lower_b_u, user_input.upper_b_u) if user_input.kernel_type == 'RBF' else ''))
