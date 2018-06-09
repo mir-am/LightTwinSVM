@@ -15,6 +15,7 @@
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
 6. [Numerical Experiments](#numerical-experiments)
+7. FAQ
 
 ## Intro
 LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
@@ -22,7 +23,7 @@ LightTwinSVM is a simple and fast implementation of standard Twin Support Vector
 The main features of the program are the following:
 - A simple console program for running TwinSVM classifier
 - Fast optimization algorithm: The ClippDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
-- Both Linear and RBF kernel are supported.
+- Linear, RBF kernel and Rectangular are supported.
 - K-fold cross validation supported.
 - Training/Test split supported.
 - It supports grid search over C and gamma parameters.
@@ -70,12 +71,13 @@ After the successful installation, LightTwinSVM program should look like this in
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
 **Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. Currently, CSV files are supported. <br />
 ![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)<br />
-**Step 2:** Choose a kernel function between Linear and Gaussin (RBF). RBF kernel often produces better classification result but takes more time.
+**Step 2:** Choose a kernel function among Linear, Gaussin (RBF) and Rectangular. RBF kernel often produces better classification result but takes more time. However if you want to use non-linear kernel and your dataset is large, then consider choosing Rectangular kernel.
 <br />
 ```
 Step 2/4: Choose a kernel function:(Just type the number. e.g 1)
 1-Linear
 2-RBF
+3-RBF(Rectangular kernel)
 -> 2
 ```
 **Step 3:** To evaluate TwinSVM performance, You can either use [K-Fold cross validation](https://towardsdatascience.com/cross-validation-in-machine-learning-72924a69872f) or split your data into training and test sets. <br />
