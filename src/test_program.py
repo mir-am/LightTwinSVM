@@ -25,7 +25,8 @@ def print_test_info(test_input):
     It runs the test and prints info about it.
     """
 
-    test_info = (test_input.filename, test_input.kernel_type, '%d-Fold-CV' % \
+    test_info = (test_input.filename, test_input.kernel_type if test_input.rect_kernel == 1 else \
+                 'Rectangular kernel(Using %d %% of samples)' % (test_input.rect_kernel * 100), '%d-Fold-CV' % \
                  test_input.test_method_tuple[1] if test_input.test_method_tuple[0] == 'CV' else \
                  'Tr%d' % (test_input.test_method_tuple[1]), test_input.lower_b_c, \
                  test_input.upper_b_c, ',u:2^%d-2^%d' % (test_input.lower_b_u, \
@@ -182,7 +183,7 @@ class TestProgram(unittest.TestCase):
     def test_LIBSVM_linear_CV_girdsearch(self):
 
         """
-        It checks linear kenel, CrossValidatiob and grid search with LIBSVM data
+        It checks linear kenel, CrossValidation and grid search with LIBSVM data
         """
 
         self.input.kernel_type = 'linear'
@@ -196,6 +197,20 @@ class TestProgram(unittest.TestCase):
         print_test_info(self.input)
 
         self.input.X_train, self.input.y_train, self.input.filename = temp
+        
+    def test_rectangular_CV_gridsearch(self):
+
+        """
+        It checks rectangular kernel, CrossValidation and grid search
+        """
+
+        self.input.kernel_type = 'RBF'
+        self.input.rect_kernel = 0.5  # Using 50% of samples for Rectangular kernel
+        self.input.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input)
+
+        self.input.rect_kernel = 1  # Default value for RBF kernel
 
 
 if __name__ == '__main__':

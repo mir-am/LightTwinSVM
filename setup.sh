@@ -8,7 +8,25 @@
 # This shell script helps users install the denependencies and test the program.
 # Counting success of each step. Installation process consists of 7 steps.
 step=0
+# Creating a shell script for running the program
+create_script()
+{
+arg=\${1-\"-n\"}
 
+cat << EOM > "ltsvm.sh"
+#!/bin/bash
+case $arg in
+    "-n")
+    python3 src/main.py # LightTwinSVM program
+    ;;
+    "-t")
+    python3 src/test_program.py # Unit tests
+    ;;
+    *)
+    echo -e "Invalid argument.\n-n normal mode\n-t test mode"
+esac
+EOM
+}
 
 echo -e "The Installation of LightTwinSVM program:"
 echo "Make sure that you are connected to the internet so that dependencies can be downloaded."
@@ -166,8 +184,7 @@ then
 			echo -e "A shell script already created for running program.\nat this address:$(pwd)"
 		else
 		
-			echo "#!/bin/bash
-python3 src/main.py" >> ltsvm.sh
+			create_script
 			
 			chmod +x ltsvm.sh
 			
