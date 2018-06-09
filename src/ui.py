@@ -44,36 +44,36 @@ class UserInput:
 def get_check_range(message):
 
     """
-        This function gets the user input and checks it for grid search's parameter
-        Input:
-            message: For printing.
+    This function gets the user input and checks it for grid search's parameter
+    Input:
+        message: For printing.
 
     """
 
     while True:
-    
+
         try:
-            
+
             print(message)
-        
+
             c_range = input("-> ").split(' ')
-                    
+
             if len(c_range) == 2:
-                
+
                 c_l, c_u = int(c_range[0]), int(c_range[1])
-                    
+
                 if c_l < c_u:
-                        
+
                     return c_l, c_u
-            
+
             print("Wrong input! Try again.")
-            
+
             continue
-        
+
         except ValueError:
-            
+
             print("Wrong input! Try again.")
-            
+
             continue
 
 
@@ -83,8 +83,6 @@ def program_ui():
     User interface of the program is implemented in this function.
     It processes user input.
     """
-
-    user_input = UserInput()
 
     # Printing general info on program
     print("""LightTwinSVM Program - Simple and Fast
@@ -97,6 +95,8 @@ License: GNU General Public License v3.0
     input("Press Enter to start the program...\n")
 
     while True:
+
+        user_input = UserInput()
 
         print("Step 1/4: Please select your dataset... (CSV and LIBSVM file supported.)")
 
