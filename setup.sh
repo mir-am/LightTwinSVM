@@ -140,7 +140,7 @@ then
 		else
 			# clones Armadillo which is a C++ Linear Algebra library
 			# Armadillo is licensed under the Apache License, Version 2.0
-			git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git temp
+			git clone https://github.com/mir-am/armadillo-code.git temp
 		fi
 		
 		# Compiles C++ extension module

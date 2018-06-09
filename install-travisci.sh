@@ -12,7 +12,7 @@ pip install -r requirments.txt
 
 # clones Armadillo which is a C++ Linear Algebra library
 # Armadillo is licensed under the Apache License, Version 2.0
-git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git temp
+git clone https://github.com/mir-am/armadillo-code.git temp
 
 # Lookslike there is a bug in python-config which produces wrong extension suffix
 # More info at https://bugs.python.org/issue25440

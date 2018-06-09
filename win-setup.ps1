@@ -19,7 +19,7 @@ else{
 
     # clone Armadillo which is a C++ Linear Algebra library
     # Armadillo is licensed under the Apache License, Version 2.0
-    git clone -b 8.500.x --single-branch https://github.com/conradsnicta/armadillo-code.git
+    git clone https://github.com/mir-am/armadillo-code.git
 
 }
 
@@ -63,6 +63,6 @@ echo "Step 3 completed... (pre-bulit Windows binary)"
 $elapsedTime = (((Get-Date) - $startTime).TotalSeconds).ToString("0.000")
 echo "The installation finished in $elapsedTime seconds."
 
-#cd .\dist
+cd .\dist
 
-#& ".\LightTwinSVM.exe"
+& ".\LightTwinSVM.exe"
