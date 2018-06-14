@@ -15,7 +15,7 @@ In this module, unit test is defined for checking the integrity of installation.
 from eval_classifier import Validator, initializer
 from ui import UserInput
 from dataproc import read_data, read_libsvm
-from twinsvm import TSVM
+from twinsvm import TSVM, MCTSVM
 import unittest
 
 
@@ -62,6 +62,8 @@ class TestProgram(unittest.TestCase):
 
         self.k_folds = 5
         self.train_set_size = 90
+        # Dataset for multiclass test
+        self.mc_X_train, self.mc_y_train, self.mc_filename = read_data('./dataset/glass.csv')
 
     def test_train_TSVM_linear(self):
 
@@ -211,6 +213,26 @@ class TestProgram(unittest.TestCase):
         print_test_info(self.input)
 
         self.input.rect_kernel = 1  # Default value for RBF kernel
+
+    def test_linear_MCTSVM(self):
+
+        """
+        It checks linear multi-class TwinSVM
+        """
+
+        mctsvm_obj = MCTSVM()
+        mctsvm_obj.fit(self.mc_X_train, self.mc_y_train)
+        print(mctsvm_obj.predict(self.mc_X_train))
+
+    def test_RBF_MCTSVM(self):
+
+        """
+        It checks non-linear multi-class TwinSVM
+        """
+
+        mctsvm_obj = MCTSVM('RBF')
+        mctsvm_obj.fit(self.mc_X_train, self.mc_y_train)
+        print(mctsvm_obj.predict(self.mc_X_train))
 
 
 if __name__ == '__main__':

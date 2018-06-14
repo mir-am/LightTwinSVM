@@ -175,8 +175,8 @@ class HyperPlane:
 
     def __init__(self):
 
-        self.w = None
-        self.b = None
+        self.w = None  # Coordinates of hyperplane
+        self.b = None  # Bias term
 
 
 class MCTSVM():
@@ -186,14 +186,102 @@ class MCTSVM():
     One-vs-All Scheme
     """
 
-    def __init__(self):
+    def __init__(self, kernel_type='linear', c=2**0, gamma=2**0):
 
-        pass
+        """
+        Input:
+            kernel_type: Type of kernel function (Linear or RBF)
+            c: Penalty parameter
+            gamma: parameter of RBF function
+        """
 
-    def fit(self):
+        self.kernel_t = kernel_type
+        self.C = c
+        self.y = gamma
+        self.classfiers = {}  # Classifiers
+        self.mat_D_t = []  # For non-linear MCTSVM
 
-        pass
+    def fit(self, X_train, y_train):
+        
+        """
+        X_train: Training samples
+        y_train: Lables of training samples
+        """
 
-    def predict(self):
+        num_classes = np.unique(y_train)
+        
+        # Construct K-binary classifiers
+        for idx, i in enumerate(num_classes):
 
-        pass
+            # Samples of i-th class
+            mat_X_i = X_train[y_train == i]
+
+            # Samples of other classes
+            mat_Y_i = X_train[y_train != i]
+
+            # Vectors of ones
+            mat_e1_i = np.ones((mat_X_i.shape[0], 1))
+            mat_e2_i = np.ones((mat_Y_i.shape[0], 1))
+
+            if self.kernel_t == 'linear':
+                
+                mat_A_i = np.column_stack((mat_X_i, mat_e1_i))
+                mat_B_i = np.column_stack((mat_Y_i, mat_e2_i))
+
+            elif self.kernel_t == 'RBF':
+
+                mat_D = np.row_stack((mat_X_i, mat_Y_i))
+
+                self.mat_D_t.append(np.transpose(mat_D))
+
+                mat_A_i = np.column_stack((rbf_kernel(mat_X_i, self.mat_D_t[idx], self.y), mat_e1_i))
+                mat_B_i = np.column_stack((rbf_kernel(mat_Y_i, self.mat_D_t[idx], self.y), mat_e2_i))
+
+            mat_A_i_t = np.transpose(mat_A_i)
+            mat_B_i_t = np.transpose(mat_B_i)
+
+        # Compute inverses:
+        # Regulariztion term used for ill-possible condition
+        reg_term = 2 ** float(-7)
+
+        mat_A_A = np.linalg.inv(np.dot(mat_A_i_t, mat_A_i) + (reg_term * np.identity(mat_A_i.shape[1])))
+
+        # Dual problem of i-th class
+        mat_dual_i = np.dot(np.dot(mat_B_i, mat_A_A), mat_B_i_t)
+
+        # Obtaining Lagrange multipliers using ClippDCD optimizer
+        alpha_i = np.array(clippdcd.clippDCD_optimizer(mat_dual_i, self.C)).reshape(mat_dual_i.shape[0], 1)
+
+        hyperplane_i = np.dot(np.dot(mat_A_A, mat_B_i_t), alpha_i)
+
+        hyper_p_inst = HyperPlane()
+        hyper_p_inst.w = hyperplane_i[:hyperplane_i.shape[0] - 1, :]
+        hyper_p_inst.b = hyperplane_i[-1, :]
+
+        self.classfiers[i] = hyper_p_inst
+
+
+    def predict(self, X_test):
+
+        """
+        Predictes class of test samples
+            Input:
+                X_test: Test samples
+        """
+
+        # Perpendicular distance from each hyperplane
+        prepen_dist = np.zeros((X_test.shape[0], len(self.classfiers.keys())))
+
+        kernel_f = {'linear': lambda i, j: X_test[i, :] , 'RBF': lambda i, j: rbf_kernel(X_test[i, :], \
+                    self.mat_D_t[j], self.y)}
+
+        for i in range(X_test.shape[0]):
+
+            for idx, j in enumerate(self.classfiers.keys()):
+
+                prepen_dist[i, idx] = np.abs(np.dot(kernel_f[self.kernel_t](i, idx), \
+                           self.classfiers[j].w) + self.classfiers[j].b) / np.linalg.norm(self.classfiers[j].w)
+
+        output = np.argmin(prepen_dist, axis=1) + 1
+
+        return output
