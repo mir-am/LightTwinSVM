@@ -201,15 +201,29 @@ class MCTSVM():
         self.classfiers = {}  # Classifiers
         self.mat_D_t = []  # For non-linear MCTSVM
 
+    def set_parameter(self, c=2**0, gamma=2**0):
+
+        """
+        It changes the parametes for multiclass TSVM classifier.
+        DO NOT USE THIS METHOD AFTER INSTANTIATION OF MCTSVM CLASS!
+        THIS METHOD CREATED ONLY FOR Validator CLASS.
+        Input:
+            c: Penalty parameters
+            gamma: RBF function parameter
+        """
+
+        self.C = c
+        self.y = gamma
+
     def fit(self, X_train, y_train):
-        
+
         """
         X_train: Training samples
         y_train: Lables of training samples
         """
 
         num_classes = np.unique(y_train)
-        
+
         # Construct K-binary classifiers
         for idx, i in enumerate(num_classes):
 
@@ -240,25 +254,25 @@ class MCTSVM():
             mat_A_i_t = np.transpose(mat_A_i)
             mat_B_i_t = np.transpose(mat_B_i)
 
-        # Compute inverses:
-        # Regulariztion term used for ill-possible condition
-        reg_term = 2 ** float(-7)
-
-        mat_A_A = np.linalg.inv(np.dot(mat_A_i_t, mat_A_i) + (reg_term * np.identity(mat_A_i.shape[1])))
-
-        # Dual problem of i-th class
-        mat_dual_i = np.dot(np.dot(mat_B_i, mat_A_A), mat_B_i_t)
-
-        # Obtaining Lagrange multipliers using ClippDCD optimizer
-        alpha_i = np.array(clippdcd.clippDCD_optimizer(mat_dual_i, self.C)).reshape(mat_dual_i.shape[0], 1)
-
-        hyperplane_i = np.dot(np.dot(mat_A_A, mat_B_i_t), alpha_i)
-
-        hyper_p_inst = HyperPlane()
-        hyper_p_inst.w = hyperplane_i[:hyperplane_i.shape[0] - 1, :]
-        hyper_p_inst.b = hyperplane_i[-1, :]
-
-        self.classfiers[i] = hyper_p_inst
+            # Compute inverses:
+            # Regulariztion term used for ill-possible condition
+            reg_term = 2 ** float(-7)
+    
+            mat_A_A = np.linalg.inv(np.dot(mat_A_i_t, mat_A_i) + (reg_term * np.identity(mat_A_i.shape[1])))
+    
+            # Dual problem of i-th class
+            mat_dual_i = np.dot(np.dot(mat_B_i, mat_A_A), mat_B_i_t)
+    
+            # Obtaining Lagrange multipliers using ClippDCD optimizer
+            alpha_i = np.array(clippdcd.clippDCD_optimizer(mat_dual_i, self.C)).reshape(mat_dual_i.shape[0], 1)
+    
+            hyperplane_i = np.dot(np.dot(mat_A_A, mat_B_i_t), alpha_i)
+    
+            hyper_p_inst = HyperPlane()
+            hyper_p_inst.w = hyperplane_i[:hyperplane_i.shape[0] - 1, :]
+            hyper_p_inst.b = hyperplane_i[-1, :]
+    
+            self.classfiers[i] = hyper_p_inst
 
 
     def predict(self, X_test):

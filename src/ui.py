@@ -31,6 +31,7 @@ class UserInput:
 
         # Initializing all the inputs
         self.X_train, self.y_train = None, None
+        self.class_type = None  # Type of classification (Binary or Multi-class)
         self.filename = None
         self.result_path = './result'
         self.kernel_type = None
@@ -140,13 +141,22 @@ License: GNU General Public License v3.0
 
                     user_input.X_train, user_input.y_train, user_input.filename = read_libsvm(dataset_path)
 
+                num_classes = np.unique(user_input.y_train).size
+
+                if num_classes == 2:
+
+                    user_input.class_type = 'binary'
+
+                elif num_classes >= 3:
+
+                    user_input.class_type = 'multiclass'
 
                 print("Your dataset \"%s\" is successfully loaded in %.2f seconds..." % \
                      (user_input.filename, time.time() - start_t))
 
                 print("No. of samples: %d|No. of features: %d|No. of classes: %d|Datatype: %s\n" % \
                      (user_input.X_train.shape[0], user_input.X_train.shape[1], \
-                      np.unique(user_input.y_train).size, 'CSV' if file_ext == '.csv' else 'LIBSVM'))
+                      num_classes, 'CSV' if file_ext == '.csv' else 'LIBSVM'))
 
             else:
 

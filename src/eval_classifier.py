@@ -13,10 +13,11 @@ train/test split, grid search and generating the detailed result.
 """
 
 
-from twinsvm import TSVM
+from twinsvm import TSVM, MCTSVM
 from misc import progress_bar_gs, time_fmt
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
+from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 from itertools import product
 from datetime import datetime
 import numpy as np
@@ -190,8 +191,8 @@ class Validator:
                np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
                np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
                np.std(mean_f1_n), tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
-    
-    
+
+
     def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
         
         """
@@ -222,22 +223,75 @@ class Validator:
         return accuracy, 0.0, [accuracy, recall_p, precision_p, f1_p, recall_n, \
                precision_n, f1_n, tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
 
+    def cv_validator_mc(self, c=2**0, gamma=2**0):
+
+        """
+        It applies cross validation on instance of multiclass TSVM classifier
+        """
+
+        # Set parameters of multiclass TSVM classifer
+        self.obj_TSVM.set_parameter(c, gamma)
+
+        # K-Fold Cross validation, divide data into K subsets
+        k_fold = KFold(self.validator[1])    
+
+        # Store result after each run
+        mean_accuracy = []
+        
+        # Evaluation metrics
+        mean_recall, mean_precision, mean_f1 = [], [], []
+        
+        # Train and test multiclass TSVM classifier K times
+        for train_index, test_index in k_fold.split(self.train_data):
+
+            # Extract data based on index created by k_fold
+            X_train = np.take(self.train_data, train_index, axis=0) 
+            X_test = np.take(self.train_data, test_index, axis=0)
+
+            y_train = np.take(self.labels_data, train_index, axis=0)
+            y_test = np.take(self.labels_data, test_index, axis=0)
+
+            # fit - creates K-binary TSVM classifier
+            self.obj_TSVM.fit(X_train, y_train)
+
+            # Predict
+            output = self.obj_TSVM.predict(X_test)
+
+            mean_accuracy.append(accuracy_score(y_test, output) * 100)
+            mean_recall.append(recall_score(y_test, output, average='micro') * 100)
+            mean_precision.append(precision_score(y_test, output, average='micro') * 100)
+            mean_f1.append(f1_score(y_test, output, average='micro') * 100)
+
+        return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
+               np.std(mean_accuracy), np.mean(mean_recall), np.std(mean_recall), \
+               np.mean(mean_precision), np.std(mean_precision), np.mean(mean_f1), \
+               np.std(mean_f1), c, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
+
     def choose_validator(self):
 
         """
         It returns choosen validator method.
         """
-        if self.validator[0] == 'CV':
 
-            return self.cv_validator
+        if isinstance(self.obj_TSVM, TSVM):  # Binary TSVM
 
-        elif self.validator[0] == 't_t_split':
+            if self.validator[0] == 'CV':
 
-            return self.split_tt_validator
+                return self.cv_validator
+
+            elif self.validator[0] == 't_t_split':
+
+                return self.split_tt_validator
+
+        elif isinstance(self.obj_TSVM, MCTSVM):  # Multi-class TSVM
+
+            if self.validator[0] == 'CV':
+
+                return self.cv_validator_mc
 
 
-def search_space(kernel_type, c_l_bound, c_u_bound, rbf_lbound, rbf_ubound, \
-                 step=1):
+def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
+                 rbf_ubound, step=1):
 
     """
     It generates combination of search elements for grid search
@@ -251,13 +305,21 @@ def search_space(kernel_type, c_l_bound, c_u_bound, rbf_lbound, rbf_ubound, \
 
     c_range = [2 ** i for i in np.arange(c_l_bound, c_u_bound + 1, step, dtype=np.float)]
 
-    return list(product(*[c_range, c_range, ])) if kernel_type == 'linear' else \
-           list(product(*[c_range, c_range, [2 ** i for i in np.arange(rbf_lbound, \
-                rbf_ubound + 1, step, dtype=np.float)]]))
-    
+    if class_type == 'binary':
+
+        return list(product(*[c_range, c_range, ])) if kernel_type == 'linear' else \
+               list(product(*[c_range, c_range, [2 ** i for i in np.arange(rbf_lbound, \
+                    rbf_ubound + 1, step, dtype=np.float)]]))
+
+    elif class_type == 'multiclass':
+
+        return list(product(*[c_range, ])) if kernel_type == 'linear' else \
+               list(product(*[c_range, [2 ** i for i in np.arange(rbf_lbound, \
+                    rbf_ubound + 1, step, dtype=np.float)]]))
+
 
 def grid_search(search_space, func_validator):
-    
+
     """
         It applies grid search which finds C and gamma paramters for obtaining
         best classification accuracy.
@@ -287,10 +349,10 @@ def grid_search(search_space, func_validator):
                     suffix='')
 
     start_time = datetime.now()
-    
+
     run = 1   
-    
-    # Ehaustive Grid search for finding best C1 & C2   
+
+    # Ehaustive Grid search for finding optimal parameters
     for element in search_space:
 
         try:
@@ -341,11 +403,13 @@ def save_result(file_name, validator_obj, gs_result, output_path):
 
     """
 
-    column_names = {'CV': ['accuracy', 'acc_std', 'recall_p', 'r_p_std', 'precision_p', 'p_p_std', \
+    column_names = {'binary': {'CV': ['accuracy', 'acc_std', 'recall_p', 'r_p_std', 'precision_p', 'p_p_std', \
                            'f1_p', 'f1_p_std', 'recall_n', 'r_n_std', 'precision_n', 'p_n_std', 'f1_n',\
                            'f1_n_std', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma'],
                     't_t_split': ['accuracy', 'recall_p', 'precision_p', 'f1_p', 'recall_n', 'precision_n', \
-                                  'f1_n', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma']}
+                                  'f1_n', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma']},
+                    'multiclass':{'CV': ['accuracy', 'acc_std', 'micro_recall', 'm_rec_std', 'micro_precision', \
+                                         'm_prec_std', 'mirco_f1', 'm_f1_std', 'C', 'gamma']}}
 
     # (Name of validator, validator's attribute) - ('CV', 5-folds)
     validator_type, validator_attr = validator_obj.validator              
@@ -356,7 +420,8 @@ def save_result(file_name, validator_obj, gs_result, output_path):
 
     excel_file = pd.ExcelWriter(output_file, engine='xlsxwriter')
 
-    result_frame = pd.DataFrame(gs_result, columns=column_names[validator_type]) 
+    result_frame = pd.DataFrame(gs_result, columns=column_names['binary' if \
+                   isinstance(validator_obj.obj_TSVM, TSVM) else 'multiclass'][validator_type]) 
 
     result_frame.to_excel(excel_file, sheet_name='Sheet1', index=False)
 
@@ -373,14 +438,20 @@ def initializer(user_input_obj):
         user_input_obj: User input (UserInput class)
     """
 
-    tsvm_obj = TSVM(user_input_obj.kernel_type, user_input_obj.rect_kernel)
+    if user_input_obj.class_type == 'binary':
+
+        tsvm_obj = TSVM(user_input_obj.kernel_type, user_input_obj.rect_kernel)
+
+    elif user_input_obj.class_type == 'multiclass':
+
+        tsvm_obj = MCTSVM(user_input_obj.kernel_type)
 
     validate = Validator(user_input_obj.X_train, user_input_obj.y_train, \
                          user_input_obj.test_method_tuple, tsvm_obj)
 
-    search_elements = search_space(user_input_obj.kernel_type, user_input_obj.lower_b_c, \
-                                   user_input_obj.upper_b_c, user_input_obj.lower_b_u, \
-                                   user_input_obj.upper_b_u)
+    search_elements = search_space(user_input_obj.kernel_type, user_input_obj.class_type, \
+                      user_input_obj.lower_b_c, user_input_obj.upper_b_c, user_input_obj.lower_b_u, \
+                      user_input_obj.upper_b_u)
 
     # Dispaly headers
     print("TSVM-%s    Dataset: %s    Total Search Elements: %d" % (user_input_obj.kernel_type, \
