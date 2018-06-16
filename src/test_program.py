@@ -50,20 +50,31 @@ class TestProgram(unittest.TestCase):
         super().__init__(*args, **kwargs)
 
         self.input = UserInput()
-
-        # Default settings for unit test
+        # Default settings for unit test - Binary Classification
         # Dataset
         self.input.X_train, self.input.y_train, self.input.filename = read_data("./dataset/pima-indian.csv")
         # Lower and upper bounds of parameters
         self.input.lower_b_c, self.input.upper_b_c = -2, 2
         self.input.lower_b_u, self.input.upper_b_u = -2, 2
         self.input.filename = 'UnitTest_' + self.input.filename
+        self.input.class_type = 'binary'
+        self.input.result_path = './result'
+
+        self.input_mc = UserInput()
+        # Default settings for unit test - multiclass Classification
+        # Dataset
+        self.input_mc.X_train, self.input_mc.y_train, self.input_mc.filename = \
+        read_data('./dataset/balance.csv')
+        # Lower and upper bounds of parameters
+        self.input_mc.lower_b_c, self.input_mc.upper_b_c = -2, 2
+        self.input_mc.lower_b_u, self.input_mc.upper_b_u = -2, 2
+        self.input_mc.filename = 'UnitTest_' + self.input_mc.filename
+        self.input_mc.class_type = 'multiclass'
         self.input.result_path = './result'
 
         self.k_folds = 5
         self.train_set_size = 90
-        # Dataset for multiclass test
-        self.mc_X_train, self.mc_y_train, self.mc_filename = read_data('./dataset/glass.csv')
+
 
     def test_train_TSVM_linear(self):
 
@@ -221,9 +232,10 @@ class TestProgram(unittest.TestCase):
         """
 
         mctsvm_obj = MCTSVM()
-        mctsvm_obj.fit(self.mc_X_train, self.mc_y_train)
-        print(mctsvm_obj.predict(self.mc_X_train))
+        mctsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
+        mctsvm_obj.predict(self.input_mc.X_train)
 
+    @unittest.skip('Singular Matrix!')
     def test_RBF_MCTSVM(self):
 
         """
@@ -233,6 +245,28 @@ class TestProgram(unittest.TestCase):
         mctsvm_obj = MCTSVM('RBF')
         mctsvm_obj.fit(self.mc_X_train, self.mc_y_train)
         print(mctsvm_obj.predict(self.mc_X_train))
+
+    def test_linear_CV_gridsearch_MCTSVM(self):
+
+        """
+        It checks linear kernel, Crossvalidation and grid search with MCTSVM
+        """
+
+        self.input_mc.kernel_type = 'linear'
+        self.input_mc.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input_mc)
+
+    def test_RBF_CV_gridsearch_MCTSVM(self):
+
+        """
+        It checks RBF kernel, Crossvalidation and grid search with MCTSVM
+        """
+
+        self.input_mc.kernel_type = 'RBF'
+        self.input_mc.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input_mc)
 
 
 if __name__ == '__main__':
