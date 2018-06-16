@@ -24,6 +24,7 @@ The main features of the program are the following:
 - A simple console program for running TwinSVM classifier
 - Fast optimization algorithm: The ClippDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
 - Linear, RBF kernel and Rectangular are supported.
+- Binary and Multi-class classification (One-vs.All) are supported.
 - K-fold cross validation supported.
 - Training/Test split supported.
 - It supports grid search over C and gamma parameters.
@@ -69,7 +70,7 @@ After the successful installation, LightTwinSVM program should look like this in
 
 ## User Guide
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
-**Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. Currently, CSV files are supported. <br />
+**Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. CSV and LIBSVM files are supported. It is highly recommended to normalize your dataset. <br />
 ![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)<br />
 **Step 2:** Choose a kernel function among Linear, Gaussin (RBF) and Rectangular. RBF kernel often produces better classification result but takes more time. However if you want to use non-linear kernel and your dataset is large, then consider choosing Rectangular kernel.
 <br />
