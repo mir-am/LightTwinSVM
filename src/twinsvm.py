@@ -19,8 +19,18 @@ Tomar, D., & Agarwal, S. (2015). A comparison on multi-class classification meth
 
 
 # ClippDCD optimizer is an extension module which is implemented in C++
-import clippdcd
+from sklearn.utils.multiclass import check_classification_targets
+from sklearn.utils import column_or_1d
+from dataproc import read_data
 import numpy as np
+
+try:
+
+    import clippdcd
+
+except ImportError:
+    
+    print("Failed to import clipDCD module!")
 
 
 class TSVM:
@@ -302,3 +312,98 @@ class MCTSVM():
         output = np.argmin(prepen_dist, axis=1) + 1
 
         return output
+
+
+class OVO_TSVM:
+
+    """
+    Multi Class Twin Support Vector Machine
+    One-vs-One Scheme
+    """    
+    
+    def __init__(self, kernel='linear', C_1=1, C_2=1, gamma=1):
+        
+        """
+        Parameters:
+            kernel: Type of kernel function. 'linear' or 'RBF'
+            C_1, C_2: float, (default=1)
+                      Penalty parameter
+            gamma: float, (default=1.0)
+                   Kernel coefficient for RBF function
+                
+        """
+        
+        self.kernel = kernel
+        self.C_1 = C_1
+        self.C_2 = C_2
+        self.gamma = gamma
+         
+    def _validate_targets(self, y):
+        
+        """
+        Validates labels for training and testing classifier
+        """
+        y_ = column_or_1d(y, warn=True)
+        check_classification_targets(y)
+        self.classes_, y = np.unique(y_, return_inverse=True)
+        
+        return np.asarray(y, dtype=np.int)
+    
+    
+    def fit(self, X, y):
+        
+        
+        """
+        Given training set, it creates a SVM model
+        
+        Parameters:
+            X_train: Training samples, (n_samples, n_features)
+            y_train: Target values, (n_samples, )
+        """
+        
+        y = self._validate_targets(y)
+        
+        
+        # Allocate n(n-1)/2 binary TSVM classifiers
+        self.bin_TSVM_models = self.classes_.size * [None]
+        
+        p = 0
+        
+        for i in range(self.classes_.size):
+            
+            for j in range(i + 1, self.classes_.size):
+                
+                print("%d, %d" % (i, j))
+                
+                # Break multi-class problem into a binary problem
+                sub_prob_X_i_j = X[(y == i) | (y == j)]
+                sub_prob_y_i_j = y[(y == i) | (y == j)]
+                
+                print(sub_prob_y_i_j)
+                
+                # For binary classification, labels must be {-1, +1}
+                # i-th class -> +1 and j-th class -> -1
+                sub_prob_y_i_j[sub_prob_y_i_j == j] = -1
+                sub_prob_y_i_j[sub_prob_y_i_j == i] = 1
+                
+                self.bin_TSVM_models[p] = TSVM(self.kernel, 1, self.C_1, self.C_2, \
+                               self.gamma)
+                
+                print(sub_prob_y_i_j)
+                
+                
+                
+                p = p + 1
+                
+                
+        print(p)
+        
+    
+if __name__ == '__main__':
+    
+    X_train, y_train, data_name = read_data('../dataset/balance.csv')
+    
+    ovo_tsvm_model = OVO_TSVM()
+    
+    ovo_tsvm_model.fit(X_train, y_train)
+
