@@ -21,7 +21,6 @@ Tomar, D., & Agarwal, S. (2015). A comparison on multi-class classification meth
 # ClippDCD optimizer is an extension module which is implemented in C++
 from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils import column_or_1d
-from dataproc import read_data
 import numpy as np
 
 try:
@@ -379,31 +378,71 @@ class OVO_TSVM:
                 sub_prob_X_i_j = X[(y == i) | (y == j)]
                 sub_prob_y_i_j = y[(y == i) | (y == j)]
                 
-                print(sub_prob_y_i_j)
+                #print(sub_prob_y_i_j)
                 
                 # For binary classification, labels must be {-1, +1}
                 # i-th class -> +1 and j-th class -> -1
                 sub_prob_y_i_j[sub_prob_y_i_j == j] = -1
                 sub_prob_y_i_j[sub_prob_y_i_j == i] = 1
                 
+                #print(sub_prob_y_i_j)
+                
                 self.bin_TSVM_models[p] = TSVM(self.kernel, 1, self.C_1, self.C_2, \
                                self.gamma)
                 
-                print(sub_prob_y_i_j)
-                
-                
+                self.bin_TSVM_models[p].fit(sub_prob_X_i_j, sub_prob_y_i_j)
                 
                 p = p + 1
+         
+    def predict(self, X):
+        
+        # Initialze votes
+        votes = np.zeros((X.shape[0], self.classes_.size), dtype=np.int)
+        
+        # iterate over test samples
+        for k in range(X.shape[0]):
+            
+            p = 0
+        
+            for i in range(self.classes_.size):
                 
+                for j in range(i + 1, self.classes_.size):
+                    
+                    y_pred = self.bin_TSVM_models[p].predict(X[k, :].reshape(1, X.shape[1]))
+                    
+                    print(y_pred)
+                    
+                    if y_pred == 1:
+                        
+                        votes[k, i] = votes[k, i] + 1
+                        
+                    else:
+                        
+                        votes[k, j] = votes[k, j] + 1
+                        
+        
+         # Labels of test samples based max-win strategy
+        max_votes = np.argmax(votes, axis=1)
+            
+        return self.classes_.take(np.asarray(max_votes, dtype=np.int))
                 
-        print(p)
+        
         
     
 if __name__ == '__main__':
     
-    X_train, y_train, data_name = read_data('../dataset/balance.csv')
+    from dataproc import read_data
+    from sklearn.metrics import accuracy_score
     
-    ovo_tsvm_model = OVO_TSVM()
+    X_train, y_train, data_name = read_data('/home/mir/Mir/Mir-Repo/dataset/mc-data/wine.csv')
+    
+    ovo_tsvm_model = OVO_TSVM('linear', 4, 8)
     
     ovo_tsvm_model.fit(X_train, y_train)
+    
+    pred = ovo_tsvm_model.predict(X_train)
+    
+    print(pred)
 
+
+    print("Accuracy: %.2f" % (accuracy_score(y_train, pred) * 100))
