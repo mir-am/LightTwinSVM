@@ -18,13 +18,14 @@ Tomar, D., & Agarwal, S. (2015). A comparison on multi-class classification meth
 """
 
 
-# ClippDCD optimizer is an extension module which is implemented in C++
+from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.utils.multiclass import check_classification_targets
+from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from sklearn.utils import column_or_1d
 import numpy as np
 
 try:
-
+# ClippDCD optimizer is an extension module which is implemented in C++
     import clippdcd
 
 except ImportError:
@@ -191,7 +192,7 @@ class HyperPlane:
         self.b = None  # Bias term
 
 
-class MCTSVM():
+class MCTSVM:
 
     """
     Multi Class Twin Support Vector Machine
@@ -313,11 +314,13 @@ class MCTSVM():
         return output
 
 
-class OVO_TSVM:
+class OVO_TSVM(BaseEstimator, ClassifierMixin):
 
     """
     Multi Class Twin Support Vector Machine
     One-vs-One Scheme
+    This classifier is scikit-learn compatible, which means scikit-learn features
+    such as cross_val_score and GridSearchCV can be used for OVO_TSVM
     """    
     
     def __init__(self, kernel='linear', C_1=1, C_2=1, gamma=1):
@@ -349,6 +352,27 @@ class OVO_TSVM:
         return np.asarray(y, dtype=np.int)
     
     
+    def _validate_for_predict(self, X):
+        
+        """
+        Checks that the classifier is already trained and also test samples are
+        valid
+        """
+        
+        check_is_fitted(self, ['bin_TSVM_models_'])
+        X = check_array(X, dtype=np.float64)
+        
+        n_samples, n_features = X.shape
+        
+        if n_features != self.shape_fit_[1]:
+            
+            raise ValueError("X.shape[1] = %d should be equal to %d," 
+                             "the number of features of training samples" % 
+                             (n_features, self.shape_fit_[1]))
+        
+        return X
+    
+    
     def fit(self, X, y):
         
         
@@ -361,10 +385,11 @@ class OVO_TSVM:
         """
         
         y = self._validate_targets(y)
-        
-        
+        X, y = check_X_y(X, y, dtype=np.float64)
+         
         # Allocate n(n-1)/2 binary TSVM classifiers
-        self.bin_TSVM_models = self.classes_.size * [None]
+        self.bin_TSVM_models_ = ((self.classes_.size * (self.classes_.size - 1))
+                               // 2 ) * [None]
         
         p = 0
         
@@ -372,7 +397,7 @@ class OVO_TSVM:
             
             for j in range(i + 1, self.classes_.size):
                 
-                print("%d, %d" % (i, j))
+                #print("%d, %d" % (i, j))
                 
                 # Break multi-class problem into a binary problem
                 sub_prob_X_i_j = X[(y == i) | (y == j)]
@@ -385,16 +410,31 @@ class OVO_TSVM:
                 sub_prob_y_i_j[sub_prob_y_i_j == j] = -1
                 sub_prob_y_i_j[sub_prob_y_i_j == i] = 1
                 
-                #print(sub_prob_y_i_j)
-                
-                self.bin_TSVM_models[p] = TSVM(self.kernel, 1, self.C_1, self.C_2, \
+                self.bin_TSVM_models_[p] = TSVM(self.kernel, 1, self.C_1, self.C_2, \
                                self.gamma)
                 
-                self.bin_TSVM_models[p].fit(sub_prob_X_i_j, sub_prob_y_i_j)
+                self.bin_TSVM_models_[p].fit(sub_prob_X_i_j, sub_prob_y_i_j)
                 
                 p = p + 1
+                
+        self.shape_fit_ = X.shape
+                
+        return self
          
     def predict(self, X):
+        
+        """
+        Predicits lables of test samples
+        
+        Parameters:
+            X_test: test samples, (n_samples, n_features)
+        
+        Returns:
+            y_pred: array, (n_samples,)
+        
+        """
+        
+        X = self._validate_for_predict(X)
         
         # Initialze votes
         votes = np.zeros((X.shape[0], self.classes_.size), dtype=np.int)
@@ -408,9 +448,7 @@ class OVO_TSVM:
                 
                 for j in range(i + 1, self.classes_.size):
                     
-                    y_pred = self.bin_TSVM_models[p].predict(X[k, :].reshape(1, X.shape[1]))
-                    
-                    print(y_pred)
+                    y_pred = self.bin_TSVM_models_[p].predict(X[k, :].reshape(1, X.shape[1]))
                     
                     if y_pred == 1:
                         
@@ -419,6 +457,8 @@ class OVO_TSVM:
                     else:
                         
                         votes[k, j] = votes[k, j] + 1
+                        
+                    p = p + 1
                         
         
          # Labels of test samples based max-win strategy
@@ -433,16 +473,35 @@ if __name__ == '__main__':
     
     from dataproc import read_data
     from sklearn.metrics import accuracy_score
-    
-    X_train, y_train, data_name = read_data('/home/mir/Mir/Mir-Repo/dataset/mc-data/wine.csv')
-    
-    ovo_tsvm_model = OVO_TSVM('linear', 4, 8)
-    
-    ovo_tsvm_model.fit(X_train, y_train)
-    
-    pred = ovo_tsvm_model.predict(X_train)
-    
-    print(pred)
+    from sklearn.model_selection import train_test_split
+    from sklearn.utils.estimator_checks import check_estimator
+    from sklearn.model_selection import cross_val_score, GridSearchCV
+    import time
 
-
-    print("Accuracy: %.2f" % (accuracy_score(y_train, pred) * 100))
+    
+    train_data, labels, data_name = read_data('/home/mir/mir-projects/Mir-Repo/dataset/mc-data/wine.csv')
+#    
+#    X_train, X_test, y_train, y_test = train_test_split(train_data, labels,
+#                                                        test_size=0.30, random_state=42)
+#    
+    
+    param = {'C_1': [float(2**i) for i in range(-5, 6)],
+             'C_2': [float(2**i) for i in range(-5, 6)]}
+    
+    start_t = time.time()
+#    
+    ovo_tsvm_model = OVO_TSVM('linear')
+    
+    #cv = cross_val_score(ovo_tsvm_model, train_data, labels, cv=10)
+    
+    result = GridSearchCV(ovo_tsvm_model, param, cv=10, n_jobs=4, refit=False, verbose=1)
+    result.fit(train_data, labels)
+    
+#    
+#    ovo_tsvm_model.fit(X_train, y_train)
+#    
+#    pred = ovo_tsvm_model.predict(X_test)
+#    
+    print("Finished: %.2f ms" % ((time.time() - start_t) * 1000))
+#    
+    print("Accuracy: %.2f" % (result.best_score_ * 100))
