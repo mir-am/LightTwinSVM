@@ -480,13 +480,13 @@ if __name__ == '__main__':
 
     
     train_data, labels, data_name = read_data('/home/mir/mir-projects/Mir-Repo/dataset/mc-data/wine.csv')
-#    
-#    X_train, X_test, y_train, y_test = train_test_split(train_data, labels,
-#                                                        test_size=0.30, random_state=42)
-#    
     
-    param = {'C_1': [float(2**i) for i in range(-5, 6)],
-             'C_2': [float(2**i) for i in range(-5, 6)]}
+    X_train, X_test, y_train, y_test = train_test_split(train_data, labels,
+                                                        test_size=0.30, random_state=42)
+    
+    
+#    param = {'C_1': [float(2**i) for i in range(-5, 6)],
+#             'C_2': [float(2**i) for i in range(-5, 6)]}
     
     start_t = time.time()
 #    
@@ -494,14 +494,14 @@ if __name__ == '__main__':
     
     #cv = cross_val_score(ovo_tsvm_model, train_data, labels, cv=10)
     
-    result = GridSearchCV(ovo_tsvm_model, param, cv=10, n_jobs=4, refit=False, verbose=1)
-    result.fit(train_data, labels)
+#    result = GridSearchCV(ovo_tsvm_model, param, cv=10, n_jobs=4, refit=False, verbose=1)
+#    result.fit(train_data, labels)
     
 #    
-#    ovo_tsvm_model.fit(X_train, y_train)
-#    
-#    pred = ovo_tsvm_model.predict(X_test)
+    ovo_tsvm_model.fit(X_train, y_train)
+    
+    pred = ovo_tsvm_model.predict(X_test)
 #    
     print("Finished: %.2f ms" % ((time.time() - start_t) * 1000))
 #    
-    print("Accuracy: %.2f" % (result.best_score_ * 100))
+    print("Accuracy: %.2f" % (accuracy_score(y_test, pred) * 100))

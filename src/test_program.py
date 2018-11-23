@@ -15,7 +15,7 @@ In this module, unit test is defined for checking the integrity of installation.
 from eval_classifier import Validator, initializer
 from ui import UserInput
 from dataproc import read_data, read_libsvm
-from twinsvm import TSVM, MCTSVM
+from twinsvm import TSVM, MCTSVM, OVO_TSVM
 import unittest
 
 
@@ -52,7 +52,8 @@ class TestProgram(unittest.TestCase):
         self.input = UserInput()
         # Default settings for unit test - Binary Classification
         # Dataset
-        self.input.X_train, self.input.y_train, self.input.filename = read_data("./dataset/pima-indian.csv")
+        self.input.X_train, self.input.y_train, self.input.filename = \
+        read_data("./dataset/pima-indian.csv")
         # Lower and upper bounds of parameters
         self.input.lower_b_c, self.input.upper_b_c = -2, 2
         self.input.lower_b_u, self.input.upper_b_u = -2, 2
@@ -64,7 +65,7 @@ class TestProgram(unittest.TestCase):
         # Default settings for unit test - multiclass Classification
         # Dataset
         self.input_mc.X_train, self.input_mc.y_train, self.input_mc.filename = \
-        read_data('./dataset/balance.csv')
+        read_data('./dataset/wine.csv')
         # Lower and upper bounds of parameters
         self.input_mc.lower_b_c, self.input_mc.upper_b_c = -2, 2
         self.input_mc.lower_b_u, self.input_mc.upper_b_u = -2, 2
@@ -228,23 +229,23 @@ class TestProgram(unittest.TestCase):
     def test_linear_MCTSVM(self):
 
         """
-        It checks linear multi-class TwinSVM
+        It checks linear OVA TwinSVM
         """
 
         mctsvm_obj = MCTSVM()
         mctsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
         mctsvm_obj.predict(self.input_mc.X_train)
 
-    @unittest.skip('Singular Matrix!')
+    #@unittest.skip('Singular Matrix!')
     def test_RBF_MCTSVM(self):
 
         """
-        It checks non-linear multi-class TwinSVM
+        It checks non-linear OVA TwinSVM
         """
 
         mctsvm_obj = MCTSVM('RBF')
-        mctsvm_obj.fit(self.mc_X_train, self.mc_y_train)
-        print(mctsvm_obj.predict(self.mc_X_train))
+        mctsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
+        mctsvm_obj.predict(self.input_mc.X_train)
 
     def test_linear_CV_gridsearch_MCTSVM(self):
 
@@ -267,6 +268,26 @@ class TestProgram(unittest.TestCase):
         self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input_mc)
+        
+    def test_linear_OVO_TSVM(self):
+        
+        """
+        It checks linear OVO TwinSVM
+        """
+        
+        ovo_tsvm_obj = OVO_TSVM()
+        ovo_tsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
+        ovo_tsvm_obj.predict(self.input_mc.X_train)
+        
+    def test_RBF_OVO_TSVM(self):
+        
+        """
+        It checks non-linear OVO TwinSVM
+        """
+        
+        ovo_tsvm_obj = OVO_TSVM('RBF')
+        ovo_tsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
+        ovo_tsvm_obj.predict(self.input_mc.X_train)
 
 
 if __name__ == '__main__':
