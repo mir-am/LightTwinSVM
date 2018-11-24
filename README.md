@@ -24,7 +24,7 @@ The main features of the program are the following:
 - A simple console program for running TwinSVM classifier
 - Fast optimization algorithm: The ClippDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
 - Linear, RBF kernel and Rectangular are supported.
-- Binary and Multi-class classification (One-vs.All) are supported.
+- Binary and Multi-class classification (One-vs-All & One-vs-One) are supported.
 - K-fold cross validation supported.
 - Training/Test split supported.
 - It supports grid search over C and gamma parameters.
