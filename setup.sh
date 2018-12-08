@@ -99,11 +99,11 @@ then
 
 	if [ $? == 0 ]
 	then
-		echo "Found Python 3 dev on your system..."
-		
-		((step++))
+	    echo "Found Python 3 dev on your system..."
+
+	    ((step++))
 	else
-		echo "Could not find Python 3 dev and will be installed."
+	    echo "Could not find Python 3 dev and will be installed."
 		
 		if [[ ! -z $(which apt-get) ]];
 		then
@@ -122,28 +122,37 @@ then
 	# In order to build C++ extension module, LAPACK and BLAS library should be present.
 	echo -e "Step 3:\nChecks existence of LAPACK and BLAS..."
 
-	lapack=$(ldconfig -p | grep liblapack)
+    	if [ "$OSTYPE" == "linux-gnu" ]
+    	then
 
-	if [ $? == 0 ]
-	then
-		echo "Found LAPACK library on your system..."
-		
+	    lapack=$(ldconfig -p | grep liblapack)
+
+	    if [ $? == 0 ]
+	    then
+		echo "Found LAPACK library on your Linux system..."
+
 		((step++))
-	else
+	    else
 		echo "Could not find LAPACK on your system..."
-		
+
 		if [[ ! -z $(which apt-get) ]];
 		then
-			sudo apt-get install liblapack-dev libblas-dev -y
+		    sudo apt-get install liblapack-dev libblas-dev -y
 		else
-			sudo yum install lapack-devel blas-devel -y
+		    sudo yum install lapack-devel blas-devel -y
 		fi
-		
-		((step++))
-	fi
-	
+                ((step++))
+
+	    fi
+
+    	elif [ "$OSTYPE" == "darwin"* ]
+    	then
+            echo "A MacOS system is detected. So Accelerate Framework will be used for compiling C++ extension."
+            ((step++))
+    	fi
+
 	ext_module="src/clippdcd$(python3-config --extension-suffix)"
-	
+
 	if [ -e $ext_module ]
 	then
 		echo "Found ClippDCD optimizer (C++ extension module.)"
@@ -160,9 +169,19 @@ then
 			# Armadillo is licensed under the Apache License, Version 2.0
 			git clone https://github.com/mir-am/armadillo-code.git temp
 		fi
-		
-		# Compiles C++ extension module
-		c++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
+
+        # Check OS type for compiling on Linux and MacOS systems
+        if [ "$OSTYPE" == "linux-gnu" ]
+        then
+            # Compiles C++ extension module
+	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack
+
+        elif [ "$OSTYPE" == "darwin"* ]
+        then
+
+	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+
+        fi
 		
 		echo "The C++ extension moudle is generated..."
 		((step++))
