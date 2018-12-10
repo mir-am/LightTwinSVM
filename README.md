@@ -14,15 +14,15 @@
 3. [User Guide](#user-guide)
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
-6. [Numerical Experiments](#numerical-experiments)
-7. FAQ
+6. [FAQ](#frequently-asked-questions)
+7. [Numerical Experiments](#numerical-experiments) 
 
 ## Intro
 LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
  
 The main features of the program are the following:
 - A simple console program for running TwinSVM classifier
-- Fast optimization algorithm: The ClippDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
+- Fast optimization algorithm: The clipDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
 - Linear, RBF kernel and Rectangular are supported.
 - Binary and Multi-class classification (One-vs-All & One-vs-One) are supported.
 - K-fold cross validation supported.
@@ -31,10 +31,10 @@ The main features of the program are the following:
 - CSV and LIBSVM data files are supported.
 - Detailed classification result will be saved in a spreadsheet file.
 
-Twin Support Vector Machine classifier proposed by: <br />
+Twin Support Vector Machine classifier was proposed by: <br />
 Khemchandani, R., & Chandra, S. (2007). Twin support vector machines for pattern classification. IEEE Transactions on pattern analysis and machine intelligence, 29(5), 905-910.
 
-The ClippDCD algorithm was proposed by: <br />
+The clipDCD algorithm was proposed by: <br />
 Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algorithm for solving support vector machines. Knowledge-Based Systems, 71, 266-278.
 
 ## Installation Guide
@@ -42,6 +42,7 @@ Currently, supported operating systems are as follows:
 - Debian-based Linux systems (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10 and Linux Mint 18)
 - RPM-based Linux systems (Fedora)
 - Microsoft Windows (It's experimental.)
+- MacOS
 
 ### Linux
 First of all, [Python](https://www.python.org/) 3.4 interpreter or newer is required. Python 3 is usually installed by default on most Linux distributions.
@@ -98,28 +99,34 @@ Step 4/4:Type the range of C penalty parameter for grid search:
 -> -4 4
 ```
 After completing the above steps, the exhaustive search will be started. When the search process is completed, a detailed classification result will be saved in a spreadsheet file. In this file, all the common evalaution metrics(e.g Accuracy, Recall, Precision and F1) are provided.<br />
-A instace of spreadsheet file containing classification result can be seen [here](https://github.com/mir-am/LightTwinSVM/blob/misc/TSVM_RBF_5-F-CV_pima-indian_2018-05-23%2013:21.csv).
+A instance of spreadsheet file containing classification result can be seen [here](https://github.com/mir-am/LightTwinSVM/blob/misc/TSVM_RBF_5-F-CV_pima-indian_2018-05-23%2013:21.csv).
  
 
 ## Dataset Format
 - **LIBSVM** data files are supported. Note that the extension of this file should be '*.libsvm'.
 - For **comma separated value (CSV)** file, make sure that your dataset is consistent with the following rules:
 1. First row can be header names. (It's optional.)
-2. Frist column should be labels of samples. Moreover, labels of positive and negative samples should be 1 and -1, respectively.
+2. First column should be labels of samples. Moreover, labels of positive and negative samples should be 1 and -1, respectively.
 3. All the values in dataset except headernames should be numerical. Nominal values are not allowed. <br />
-To help you prepare your dataset and test the program, three datasets are inculded [here](https://github.com/mir-am/LightTwinSVM/tree/master/dataset).
+To help you prepare your dataset and test the program, three datasets are included [here](https://github.com/mir-am/LightTwinSVM/tree/master/dataset).
 
 ## Support
 **Have a question about the software?**<br />
-You can contact me via [email](mailto:mir-am@hotmail.com). Feedbacks and suggestions for improvements are welcome.<br />
+You can contact me via [email](mailto:mir-am@hotmail.com). Feedback and suggestions for improvements are welcome.<br />
 
 **Have a problem with the software or found a bug?**<br />
 To let me know and fix it, please open an issue [here](https://github.com/mir-am/LightTwinSVM/issues). <br />
 To report a problem or bug, please provide the following information:<br />
 1. Error messages<br />
 2. Output of the program.<br />
-3. Explain how to produce the problem if possible.
+3. Explain how to reproduce the problem if possible.
 
+## Frequently Asked Questions
+- What is the main idea of TwinSVM classifier? <br />
+TwinSVM does classification by using two non-parallel hyperplanes as opposed to a single hyperplane in the standard SVM. <br />
+In TwinSVM, each hyperplane is as close as possible to samples of its own class and far away from samples of other class. To know more about TwinSVM and its optimization problems, you can read [this blog post](https://mirblog.me/index.php/2018/12/07/a-brief-intro-to-twin-support-vector-machine-classifier/ "A brief Introduction to TwinSVM classifier").
 
 ## Numerical Experiments
 
+## Acknowledgments
+Thanks to [idejie](https://github.com/idejie) for test and support on the MacOS. (Dec 8, 2018)
