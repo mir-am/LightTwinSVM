@@ -24,18 +24,14 @@ from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from sklearn.utils import column_or_1d
 import numpy as np
 
-try:
-# ClippDCD optimizer is an extension module which is implemented in C++
-    import clippdcd
 
-except ImportError:
-    
-    print("Failed to import clipDCD module!")
+# ClippDCD optimizer is an extension module which is implemented in C++
+import clippdcd
 
 
 class TSVM:
 
-    def __init__(self, kernel_type='linear', rect_kernel=1, c1=2**0, c2=2**0, \
+    def __init__(self, kernel='linear', rect_kernel=1, c1=2**0, c2=2**0, \
                  gamma=2**0):
 
         """
@@ -48,7 +44,7 @@ class TSVM:
         self.C1 = c1
         self.C2 = c2
         self.u = gamma
-        self.kernel_t = kernel_type
+        self.kernel = kernel
         self.rectangular_size = rect_kernel
         self.mat_C_t = None
 
@@ -93,12 +89,12 @@ class TSVM:
         mat_e1 = np.ones((mat_A.shape[0], 1))
         mat_e2 = np.ones((mat_B.shape[0], 1))
 
-        if self.kernel_t == 'linear':  # Linear kernel
+        if self.kernel == 'linear':  # Linear kernel
             
             mat_H = np.column_stack((mat_A, mat_e1))
             mat_G = np.column_stack((mat_B, mat_e2))
 
-        elif self.kernel_t == 'RBF': # Non-linear 
+        elif self.kernel == 'RBF': # Non-linear 
 
             # class 1 & class -1
             mat_C = np.row_stack((mat_A, mat_B))
@@ -160,9 +156,9 @@ class TSVM:
         for i in range(X_test.shape[0]):
 
             # Prependicular distance of data pint i from hyperplanes
-            prepen_distance[i, 1] = np.abs(np.dot(kernel_f[self.kernel_t](i), self.w1) + self.b1)
+            prepen_distance[i, 1] = np.abs(np.dot(kernel_f[self.kernel](i), self.w1) + self.b1)
 
-            prepen_distance[i, 0] = np.abs(np.dot(kernel_f[self.kernel_t](i), self.w2) + self.b2)
+            prepen_distance[i, 0] = np.abs(np.dot(kernel_f[self.kernel](i), self.w2) + self.b2)
 
         # Assign data points to class +1 or -1 based on distance from hyperplanes
         output = 2 * np.argmin(prepen_distance, axis=1) - 1
@@ -199,7 +195,7 @@ class MCTSVM:
     One-vs-All Scheme
     """
 
-    def __init__(self, kernel_type='linear', c=2**0, gamma=2**0):
+    def __init__(self, kernel='linear', c=2**0, gamma=2**0):
 
         """
         Input:
@@ -208,7 +204,7 @@ class MCTSVM:
             gamma: parameter of RBF function
         """
 
-        self.kernel_t = kernel_type
+        self.kernel = kernel
         self.C = c
         self.y = gamma
         self.classfiers = {}  # Classifiers
@@ -338,6 +334,21 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         self.kernel = kernel
         self.C_1 = C_1
         self.C_2 = C_2
+        self.gamma = gamma
+        
+    def set_parameter(self, c1=2**0, c2=2**0, gamma=2**0):
+
+        """
+        It changes the parametes for TSVM classifier.
+        DO NOT USE THIS METHOD AFTER INSTANTIATION OF TSVM CLASS!
+        THIS METHOD CREATED ONLY FOR Validator CLASS.
+        Input:
+            c1, c2: Penalty parameters
+            gamma: RBF function parameter
+        """
+
+        self.C_1 = c1
+        self.C_2 = c2
         self.gamma = gamma
          
     def _validate_targets(self, y):

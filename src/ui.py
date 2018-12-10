@@ -165,6 +165,32 @@ License: GNU General Public License v3.0
                 continue
 
             break
+        
+        if user_input.class_type == 'multiclass':
+        
+            # Let user choose type of multi-class (OVO or OVA)
+            while True:
+                
+                print("Step 1.1/4: Select a multi-class method:(Just type the number. e.g 1)\n1-One-vs-All(Faster)\n2-One-vs-One(More accurate)")
+                
+                mc_choice = input("-> ")
+                
+                if '1' in mc_choice:
+                    
+                    user_input.class_type = 'ova'
+                    
+                elif '2' in mc_choice:
+                    
+                    user_input.class_type = 'ovo'
+                    
+                else:
+    
+                    print("Wrong input! Try again.")
+    
+                    continue
+                    
+                break
+            
 
         # Step 2: Select a kernel function type
         while True:

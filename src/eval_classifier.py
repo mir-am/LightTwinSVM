@@ -13,7 +13,7 @@ train/test split, grid search and generating the detailed result.
 """
 
 
-from twinsvm import TSVM, MCTSVM
+from twinsvm import TSVM, MCTSVM, OVO_TSVM
 from misc import progress_bar_gs, time_fmt
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
@@ -190,7 +190,7 @@ class Validator:
                np.mean(mean_precision_p), np.std(mean_precision_p), np.mean(mean_f1_p), \
                np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
                np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
-               np.std(mean_f1_n), tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
+               np.std(mean_f1_n), tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel == 'RBF' else '']
 
 
     def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
@@ -265,7 +265,7 @@ class Validator:
         return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
                np.std(mean_accuracy), np.mean(mean_recall), np.std(mean_recall), \
                np.mean(mean_precision), np.std(mean_precision), np.mean(mean_f1), \
-               np.std(mean_f1), c, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
+               np.std(mean_f1), c, gamma if self.obj_TSVM.kernel == 'RBF' else '']
 
     def choose_validator(self):
 
@@ -283,7 +283,7 @@ class Validator:
 
                 return self.split_tt_validator
 
-        elif isinstance(self.obj_TSVM, MCTSVM):  # Multi-class TSVM
+        else:  # Multi-class TSVM
 
             if self.validator[0] == 'CV':
 
@@ -305,13 +305,13 @@ def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
 
     c_range = [2 ** i for i in np.arange(c_l_bound, c_u_bound + 1, step, dtype=np.float)]
 
-    if class_type == 'binary':
+    if class_type == 'binary' or class_type == 'ovo':
 
         return list(product(*[c_range, c_range, ])) if kernel_type == 'linear' else \
                list(product(*[c_range, c_range, [2 ** i for i in np.arange(rbf_lbound, \
                     rbf_ubound + 1, step, dtype=np.float)]]))
 
-    elif class_type == 'multiclass':
+    elif class_type == 'ova':
 
         return list(product(*[c_range, ])) if kernel_type == 'linear' else \
                list(product(*[c_range, [2 ** i for i in np.arange(rbf_lbound, \
@@ -414,7 +414,7 @@ def save_result(file_name, validator_obj, gs_result, output_path):
     # (Name of validator, validator's attribute) - ('CV', 5-folds)
     validator_type, validator_attr = validator_obj.validator              
 
-    output_file = os.path.join(output_path, "TSVM_%s_%s_%s_%s.xlsx") % (validator_obj.obj_TSVM.kernel_t, \
+    output_file = os.path.join(output_path, "TSVM_%s_%s_%s_%s.xlsx") % (validator_obj.obj_TSVM.kernel, \
                   "%d-F-CV" % validator_attr if validator_type == 'CV' else 'Tr%d-Te%d' % \
                   (100 - validator_attr, validator_attr), file_name, datetime.now().strftime('%Y-%m-%d %H-%M'))
 
@@ -442,8 +442,12 @@ def initializer(user_input_obj):
 
         tsvm_obj = TSVM(user_input_obj.kernel_type, user_input_obj.rect_kernel)
 
-    elif user_input_obj.class_type == 'multiclass':
+    elif user_input_obj.class_type == 'ovo':
 
+        tsvm_obj = OVO_TSVM(user_input_obj.kernel_type)
+        
+    elif user_input_obj.class_type == 'ova':
+        
         tsvm_obj = MCTSVM(user_input_obj.kernel_type)
 
     validate = Validator(user_input_obj.X_train, user_input_obj.y_train, \
