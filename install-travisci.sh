@@ -11,15 +11,21 @@
 # For OS X, python can be installed using  brew on Travis CI
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]
 then
+
 brew update
 brew install pyenv
 brew install pyenv-virtualenv
 pyenv install $PYENV_VERSION
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+
+# Manually adding to path!!
+export PYENV_VERSION=$PYENV_VERSION
+export PATH="/Users/travis/.pyenv/shims:${PATH}"
 pyenv-virtualenv venv
 source venv/bin/activate
+
+pip install --upgrade pip
 python --version
+pip --version
 fi
 
 pip install -r requirments.txt
