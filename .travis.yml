@@ -5,9 +5,13 @@
 
 # Configuration file for building and testing LightTwinSVM on Travis CI
 
-# Ubuntu 14.04.5 LTS
-dist: trusty 
-sudo: true
+# Ubuntu 16.04 LTS & OS X
+matrix:
+  include:
+    -os: linux
+     dist: xenial
+     sudo: true     
+    -os: osx
 
 branches:
   only:
@@ -15,7 +19,6 @@ branches:
 
 language: python
 python:
-- '3.4'
 - '3.5'
 - '3.6'
 - '3.7'
