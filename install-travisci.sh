@@ -8,6 +8,20 @@
 # In this shell script, required dependencis will be installed.
 # for building and testing LightTwinSVM on Travis CI
 
+# For OS X, python can be installed using  brew on Travis CI
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+then
+brew update
+brew install pyenv
+brew install pyenv-virtualenv
+pyenv install $PYENV_VERSION
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+pyenv-virtualenv venv
+source venv/bin/activate
+python --version
+fi
+
 pip install -r requirments.txt
 
 # clones Armadillo which is a C++ Linear Algebra library

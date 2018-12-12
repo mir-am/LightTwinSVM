@@ -4,24 +4,33 @@
 # License: GNU General Public License v3.0
 
 # Configuration file for building and testing LightTwinSVM on Travis CI
+language: python
 
 # Ubuntu 16.04 LTS & OS X
 matrix:
   include:
     - os: linux
       dist: xenial
-      sudo: true     
+      sudo: true
+      python: '3.5'
+      
+    - os: linux
+      dist: xenial
+      sudo: true
+      python: '3.6'
+      
+    - os: linux
+      dist: xenial
+      sudo: true
+      python: '3.7'
+      
     - os: osx
+      language: generic
+      env: PYENV_VERSION=3.6.7
 
 branches:
   only:
   - master
-
-language: python
-python:
-- '3.5'
-- '3.6'
-- '3.7'
 
 addons:
   apt:
