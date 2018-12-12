@@ -23,14 +23,8 @@ from sklearn.utils.multiclass import check_classification_targets
 from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from sklearn.utils import column_or_1d
 import numpy as np
-
-try:
 # ClippDCD optimizer is an extension module which is implemented in C++
-    import clippdcd
-
-except ImportError:
-    
-    print("Failed to import clipDCD module!")
+import clippdcd
 
 
 class TSVM:
