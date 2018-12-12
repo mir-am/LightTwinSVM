@@ -13,8 +13,13 @@ Such as date time formatting and customized progress bar
 """
 
 import itertools
-import matplotlib.pyplot as plt
 import numpy as np
+
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    print("Couldn't import matplotlib package. However, this package is optional"
+          " and required for plotting confusion matrix.")
 
 
 def time_fmt(t_delta):
