@@ -12,8 +12,8 @@
 if [[ "$TRAVIS_OS_NAME" == "osx" ]]
 then
 
-brew update
-brew install pyenv
+#brew update # It's time-consuming
+brew install pyenv || brew upgrade pyenv
 brew install pyenv-virtualenv
 pyenv install $PYENV_VERSION
 
@@ -34,19 +34,24 @@ pip install -r requirments.txt
 # Armadillo is licensed under the Apache License, Version 2.0
 git clone https://github.com/mir-am/armadillo-code.git temp
 
+
+
+# Building C++ extension module on Linux and OS X
+if [[ "$TRAVIS_OS_NAME" == "linux" ]]
+then
+
 # Lookslike there is a bug in python-config which produces wrong extension suffix
 # More info at https://bugs.python.org/issue25440
 # Following solution solves the problem on Travis CI
 # Get extension suffix for building Python extension module
 ext_suffix='./src/clippdcd'$(python3 -c $'from distutils.sysconfig import get_config_var; print(get_config_var(\'EXT_SUFFIX\'))')
 
-# Building C++ extension module on Linux and OS X
-if [[ "$TRAVIS_OS_NAME" == "linux" ]]
-then
 g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o $ext_suffix -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
+
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
 then
-g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+echo $(python-config --extension-suffix)
+g++ -O3 -Wall -shared -std=c++11 -fPIC `python -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
 fi
 
 # Creates result directory for saving unit test's output
