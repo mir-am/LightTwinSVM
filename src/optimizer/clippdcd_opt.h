@@ -28,8 +28,8 @@ May 4, 2018: A trick for improving dot product computation. It imporves speed by
 #include <vector>
 
 // For consistency between Cython and Pybind11
-// and same interface for Python will be generated.
-#ifdef __unix__
+// same interface for Python will be generated.
+#if defined __unix__ || defined __APPLE__
     #define clippdcd_func_name clippDCD_optimizer
 #elif defined _WIN64
     #define clippdcd_func_name clippDCDOptimizer

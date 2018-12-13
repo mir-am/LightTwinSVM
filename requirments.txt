@@ -5,3 +5,5 @@ scikit-learn
 pandas
 pybind11
 xlsxwriter
+# Looks like this pacakge is needed to import scikit-learn on MacOS!
+sklearn
