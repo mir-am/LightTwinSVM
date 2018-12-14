@@ -13,7 +13,7 @@ train/test split, grid search and generating the detailed result.
 """
 
 
-from twinsvm import TSVM, MCTSVM, OVO_TSVM
+from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
 from misc import progress_bar_gs, time_fmt
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold

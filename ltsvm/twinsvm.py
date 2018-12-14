@@ -26,7 +26,7 @@ import numpy as np
 
 
 # ClippDCD optimizer is an extension module which is implemented in C++
-import clippdcd
+from ltsvm.optimizer import clipdcd
 
 
 class TSVM:
@@ -122,8 +122,8 @@ class TSVM:
         mat_dual2 = np.dot(np.dot(mat_H, mat_G_G), mat_H_t)
 
         # Obtaining Lagrane multipliers using ClippDCD optimizer
-        alpha_d1 = np.array(clippdcd.clippDCD_optimizer(mat_dual1, self.C1)).reshape(mat_dual1.shape[0], 1)
-        alpha_d2 = np.array(clippdcd.clippDCD_optimizer(mat_dual2, self.C2)).reshape(mat_dual2.shape[0], 1)
+        alpha_d1 = np.array(clipdcd.clippDCD_optimizer(mat_dual1, self.C1)).reshape(mat_dual1.shape[0], 1)
+        alpha_d2 = np.array(clipdcd.clippDCD_optimizer(mat_dual2, self.C2)).reshape(mat_dual2.shape[0], 1)
 
         # Obtain hyperplanes
         hyper_p_1 = -1 * np.dot(np.dot(mat_H_H, mat_G_t), alpha_d1)
@@ -273,7 +273,7 @@ class MCTSVM:
             mat_dual_i = np.dot(np.dot(mat_B_i, mat_A_A), mat_B_i_t)
     
             # Obtaining Lagrange multipliers using ClippDCD optimizer
-            alpha_i = np.array(clippdcd.clippDCD_optimizer(mat_dual_i, self.C)).reshape(mat_dual_i.shape[0], 1)
+            alpha_i = np.array(clipdcd.clippDCD_optimizer(mat_dual_i, self.C)).reshape(mat_dual_i.shape[0], 1)
     
             hyperplane_i = np.dot(np.dot(mat_A_A, mat_B_i_t), alpha_i)
     

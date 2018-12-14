@@ -31,7 +31,7 @@ May 4, 2018: A trick for improving dot product computation. It imporves speed by
 
 #define MAX_ITER 15000
 
-PYBIND11_MODULE(clippdcd, m) {
+PYBIND11_MODULE(clipdcd, m) {
     m.doc() = "ClippDCD opimizer implemented in C++ and improved by Mir, A.";
 
     m.def("clippDCD_optimizer", &clippDCD_optimizer, "ClippDCD algorithm - solves dual optimization problem");

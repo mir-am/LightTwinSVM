@@ -12,8 +12,7 @@ User interface of LightTwinSVM program is implemented in this module.
 
 """
 
-
-from eval_classifier import initializer
+from ltsvm.eval_classifier import initializer
 from dataproc import read_data, read_libsvm
 from tkinter import Tk, filedialog
 from os import path
