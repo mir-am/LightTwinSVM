@@ -12,8 +12,9 @@ User interface of LightTwinSVM program is implemented in this module.
 
 """
 
+from ltsvm import __version__, RELEASE_DATE
 from ltsvm.eval_classifier import initializer
-from dataproc import read_data, read_libsvm
+from ltsvm.dataproc import read_data, read_libsvm
 from tkinter import Tk, filedialog
 from os import path
 import time
@@ -86,11 +87,12 @@ def program_ui():
 
     # Printing general info on program
     print("""LightTwinSVM Program - Simple and Fast
-Version: 0.2.0-alpha - 2018-05-30
+Version: %s - %s
 Developer: Mir, A. (mir-am@hotmail.com)
 Paper's authors: Khemchandani, R. & Chandra, S.
 License: GNU General Public License v3.0
-*************************************************\n""")
+*************************************************\n""" % (__version__,
+ RELEASE_DATE))
 
     input("Press Enter to start the program...\n")
 

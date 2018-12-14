@@ -14,7 +14,7 @@ train/test split, grid search and generating the detailed result.
 
 
 from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
-from misc import progress_bar_gs, time_fmt
+from ltsvm.misc import progress_bar_gs, time_fmt
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score

@@ -24,7 +24,7 @@ from sklearn.utils.validation import check_X_y, check_is_fitted, check_array
 from sklearn.utils import column_or_1d
 import numpy as np
 
-# ClippDCD optimizer is an extension module which is implemented in C++
+# ClipDCD optimizer is an extension module which is implemented in C++
 from ltsvm.optimizer import clipdcd
 
 
