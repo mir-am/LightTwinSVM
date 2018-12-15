@@ -151,7 +151,7 @@ then
             ((step++))
     	fi
 
-	ext_module="src/clippdcd$(python3-config --extension-suffix)"
+	ext_module="ltsvm/optimizer/clippdcd$(python3-config --extension-suffix)"
 
 	if [ -e $ext_module ]
 	then
@@ -234,7 +234,7 @@ then
 		then
 			echo "Unit test started..."
 			
-			python3 ./src/test_program.py -v
+			python3 ./ltsvm/test_program.py -v
 		fi
 		
 		echo -e "***************************************\n"
