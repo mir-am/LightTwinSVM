@@ -28,9 +28,9 @@ import numpy as np
 from ltsvm.optimizer import clipdcd
 
 
-class TSVM:
+class TSVM(BaseEstimator):
 
-    def __init__(self, kernel='linear', rect_kernel=1, c1=2**0, c2=2**0, \
+    def __init__(self, kernel='linear', rect_kernel=1, C1=2**0, C2=2**0, \
                  gamma=2**0):
 
         """
@@ -40,30 +40,30 @@ class TSVM:
             gamma: RBF function parameter
         """
 
-        self.C1 = c1
-        self.C2 = c2
-        self.u = gamma
+        self.C1 = C1
+        self.C2 = C2
+        self.gamma = gamma
         self.kernel = kernel
-        self.rectangular_size = rect_kernel
+        self.rect_kernel = rect_kernel
         self.mat_C_t = None
 
         # Two hyperplanes attributes
         self.w1, self.b1, self.w2, self.b2 = None, None, None, None
 
-    def set_parameter(self, c1=2**0, c2=2**0, gamma=2**0):
-
-        """
-        It changes the parametes for TSVM classifier.
-        DO NOT USE THIS METHOD AFTER INSTANTIATION OF TSVM CLASS!
-        THIS METHOD CREATED ONLY FOR Validator CLASS.
-        Input:
-            c1, c2: Penalty parameters
-            gamma: RBF function parameter
-        """
-
-        self.C1 = c1
-        self.C2 = c2
-        self.u = gamma
+#    def set_parameter(self, c1=2**0, c2=2**0, gamma=2**0):
+#
+#        """
+#        It changes the parametes for TSVM classifier.
+#        DO NOT USE THIS METHOD AFTER INSTANTIATION OF TSVM CLASS!
+#        THIS METHOD CREATED ONLY FOR Validator CLASS.
+#        Input:
+#            c1, c2: Penalty parameters
+#            gamma: RBF function parameter
+#        """
+#
+#        self.C1 = c1
+#        self.C2 = c2
+#        self.u = gamma
 
     def fit(self, X_train, y_train):
 
@@ -98,11 +98,11 @@ class TSVM:
             # class 1 & class -1
             mat_C = np.row_stack((mat_A, mat_B))
 
-            self.mat_C_t = np.transpose(mat_C)[:, :int(mat_C.shape[0] * self.rectangular_size)]
+            self.mat_C_t = np.transpose(mat_C)[:, :int(mat_C.shape[0] * self.rect_kernel)]
 
-            mat_H = np.column_stack((rbf_kernel(mat_A, self.mat_C_t, self.u), mat_e1))
+            mat_H = np.column_stack((rbf_kernel(mat_A, self.mat_C_t, self.gamma), mat_e1))
 
-            mat_G = np.column_stack((rbf_kernel(mat_B, self.mat_C_t, self.u), mat_e2))
+            mat_G = np.column_stack((rbf_kernel(mat_B, self.mat_C_t, self.gamma), mat_e2))
 
 
         mat_H_t = np.transpose(mat_H)
@@ -120,7 +120,7 @@ class TSVM:
         # Wolfe dual problem of class -1
         mat_dual2 = np.dot(np.dot(mat_H, mat_G_G), mat_H_t)
 
-        # Obtaining Lagrane multipliers using ClippDCD optimizer
+        # Obtaining Lagrange multipliers using ClipDCD optimizer
         alpha_d1 = np.array(clipdcd.clippDCD_optimizer(mat_dual1, self.C1)).reshape(mat_dual1.shape[0], 1)
         alpha_d2 = np.array(clipdcd.clippDCD_optimizer(mat_dual2, self.C2)).reshape(mat_dual2.shape[0], 1)
 
@@ -150,7 +150,7 @@ class TSVM:
         prepen_distance = np.zeros((X_test.shape[0], 2))
 
         kernel_f = {'linear': lambda i: X_test[i, :] , 'RBF': lambda i: rbf_kernel(X_test[i, :], \
-                    self.mat_C_t, self.u)}
+                    self.mat_C_t, self.gamma)}
 
         for i in range(X_test.shape[0]):
 
@@ -481,15 +481,15 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
     
 if __name__ == '__main__':
     
-    from dataproc import read_data
+    from ltsvm.dataproc import read_data
     from sklearn.metrics import accuracy_score
     from sklearn.model_selection import train_test_split
-    from sklearn.utils.estimator_checks import check_estimator
-    from sklearn.model_selection import cross_val_score, GridSearchCV
+#    from sklearn.utils.estimator_checks import check_estimator
+#    from sklearn.model_selection import cross_val_score, GridSearchCV
     import time
 
     
-    train_data, labels, data_name = read_data('/home/mir/mir-projects/Mir-Repo/dataset/mc-data/wine.csv')
+    train_data, labels, data_name = read_data('/home/mir/mir-projects/Mir-Repo/dataset/Votes.csv')
     
     X_train, X_test, y_train, y_test = train_test_split(train_data, labels,
                                                         test_size=0.30, random_state=42)
@@ -500,13 +500,16 @@ if __name__ == '__main__':
     
     start_t = time.time()
 #    
-    ovo_tsvm_model = OVO_TSVM('linear')
+    ovo_tsvm_model = TSVM(kernel='RBF')
+    ovo_tsvm_model.set_params(**{'C1': 4, 'C2':0.25, 'gamma': 0.1})
+    print(ovo_tsvm_model.get_params())
     
     #cv = cross_val_score(ovo_tsvm_model, train_data, labels, cv=10)
     
 #    result = GridSearchCV(ovo_tsvm_model, param, cv=10, n_jobs=4, refit=False, verbose=1)
 #    result.fit(train_data, labels)
     
+    print(X_train.shape)
 #    
     ovo_tsvm_model.fit(X_train, y_train)
     
