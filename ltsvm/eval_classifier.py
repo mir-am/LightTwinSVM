@@ -15,8 +15,7 @@ train/test split, grid search and generating the detailed result.
 
 from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
 from ltsvm.misc import progress_bar_gs, time_fmt
-from sklearn.model_selection import train_test_split
-from sklearn.model_selection import KFold
+from sklearn.model_selection import train_test_split, KFold, ParameterGrid
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
 from itertools import product
 from datetime import datetime
@@ -124,17 +123,20 @@ class Validator:
         self.validator = validator_type
         self.obj_TSVM = obj_tsvm
 
-    def cv_validator(self, c1=2**0, c2=2**0, gamma=2**0):
+    def cv_validator(self, dict_param):
 
         """
         It applies cross validation on instance of TSVM classifier
+        Input:
+            dict_param: A dictionary of hyper-parameters (dict)
+            
         output:
             Evaluation metrics such as accuracy, precision, recall and F1 score
             for each class.
         """
         
         # Set parameters of TSVM classifer
-        self.obj_TSVM.set_parameter(c1, c2, gamma)
+        self.obj_TSVM.set_params(*dict_param)
         
         # K-Fold Cross validation, divide data into K subsets
         k_fold = KFold(self.validator[1])    
@@ -303,19 +305,30 @@ def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
         return search elements for grid search (List)
     """
 
-    c_range = [2 ** i for i in np.arange(c_l_bound, c_u_bound + 1, step, dtype=np.float)]
-
+    c_range = [2 ** i for i in np.arange(c_l_bound, c_u_bound + 1, step,
+                                         dtype=np.float)]
+    
+    gamma_range = [2 ** i for i in np.arange(rbf_lbound, rbf_ubound + 1, step,
+                   dtype=np.float)] if kernel_type == 'RBF' else [1]
+    
     if class_type == 'binary' or class_type == 'ovo':
+        
+        param_grid = ParameterGrid({'C1': c_range, 'C2': c_range,
+                                    'gamma': gamma_range})
 
-        return list(product(*[c_range, c_range, ])) if kernel_type == 'linear' else \
-               list(product(*[c_range, c_range, [2 ** i for i in np.arange(rbf_lbound, \
-                    rbf_ubound + 1, step, dtype=np.float)]]))
+#        return list(product(*[c_range, c_range, ])) if kernel_type == 'linear' else \
+#               list(product(*[c_range, c_range, [2 ** i for i in np.arange(rbf_lbound, \
+#                    rbf_ubound + 1, step, dtype=np.float)]]))
 
     elif class_type == 'ova':
+        
+        param_grid = ParameterGrid({'C': c_range, 'gamma': gamma_range})
 
-        return list(product(*[c_range, ])) if kernel_type == 'linear' else \
-               list(product(*[c_range, [2 ** i for i in np.arange(rbf_lbound, \
-                    rbf_ubound + 1, step, dtype=np.float)]]))
+#        return list(product(*[c_range, ])) if kernel_type == 'linear' else \
+#               list(product(*[c_range, [2 ** i for i in np.arange(rbf_lbound, \
+#                    rbf_ubound + 1, step, dtype=np.float)]]))
+        
+    return list(param_grid)
 
 
 def grid_search(search_space, func_validator):
