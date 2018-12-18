@@ -126,7 +126,7 @@ class Validator:
     def cv_validator(self, dict_param):
 
         """
-        It applies cross validation on instance of TSVM classifier
+        It applies cross validation on instance of Binary TSVM classifier
         Input:
             dict_param: A dictionary of hyper-parameters (dict)
             
@@ -136,7 +136,7 @@ class Validator:
         """
         
         # Set parameters of TSVM classifer
-        self.obj_TSVM.set_params(*dict_param)
+        self.obj_TSVM.set_params(**dict_param)
         
         # K-Fold Cross validation, divide data into K subsets
         k_fold = KFold(self.validator[1])    
@@ -185,6 +185,7 @@ class Validator:
             fp = fp + accuracy_test[2]
             fn = fn + accuracy_test[3]
 
+        # TODO: return dict {'C': 4, 'gamma': 4} {k : x[k] + y[k]  for k in x.keys() & y.keys()}
         # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
         # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14, iter=15    
         return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
@@ -192,7 +193,8 @@ class Validator:
                np.mean(mean_precision_p), np.std(mean_precision_p), np.mean(mean_f1_p), \
                np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
                np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
-               np.std(mean_f1_n), tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel == 'RBF' else '']
+               np.std(mean_f1_n), tp, tn, fp, fn, dict_param['C1'], dict_param['C2'],
+               dict_param['gamma'] if self.obj_TSVM.kernel == 'RBF' else '']
 
 
     def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
@@ -225,14 +227,14 @@ class Validator:
         return accuracy, 0.0, [accuracy, recall_p, precision_p, f1_p, recall_n, \
                precision_n, f1_n, tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
 
-    def cv_validator_mc(self, c=2**0, gamma=2**0):
+    def cv_validator_mc(self, dict_param):
 
         """
         It applies cross validation on instance of multiclass TSVM classifier
         """
 
         # Set parameters of multiclass TSVM classifer
-        self.obj_TSVM.set_parameter(c, gamma)
+        self.obj_TSVM.set_params(**dict_param)
 
         # K-Fold Cross validation, divide data into K subsets
         k_fold = KFold(self.validator[1])    
@@ -373,7 +375,7 @@ def grid_search(search_space, func_validator):
             #start_time = time.time()
 
             # Save result after each run
-            acc, acc_std, result = func_validator(*element)
+            acc, acc_std, result = func_validator(element)
 
             #end = time.time()
 
