@@ -188,13 +188,22 @@ class Validator:
         # TODO: return dict {'C': 4, 'gamma': 4} {k : x[k] + y[k]  for k in x.keys() & y.keys()}
         # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
         # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14, iter=15    
-        return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
-               np.std(mean_accuracy), np.mean(mean_recall_p), np.std(mean_recall_p), \
-               np.mean(mean_precision_p), np.std(mean_precision_p), np.mean(mean_f1_p), \
-               np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
-               np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
-               np.std(mean_f1_n), tp, tn, fp, fn, dict_param['C1'], dict_param['C2'],
-               dict_param['gamma'] if self.obj_TSVM.kernel == 'RBF' else '']
+#        return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
+#               np.std(mean_accuracy), np.mean(mean_recall_p), np.std(mean_recall_p), \
+#               np.mean(mean_precision_p), np.std(mean_precision_p), np.mean(mean_f1_p), \
+#               np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
+#               np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
+#               np.std(mean_f1_n), tp, tn, fp, fn, dict_param['C1'], dict_param['C2'],
+#               dict_param['gamma'] if self.obj_TSVM.kernel == 'RBF' else '']
+        return np.mean(mean_accuracy), np.std(mean_accuracy), {**{'accuracy': np.mean(mean_accuracy),
+                      'acc_std': np.std(mean_accuracy),'recall_p': np.mean(mean_recall_p),
+                      'r_p_std': np.std(mean_recall_p), 'precision_p': np.mean(mean_precision_p),
+                      'p_p_std': np.std(mean_precision_p), 'f1_p': np.mean(mean_f1_p),
+                      'f1_p_std': np.std(mean_f1_p), 'recall_n': np.mean(mean_recall_n),
+                      'r_n_std': np.std(mean_recall_n), 'precision_n': np.mean(mean_precision_n),
+                      'p_n_std': np.std(mean_precision_n), 'f1_n': np.mean(mean_f1_n),
+                      'f1_n_std': np.std(mean_f1_n), 'tp': tp, 'tn': tn, 'fp': fp,
+                      'fn': fn}, **dict_param}
 
 
     def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
@@ -378,6 +387,8 @@ def grid_search(search_space, func_validator):
             acc, acc_std, result = func_validator(element)
 
             #end = time.time()
+            
+            print(result)
 
             result_list.append(result)
 
