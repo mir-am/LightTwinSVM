@@ -388,7 +388,7 @@ def grid_search(search_space, func_validator):
 
             #end = time.time()
             
-            print(result)
+            #print(result)
 
             result_list.append(result)
 
@@ -431,7 +431,7 @@ def save_result(file_name, validator_obj, gs_result, output_path):
 
     column_names = {'binary': {'CV': ['accuracy', 'acc_std', 'recall_p', 'r_p_std', 'precision_p', 'p_p_std', \
                            'f1_p', 'f1_p_std', 'recall_n', 'r_n_std', 'precision_n', 'p_n_std', 'f1_n',\
-                           'f1_n_std', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma'],
+                           'f1_n_std', 'tp', 'tn', 'fp', 'fn'], #'c1', 'c2','gamma'],
                     't_t_split': ['accuracy', 'recall_p', 'precision_p', 'f1_p', 'recall_n', 'precision_n', \
                                   'f1_n', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma']},
                     'multiclass':{'CV': ['accuracy', 'acc_std', 'micro_recall', 'm_rec_std', 'micro_precision', \
@@ -445,9 +445,10 @@ def save_result(file_name, validator_obj, gs_result, output_path):
                   (100 - validator_attr, validator_attr), file_name, datetime.now().strftime('%Y-%m-%d %H-%M'))
 
     excel_file = pd.ExcelWriter(output_file, engine='xlsxwriter')
-
-    result_frame = pd.DataFrame(gs_result, columns=column_names['binary' if \
-                   isinstance(validator_obj.obj_TSVM, TSVM) else 'multiclass'][validator_type]) 
+    
+    # columns=column_names['binary' if \isinstance(validator_obj.obj_TSVM, TSVM) else 'multiclass'][validator_type]
+    result_frame = pd.DataFrame(gs_result, columns=column_names['binary' if 
+                                isinstance(validator_obj.obj_TSVM, TSVM) else 'multiclass'][validator_type]) 
 
     result_frame.to_excel(excel_file, sheet_name='Sheet1', index=False)
 
