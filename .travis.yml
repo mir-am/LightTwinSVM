@@ -24,6 +24,7 @@ matrix:
       sudo: true
       python: '3.7'
       
+   allow_failures:  
     - os: osx
       language: generic
       env: PYENV_VERSION=3.6.7
@@ -31,6 +32,7 @@ matrix:
 branches:
   only:
   - master
+  - dev
 
 addons:
   apt:
