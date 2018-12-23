@@ -38,13 +38,13 @@ The clipDCD algorithm was proposed by: <br />
 Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algorithm for solving support vector machines. Knowledge-Based Systems, 71, 266-278.
 
 ## Installation Guide
-Currently, supported operating systems are as follows:
-- Debian-based Linux systems (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10 and Linux Mint 18)
-- RPM-based Linux systems (Fedora)
-- Microsoft Windows (It's experimental.)
-- MacOS
+Currently, supported operating systems are as follows. Choose your OS from list below for detailed install instructions.
+- [Debian-based Linux systems](#linux-&-mac-os-x) (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10, Ubuntu 18.04 and Linux Mint 18)
+- [RPM-based Linux systems](#linux-&-mac-os-x) (Fedora)
+- [Mac OS X](#linux-&-mac-os-x)
+- [Microsoft Windows](#windows) (It's experimental.)
 
-### Linux
+### Dependencies
 First of all, [Python](https://www.python.org/) 3.4 interpreter or newer is required. Python 3 is usually installed by default on most Linux distributions.
 In order to build and run the program, the following Python packages are needed:
 - [NumPy](https://www.numpy.org)
@@ -52,13 +52,18 @@ In order to build and run the program, the following Python packages are needed:
 - [Scikit-learn](http://scikit-learn.org/stable/index.html)
 - [Pandas](https://pandas.pydata.org/)
 - [Pybind11](https://pybind11.readthedocs.io/en/stable/intro.html)
+- [PyInstaller](https://www.pyinstaller.org/)(To generate a binary executable for Windows platform.)
 
 In order to build C++ extension module(Optimizer), the following tools and libraries are required:
 - [GNU C++ Compiler](https://gcc.gnu.org/)
 - [Armadillo C++ Linear Algebra Library](http://arma.sourceforge.net/)
 - [LAPACK](http://www.netlib.org/lapack/) and [BLAS](http://www.netlib.org/blas/) Library
 
-**A Linux shell is created to help users download required dependencies and install program automatically.** However, make sure that [Git](https://git-scm.com/) and GNU C++ compiler is installed on your system.
+
+### Linux & Mac OS X
+**A shell script is created to help users download required dependencies and install program automatically.** However, make sure that [Git](https://git-scm.com/) and GNU C++ compiler is installed on your system.
+
+**A note for MacOS users:** Make sure that Apple XCode is installed on your system.
 
 To install the program, open a terminal and execute the following commands:
 ```
@@ -69,11 +74,21 @@ If the installation was successful, you'd be asked to delete temporary directory
 After the successful installation, LightTwinSVM program should look like this in terminal: <br />
 ![alt text](https://raw.githubusercontent.com/mir-am/LightTwinSVM/misc/img/LightTwinSVM.png)
 
+### Windows
+First, download Git program from [here](https://git-scm.com/) if it's not installed on your system. Also, **Visual Studio 2015** or newer should be installed so that C++ extension module can be compiled.
+
+Before proceeding further, make sure that all the required Python packages are installed. Dependencies are listed [here](Dependencies). To install the program on Windows, open a PowerShell terminal and run the following commands:
+```
+git clone https://github.com/mir-am/LightTwinSVM.git
+cd LightTwinSVM && .\win-setup.ps1
+```
+When the installation is finished, a binary executable will be launched for using the program.
+
 ## User Guide
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
 **Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. CSV and LIBSVM files are supported. It is highly recommended to normalize your dataset. <br />
 ![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)<br />
-**Step 2:** Choose a kernel function among Linear, Gaussin (RBF) and Rectangular. RBF kernel often produces better classification result but takes more time. However if you want to use non-linear kernel and your dataset is large, then consider choosing Rectangular kernel.
+**Step 2:** Choose a kernel function among Linear, Gaussian (RBF) and Rectangular. RBF kernel often produces better classification result but takes more time. However if you want to use non-linear kernel and your dataset is large, then consider choosing Rectangular kernel.
 <br />
 ```
 Step 2/4: Choose a kernel function:(Just type the number. e.g 1)
@@ -84,11 +99,11 @@ Step 2/4: Choose a kernel function:(Just type the number. e.g 1)
 ```
 **Step 3:** To evaluate TwinSVM performance, You can either use [K-Fold cross validation](https://towardsdatascience.com/cross-validation-in-machine-learning-72924a69872f) or split your data into training and test sets. <br />
 ```
-Step 3/4: Choose a test methodolgy:(Just type the number. e.g 1)
+Step 3/4: Choose a test methodology:(Just type the number. e.g 1)
 1-K-fold cross validation
 2-Train/test split
 -> 1
-Determine number of folds for cross validaton: (e.g. 5)
+Determine number of folds for cross validation: (e.g. 5)
 -> 5
 ```
 **Step 4:** You need to determine the range of C penalty parameter and gamma (If RBF kernel selected.) for exhaustive grid search. <br /> 
