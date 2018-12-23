@@ -24,7 +24,7 @@ matrix:
       sudo: true
       python: '3.7'
       
-   allow_failures:  
+  allow_failures:
     - os: osx
       language: generic
       env: PYENV_VERSION=3.6.7
