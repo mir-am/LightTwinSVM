@@ -208,7 +208,7 @@ License: GNU General Public License v3.0
         # Step 3: Testing methodolgy
         while True:
 
-            print("Step 3/4: Choose a test methodolgy:(Just type the number. e.g 1)\n1-K-fold cross validation\n2-Train/test split")
+            print("Step 3/4: Choose a test methodology:(Just type the number. e.g 1)\n1-K-fold cross-validation\n2-Train/test split")
 
             test_choice = input("-> ")
 
@@ -218,7 +218,7 @@ License: GNU General Public License v3.0
 
                     test_method = 'CV'
 
-                    print("Determine number of folds for cross validaton: (e.g. 5)")        
+                    print("Determine number of folds for cross-validation: (e.g. 5)")        
 
                     k_fold = int(input("-> "))
 
