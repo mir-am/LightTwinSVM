@@ -185,16 +185,6 @@ class Validator:
             fp = fp + accuracy_test[2]
             fn = fn + accuracy_test[3]
 
-        # TODO: return dict {'C': 4, 'gamma': 4} {k : x[k] + y[k]  for k in x.keys() & y.keys()}
-        # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
-        # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14, iter=15    
-#        return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
-#               np.std(mean_accuracy), np.mean(mean_recall_p), np.std(mean_recall_p), \
-#               np.mean(mean_precision_p), np.std(mean_precision_p), np.mean(mean_f1_p), \
-#               np.std(mean_f1_p), np.mean(mean_recall_n), np.std(mean_recall_n), \
-#               np.mean(mean_precision_n), np.std(mean_precision_n), np.mean(mean_f1_n), \
-#               np.std(mean_f1_n), tp, tn, fp, fn, dict_param['C1'], dict_param['C2'],
-#               dict_param['gamma'] if self.obj_TSVM.kernel == 'RBF' else '']
         return np.mean(mean_accuracy), np.std(mean_accuracy), {**{'accuracy': np.mean(mean_accuracy),
                       'acc_std': np.std(mean_accuracy),'recall_p': np.mean(mean_recall_p),
                       'r_p_std': np.std(mean_recall_p), 'precision_p': np.mean(mean_precision_p),
@@ -204,7 +194,6 @@ class Validator:
                       'p_n_std': np.std(mean_precision_n), 'f1_n': np.mean(mean_f1_n),
                       'f1_n_std': np.std(mean_f1_n), 'tp': tp, 'tn': tn, 'fp': fp,
                       'fn': fn}, **dict_param}
-
 
     def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
         
@@ -275,10 +264,12 @@ class Validator:
             mean_precision.append(precision_score(y_test, output, average='micro') * 100)
             mean_f1.append(f1_score(y_test, output, average='micro') * 100)
 
-        return np.mean(mean_accuracy), np.std(mean_accuracy), [np.mean(mean_accuracy), \
-               np.std(mean_accuracy), np.mean(mean_recall), np.std(mean_recall), \
-               np.mean(mean_precision), np.std(mean_precision), np.mean(mean_f1), \
-               np.std(mean_f1), c, gamma if self.obj_TSVM.kernel == 'RBF' else '']
+        return np.mean(mean_accuracy), np.std(mean_accuracy), {**{'accuracy':
+               np.mean(mean_accuracy), 'acc_std': np.std(mean_accuracy),
+               'micro_recall': np.mean(mean_recall), 'm_rec_std': np.std(mean_recall),
+               'micro_precision': np.mean(mean_precision), 'm_prec_std':
+               np.std(mean_precision), 'mirco_f1': np.mean(mean_f1), 'm_f1_std':
+               np.std(mean_f1)}, **dict_param}
 
     def choose_validator(self):
 
@@ -431,11 +422,11 @@ def save_result(file_name, validator_obj, gs_result, output_path):
 
     column_names = {'binary': {'CV': ['accuracy', 'acc_std', 'recall_p', 'r_p_std', 'precision_p', 'p_p_std', \
                            'f1_p', 'f1_p_std', 'recall_n', 'r_n_std', 'precision_n', 'p_n_std', 'f1_n',\
-                           'f1_n_std', 'tp', 'tn', 'fp', 'fn'], #'c1', 'c2','gamma'],
+                           'f1_n_std', 'tp', 'tn', 'fp', 'fn'],  #'c1', 'c2','gamma'],
                     't_t_split': ['accuracy', 'recall_p', 'precision_p', 'f1_p', 'recall_n', 'precision_n', \
-                                  'f1_n', 'tp', 'tn', 'fp', 'fn', 'c1', 'c2','gamma']},
+                                  'f1_n', 'tp', 'tn', 'fp', 'fn']},  #, 'c1', 'c2','gamma']},
                     'multiclass':{'CV': ['accuracy', 'acc_std', 'micro_recall', 'm_rec_std', 'micro_precision', \
-                                         'm_prec_std', 'mirco_f1', 'm_f1_std', 'C', 'gamma']}}
+                                         'm_prec_std', 'mirco_f1', 'm_f1_std']}} #'C', 'gamma']
 
     # (Name of validator, validator's attribute) - ('CV', 5-folds)
     validator_type, validator_attr = validator_obj.validator              
@@ -448,7 +439,8 @@ def save_result(file_name, validator_obj, gs_result, output_path):
     
     # columns=column_names['binary' if \isinstance(validator_obj.obj_TSVM, TSVM) else 'multiclass'][validator_type]
     result_frame = pd.DataFrame(gs_result, columns=column_names['binary' if 
-                                isinstance(validator_obj.obj_TSVM, TSVM) else 'multiclass'][validator_type]) 
+                                isinstance(validator_obj.obj_TSVM, TSVM) else
+                                'multiclass'][validator_type] + validator_obj.obj_TSVM.get_params_names()) 
 
     result_frame.to_excel(excel_file, sheet_name='Sheet1', index=False)
 

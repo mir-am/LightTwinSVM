@@ -1,3 +1,6 @@
 build
 _static
 _templates
+__pycache__
+temp
+result

@@ -34,7 +34,7 @@ class TSVM(BaseEstimator):
                  gamma=2**0):
 
         """
-            Input:
+        Input:
             Kernel_type: 1->Linear, 2->RBF(Gaussion)
             c1, c2: Penalty parameters
             gamma: RBF function parameter
@@ -50,20 +50,13 @@ class TSVM(BaseEstimator):
         # Two hyperplanes attributes
         self.w1, self.b1, self.w2, self.b2 = None, None, None, None
 
-#    def set_parameter(self, c1=2**0, c2=2**0, gamma=2**0):
-#
-#        """
-#        It changes the parametes for TSVM classifier.
-#        DO NOT USE THIS METHOD AFTER INSTANTIATION OF TSVM CLASS!
-#        THIS METHOD CREATED ONLY FOR Validator CLASS.
-#        Input:
-#            c1, c2: Penalty parameters
-#            gamma: RBF function parameter
-#        """
-#
-#        self.C1 = c1
-#        self.C2 = c2
-#        self.u = gamma
+    def get_params_names(self):
+        
+        """
+        It returns the names of hyper-parameters of this classifier.
+        """
+        
+        return ['C1', 'C2'] if self.kernel == 'linear' else ['C1', 'C2', 'gamma']
 
     def fit(self, X_train, y_train):
 
@@ -209,25 +202,20 @@ class MCTSVM(BaseEstimator):
         self.classfiers = {}  # Classifiers
         self.mat_D_t = []  # For non-linear MCTSVM
 
-#    def set_parameter(self, c=2**0, gamma=2**0):
-#
-#        """
-#        It changes the parametes for multiclass TSVM classifier.
-#        DO NOT USE THIS METHOD AFTER INSTANTIATION OF MCTSVM CLASS!
-#        THIS METHOD CREATED ONLY FOR Validator CLASS.
-#        Input:
-#            c: Penalty parameters
-#            gamma: RBF function parameter
-#        """
-#
-#        self.C = c
-#        self.y = gamma
+    def get_params_names(self):
+        
+        """
+        It returns the names of hyper-parameters of this classifier.
+        """
+        
+        return ['C'] if self.kernel == 'linear' else ['C', 'gamma']
 
     def fit(self, X_train, y_train):
 
         """
-        X_train: Training samples
-        y_train: Lables of training samples
+        Input:
+            X_train: Training samples
+            y_train: Lables of training samples
         """
 
         num_classes = np.unique(y_train)
@@ -301,7 +289,7 @@ class MCTSVM(BaseEstimator):
 
             for idx, j in enumerate(self.classfiers.keys()):
 
-                prepen_dist[i, idx] = np.abs(np.dot(kernel_f[self.kernel_t](i, idx), \
+                prepen_dist[i, idx] = np.abs(np.dot(kernel_f[self.kernel](i, idx), \
                            self.classfiers[j].w) + self.classfiers[j].b) / np.linalg.norm(self.classfiers[j].w)
 
         output = np.argmin(prepen_dist, axis=1) + 1
@@ -335,20 +323,13 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         self.C_2 = C_2
         self.gamma = gamma
         
-    def set_parameter(self, c1=2**0, c2=2**0, gamma=2**0):
-
+    def get_params_names(self):
+        
         """
-        It changes the parametes for TSVM classifier.
-        DO NOT USE THIS METHOD AFTER INSTANTIATION OF TSVM CLASS!
-        THIS METHOD CREATED ONLY FOR Validator CLASS.
-        Input:
-            c1, c2: Penalty parameters
-            gamma: RBF function parameter
+        It returns the names of hyper-parameters of this classifier.
         """
-
-        self.C_1 = c1
-        self.C_2 = c2
-        self.gamma = gamma
+        
+        return ['C1', 'C2'] if self.kernel == 'linear' else ['C1', 'C2', 'gamma']
          
     def _validate_targets(self, y):
         
