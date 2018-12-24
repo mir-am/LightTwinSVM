@@ -306,7 +306,7 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
     such as cross_val_score and GridSearchCV can be used for OVO_TSVM
     """    
     
-    def __init__(self, kernel='linear', C_1=1, C_2=1, gamma=1):
+    def __init__(self, kernel='linear', C1=1, C2=1, gamma=1):
         
         """
         Parameters:
@@ -319,8 +319,8 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         """
         
         self.kernel = kernel
-        self.C_1 = C_1
-        self.C_2 = C_2
+        self.C1 = C1
+        self.C2 = C2
         self.gamma = gamma
         
     def get_params_names(self):
@@ -401,7 +401,7 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
                 sub_prob_y_i_j[sub_prob_y_i_j == j] = -1
                 sub_prob_y_i_j[sub_prob_y_i_j == i] = 1
                 
-                self.bin_TSVM_models_[p] = TSVM(self.kernel, 1, self.C_1, self.C_2, \
+                self.bin_TSVM_models_[p] = TSVM(self.kernel, 1, self.C1, self.C2, \
                                self.gamma)
                 
                 self.bin_TSVM_models_[p].fit(sub_prob_X_i_j, sub_prob_y_i_j)
@@ -462,40 +462,42 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
     
 if __name__ == '__main__':
     
-    from ltsvm.dataproc import read_data
-    from sklearn.metrics import accuracy_score
-    from sklearn.model_selection import train_test_split
-#    from sklearn.utils.estimator_checks import check_estimator
+#    from ltsvm.dataproc import read_data
+#    from sklearn.metrics import accuracy_score
+#    from sklearn.model_selection import train_test_split
+    from sklearn.utils.estimator_checks import check_estimator
 #    from sklearn.model_selection import cross_val_score, GridSearchCV
-    import time
+#    import time
+#    
+    check_estimator(OVO_TSVM)
 
     
-    train_data, labels, data_name = read_data('/home/mir/mir-projects/Mir-Repo/mc-data/wine.csv')
-    
-    X_train, X_test, y_train, y_test = train_test_split(train_data, labels,
-                                                        test_size=0.30, random_state=42)
-    
-    
-#    param = {'C_1': [float(2**i) for i in range(-5, 6)],
-#             'C_2': [float(2**i) for i in range(-5, 6)]}
-    
-    start_t = time.time()
+#    train_data, labels, data_name = read_data('/home/mir/mir-projects/Mir-Repo/mc-data/wine.csv')
 #    
-    ovo_tsvm_model = MCTSVM()
-    ovo_tsvm_model.set_params(**{'C': 4, 'gamma': 0.1})
-    print(ovo_tsvm_model.get_params())
-    
-    #cv = cross_val_score(ovo_tsvm_model, train_data, labels, cv=10)
-    
-#    result = GridSearchCV(ovo_tsvm_model, param, cv=10, n_jobs=4, refit=False, verbose=1)
-#    result.fit(train_data, labels)
-    
-    print(X_train.shape)
+#    X_train, X_test, y_train, y_test = train_test_split(train_data, labels,
+#                                                        test_size=0.30, random_state=42)
 #    
-    ovo_tsvm_model.fit(X_train, y_train)
-    
-    pred = ovo_tsvm_model.predict(X_test)
 #    
-    print("Finished: %.2f ms" % ((time.time() - start_t) * 1000))
+##    param = {'C_1': [float(2**i) for i in range(-5, 6)],
+##             'C_2': [float(2**i) for i in range(-5, 6)]}
 #    
-    print("Accuracy: %.2f" % (accuracy_score(y_test, pred) * 100))
+#    start_t = time.time()
+##    
+#    ovo_tsvm_model = MCTSVM()
+#    ovo_tsvm_model.set_params(**{'C': 4, 'gamma': 0.1})
+#    print(ovo_tsvm_model.get_params())
+#    
+#    #cv = cross_val_score(ovo_tsvm_model, train_data, labels, cv=10)
+#    
+##    result = GridSearchCV(ovo_tsvm_model, param, cv=10, n_jobs=4, refit=False, verbose=1)
+##    result.fit(train_data, labels)
+#    
+#    print(X_train.shape)
+##    
+#    ovo_tsvm_model.fit(X_train, y_train)
+#    
+#    pred = ovo_tsvm_model.predict(X_test)
+##    
+#    print("Finished: %.2f ms" % ((time.time() - start_t) * 1000))
+##    
+#    print("Accuracy: %.2f" % (accuracy_score(y_test, pred) * 100))
