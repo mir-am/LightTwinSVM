@@ -12,10 +12,14 @@ In this module, unit test is defined for checking the integrity of installation.
 
 """
 
-from eval_classifier import Validator, initializer
-from ui import UserInput
-from dataproc import read_data, read_libsvm
-from twinsvm import TSVM, MCTSVM, OVO_TSVM
+# A temprory workaround to import LightTwinSVM for running tests
+import sys
+sys.path.append('../')
+
+from ltsvm.eval_classifier import Validator, initializer
+from ltsvm.ui import UserInput
+from ltsvm.dataproc import read_data, read_libsvm
+from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
 import unittest
 
 
@@ -53,7 +57,7 @@ class TestProgram(unittest.TestCase):
         # Default settings for unit test - Binary Classification
         # Dataset
         self.input.X_train, self.input.y_train, self.input.filename = \
-        read_data("./dataset/pima-indian.csv")
+        read_data("../dataset/pima-indian.csv")
         # Lower and upper bounds of parameters
         self.input.lower_b_c, self.input.upper_b_c = -2, 2
         self.input.lower_b_u, self.input.upper_b_u = -2, 2
@@ -65,7 +69,7 @@ class TestProgram(unittest.TestCase):
         # Default settings for unit test - multiclass Classification
         # Dataset
         self.input_mc.X_train, self.input_mc.y_train, self.input_mc.filename = \
-        read_data('./dataset/wine.csv')
+        read_data('../dataset/wine.csv')
         # Lower and upper bounds of parameters
         self.input_mc.lower_b_c, self.input_mc.upper_b_c = -2, 2
         self.input_mc.lower_b_u, self.input_mc.upper_b_u = -2, 2
@@ -95,7 +99,7 @@ class TestProgram(unittest.TestCase):
         """
 
         # Default arguments
-        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier = TSVM(kernel='RBF')
         tsvm_classifier.fit(self.input.X_train, self.input.y_train)
         tsvm_classifier.predict(self.input.X_train)
 
@@ -118,7 +122,7 @@ class TestProgram(unittest.TestCase):
         It applies cross validation on non-Linear TSVM
         """
 
-        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier = TSVM(kernel='RBF')
         validate = Validator(self.input.X_train, self.input.y_train, ('CV', \
                              self.k_folds), tsvm_classifier)
 
@@ -131,7 +135,7 @@ class TestProgram(unittest.TestCase):
         It applies train/test split on Linear TSVM
         """
 
-        tsvm_classifier = TSVM(kernel_type='linear')
+        tsvm_classifier = TSVM(kernel='linear')
         validate = Validator(self.input.X_train, self.input.y_train, ('t_t_split', \
                              self.train_set_size), tsvm_classifier)
 
@@ -143,7 +147,7 @@ class TestProgram(unittest.TestCase):
         """
         It applies train/test split in non-linear TSVM
         """
-        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier = TSVM(kernel='RBF')
         validate = Validator(self.input.X_train, self.input.y_train, ('t_t_split', \
                              self.train_set_size), tsvm_classifier)
 
@@ -156,7 +160,7 @@ class TestProgram(unittest.TestCase):
             It checks Linear kernel, CrossValidation and grid search.
         """
 
-        self.input.kernel_type = 'linear'
+        self.input.kernel = 'linear'
         self.input.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input)
