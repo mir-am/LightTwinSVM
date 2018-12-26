@@ -46,7 +46,8 @@ class TSVM(BaseEstimator):
         self.kernel = kernel
         self.rect_kernel = rect_kernel
         self.mat_C_t = None
-
+        self.cls_name = 'TSVM'
+        
         # Two hyperplanes attributes
         self.w1, self.b1, self.w2, self.b2 = None, None, None, None
 
@@ -201,6 +202,7 @@ class MCTSVM(BaseEstimator):
         self.gamma = gamma
         self.classfiers = {}  # Classifiers
         self.mat_D_t = []  # For non-linear MCTSVM
+        self.cls_name = 'TSVM_OVA'
 
     def get_params_names(self):
         
@@ -322,6 +324,7 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         self.C1 = C1
         self.C2 = C2
         self.gamma = gamma
+        self.cls_name = 'TSVM_OVO'
         
     def get_params_names(self):
         

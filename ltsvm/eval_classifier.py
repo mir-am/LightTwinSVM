@@ -17,7 +17,7 @@ from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
 from ltsvm.misc import progress_bar_gs, time_fmt
 from sklearn.model_selection import train_test_split, KFold, ParameterGrid
 from sklearn.metrics import accuracy_score, recall_score, precision_score, f1_score
-from itertools import product
+#from itertools import product
 from datetime import datetime
 import numpy as np
 import pandas as pd
@@ -318,18 +318,10 @@ def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
         param_grid = ParameterGrid({'C1': c_range, 'C2': c_range,
                                     'gamma': gamma_range})
 
-#        return list(product(*[c_range, c_range, ])) if kernel_type == 'linear' else \
-#               list(product(*[c_range, c_range, [2 ** i for i in np.arange(rbf_lbound, \
-#                    rbf_ubound + 1, step, dtype=np.float)]]))
-
     elif class_type == 'ova':
         
         param_grid = ParameterGrid({'C': c_range, 'gamma': gamma_range})
 
-#        return list(product(*[c_range, ])) if kernel_type == 'linear' else \
-#               list(product(*[c_range, [2 ** i for i in np.arange(rbf_lbound, \
-#                    rbf_ubound + 1, step, dtype=np.float)]]))
-        
     return list(param_grid)
 
 
@@ -431,8 +423,9 @@ def save_result(file_name, validator_obj, gs_result, output_path):
     # (Name of validator, validator's attribute) - ('CV', 5-folds)
     validator_type, validator_attr = validator_obj.validator              
 
-    output_file = os.path.join(output_path, "TSVM_%s_%s_%s_%s.xlsx") % (validator_obj.obj_TSVM.kernel, \
-                  "%d-F-CV" % validator_attr if validator_type == 'CV' else 'Tr%d-Te%d' % \
+    output_file = os.path.join(output_path, "%s_%s_%s_%s_%s.xlsx") % (validator_obj.obj_TSVM.cls_name,
+                              validator_obj.obj_TSVM.kernel, "%d-F-CV" %
+                              validator_attr if validator_type == 'CV' else 'Tr%d-Te%d' % \
                   (100 - validator_attr, validator_attr), file_name, datetime.now().strftime('%Y-%m-%d %H-%M'))
 
     excel_file = pd.ExcelWriter(output_file, engine='xlsxwriter')
