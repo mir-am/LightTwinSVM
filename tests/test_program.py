@@ -14,7 +14,7 @@ In this module, unit test is defined for checking the integrity of installation.
 
 # A temprory workaround to import LightTwinSVM for running tests
 import sys
-sys.path.append('../')
+sys.path.append('./')
 
 from ltsvm.eval_classifier import Validator, initializer
 from ltsvm.ui import UserInput
@@ -57,7 +57,7 @@ class TestProgram(unittest.TestCase):
         # Default settings for unit test - Binary Classification
         # Dataset
         self.input.X_train, self.input.y_train, self.input.filename = \
-        read_data("../dataset/pima-indian.csv")
+        read_data("./dataset/pima-indian.csv")
         # Lower and upper bounds of parameters
         self.input.lower_b_c, self.input.upper_b_c = -2, 2
         self.input.lower_b_u, self.input.upper_b_u = -2, 2
@@ -69,12 +69,12 @@ class TestProgram(unittest.TestCase):
         # Default settings for unit test - multiclass Classification
         # Dataset
         self.input_mc.X_train, self.input_mc.y_train, self.input_mc.filename = \
-        read_data('../dataset/wine.csv')
+        read_data('./dataset/wine.csv')
         # Lower and upper bounds of parameters
         self.input_mc.lower_b_c, self.input_mc.upper_b_c = -2, 2
         self.input_mc.lower_b_u, self.input_mc.upper_b_u = -2, 2
         self.input_mc.filename = 'UnitTest_' + self.input_mc.filename
-        self.input_mc.class_type = 'multiclass'
+        #self.input_mc.class_type = 'multiclass'
         self.input.result_path = './result'
 
         self.k_folds = 5
@@ -114,7 +114,7 @@ class TestProgram(unittest.TestCase):
                              self.k_folds), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1})
 
     def test_RBF_Validator_CV(self):
 
@@ -127,7 +127,7 @@ class TestProgram(unittest.TestCase):
                              self.k_folds), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1, 'gamma':1})
 
     def test_linear_Validator_ttsplit(self):
 
@@ -140,7 +140,7 @@ class TestProgram(unittest.TestCase):
                              self.train_set_size), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1})
 
     def test_RBF_Validator_ttsplit(self):
 
@@ -152,7 +152,7 @@ class TestProgram(unittest.TestCase):
                              self.train_set_size), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1, 'gamma':1})
 
     def test_linear_CV_gridsearch(self):
 
@@ -160,7 +160,7 @@ class TestProgram(unittest.TestCase):
             It checks Linear kernel, CrossValidation and grid search.
         """
 
-        self.input.kernel = 'linear'
+        self.input.kernel_type = 'linear'
         self.input.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input)
@@ -258,6 +258,7 @@ class TestProgram(unittest.TestCase):
         """
 
         self.input_mc.kernel_type = 'linear'
+        self.input_mc.class_type = 'ova'
         self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input_mc)
@@ -269,6 +270,7 @@ class TestProgram(unittest.TestCase):
         """
 
         self.input_mc.kernel_type = 'RBF'
+        self.input_mc.class_type = 'ova'
         self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input_mc)

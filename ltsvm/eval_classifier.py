@@ -195,7 +195,7 @@ class Validator:
                       'f1_n_std': np.std(mean_f1_n), 'tp': tp, 'tn': tn, 'fp': fp,
                       'fn': fn}, **dict_param}
 
-    def split_tt_validator(self, c1=2**0, c2=2**0, gamma=2**0):
+    def split_tt_validator(self, dict_param):
         
         """
         It trains TwinSVM classifier on random training set and tests the classifier
@@ -206,7 +206,7 @@ class Validator:
         """
 
         # Set parameters of TSVM classifer
-        self.obj_TSVM.set_parameter(c1, c2, gamma)
+        self.obj_TSVM.set_params(**dict_param)
 
         X_train, X_test, y_train, y_test = train_test_split(self.train_data, \
                                            self.labels_data, test_size=self.validator[1], \
@@ -221,9 +221,11 @@ class Validator:
         f1_n = eval_metrics(y_test, output)
 
        # m_a=0, m_r_p=1, m_p_p=2, m_f1_p=3, k=4, c1=5, c2=6, gamma=7,
-       # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14,   
-        return accuracy, 0.0, [accuracy, recall_p, precision_p, f1_p, recall_n, \
-               precision_n, f1_n, tp, tn, fp, fn, c1, c2, gamma if self.obj_TSVM.kernel_t == 'RBF' else '']
+       # m_r_n=8, m_p_n=9, m_f1_n=10, tp=11, tn=12, fp=13, fn=14,
+        return accuracy, 0.0, {**{'accuracy': accuracy, 'recall_p': recall_p,
+               'precision_p': precision_p, 'f1_p': f1_p, 'recall_n': recall_n,
+               'precision_n': precision_n, 'f1_n': f1_n, 'tp': tp, 'tn': tn,
+               'fp': fp, 'fn': fn}, **dict_param}
 
     def cv_validator_mc(self, dict_param):
 
