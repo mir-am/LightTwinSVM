@@ -143,9 +143,12 @@ TwinSVM does classification by using two non-parallel hyperplanes as opposed to 
 ## Numerical Experiments
 In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy, experiments were conducted to compare it with scikit-learn's SVM on several UCI benchmark datasets. Similar to most research papers on classification, K-fold cross-validation is used to evaluate these classifiers (K was set to 5). Also, grid search was used to find the optimal values of hyper-parameters. Table below shows the accuracy comparison between the LightTwinSVM and Scikit-learn's SVM. <br />
 
-| Datasets  | LightTwinSVM | Scikit-learn's SVM |
-| ------------- | ------------- | ------------- |
-| Pima-Indian  |  |
+| Datasets  | LightTwinSVM | Scikit-learn's SVM | Difference in Accuracy |
+| ------------- | ------------- | ------------- | ------------- |
+| Pima-Indian  | **78.91** | 78.26 | 0.65 |
+| Australian | **87.25** | 86.81 | 0.44 |
+| Haberman  | 76.12 | 76.80 | -0.68 |
+| Cleveland  | **85.14** | 84.82 | 0.32 |
 
 
 ## Acknowledgements
