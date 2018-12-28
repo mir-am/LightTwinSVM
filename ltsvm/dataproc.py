@@ -72,7 +72,7 @@ def read_data(filename, header=True):
     data.close()
     
     # Shuffle data
-    #np.random.shuffle(data_array)                        
+    np.random.shuffle(data_array)                        
     
     # Convers string data to float
     data_train = conv_str_fl(data_array[:, 1:])                     
