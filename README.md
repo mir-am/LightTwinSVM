@@ -147,9 +147,17 @@ In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy,
 | ------------- | ------------- | ------------- | ------------- |
 | Pima-Indian  | **78.91** | 78.26 | 0.65 |
 | Australian | **87.25** | 86.81 | 0.44 |
-| Haberman  | 76.12 | 76.80 | -0.68 |
+| Haberman  | 76.12 | **76.80** | -0.68 |
 | Cleveland  | **85.14** | 84.82 | 0.32 |
+| Sonar  | **75.16** | 64.42 | 10.74 |
+| Heart-Statlog | **85.19** | **85.19** | 0 |
+| Hepatitis | **85.81** |83.23 | 2.58 |
+| WDBC | **98.24** |98.07 | 0.17 |
+| Spectf | **80.55** |79.78 | 0.81 |
+| Titanic | **82.04** |81.71 | 0.33 |
+| Mean | **83.44** |81.90 | 1.53 |
 
+From the above table, it can be found that LightTwinSVM is more efficient in terms of accuracy. Therefore, it outporforms Sklearn's SVM on most datasets. All in all, if you have used SVM for your task/project, the LightTwinSVM program may give you a better predication accuracy for your classification task. More information on this experiment can be found in [this blog post](https://mirblog.me/index.php/2018/12/28/a-accuracy-comparison-between-scikit-learns-svm-and-lighttwinsvm-program/).
 
 ## Acknowledgements
 Thanks to [idejie](https://github.com/idejie) for test and support on the MacOS. (Dec 8, 2018)
