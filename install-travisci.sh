@@ -44,15 +44,16 @@ then
 # More info at https://bugs.python.org/issue25440
 # Following solution solves the problem on Travis CI
 # Get extension suffix for building Python extension module
-ext_suffix='./ltsvm/optimizer/clippdcd'$(python3 -c $'from distutils.sysconfig import get_config_var; print(get_config_var(\'EXT_SUFFIX\'))')
+ext_suffix='./ltsvm/optimizer/clipdcd'$(python3 -c $'from distutils.sysconfig import get_config_var; print(get_config_var(\'EXT_SUFFIX\'))')
 
 g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o $ext_suffix -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack 
 
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
 then
 echo $(python-config --extension-suffix)
-g++ -O3 -Wall -shared -std=c++11 -fPIC `python -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clippdcd`python-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+g++ -O3 -Wall -shared -std=c++11 -fPIC `python -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
 fi
 
 # Creates result directory for saving unit test's output
 mkdir "result"
+
