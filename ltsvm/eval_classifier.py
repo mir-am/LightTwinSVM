@@ -309,10 +309,10 @@ def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
         return search elements for grid search (List)
     """
 
-    c_range = [2 ** i for i in np.arange(c_l_bound, c_u_bound + 1, step,
+    c_range = [2**i for i in np.arange(c_l_bound, c_u_bound+1, step,
                                          dtype=np.float)]
     
-    gamma_range = [2 ** i for i in np.arange(rbf_lbound, rbf_ubound + 1, step,
+    gamma_range = [2**i for i in np.arange(rbf_lbound, rbf_ubound+1, step,
                    dtype=np.float)] if kernel_type == 'RBF' else [1]
     
     if class_type == 'binary' or class_type == 'ovo':
@@ -373,7 +373,8 @@ def grid_search(search_space, func_validator):
 
             #end = time.time()
             
-            #print(result)
+            # For debugging purpose
+            #print('Acc: %.2f+-%.2f | params: %s' % (acc, acc_std, str(result)))
 
             result_list.append(result)
 
