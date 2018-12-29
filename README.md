@@ -21,14 +21,14 @@
 LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
  
 The main features of the program are the following:
-- A simple console program for running TwinSVM classifier
-- Fast optimization algorithm: The clipDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
-- Linear, RBF kernel and Rectangular are supported.
-- Binary and Multi-class classification (One-vs-All & One-vs-One) are supported.
-- K-fold cross validation supported.
-- Training/Test split supported.
-- It supports grid search over C and gamma parameters.
-- CSV and LIBSVM data files are supported.
+- A **simple console program** for running TwinSVM classifier
+- **Fast optimization algorithm:** The clipDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
+- **Linear**, **RBF** kernel and Rectangular are supported.
+- Binary and **Multi-class classification** (One-vs-All & One-vs-One) are supported.
+- The OVO estimator is **Scikit-learn compatible**. Hence Sklearn's methods such as GridSearchCV and cross_val_score can be used.
+- The classifier can be evaluated using either **K-fold cross-validation** or **Training/Test** split.
+- It supports **grid search** over C and gamma parameters.
+- **CSV** and **LIBSVM** data files are supported.
 - Detailed classification result will be saved in a spreadsheet file.
 
 Twin Support Vector Machine classifier was proposed by: <br />
@@ -143,10 +143,21 @@ TwinSVM does classification by using two non-parallel hyperplanes as opposed to 
 ## Numerical Experiments
 In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy, experiments were conducted to compare it with scikit-learn's SVM on several UCI benchmark datasets. Similar to most research papers on classification, K-fold cross-validation is used to evaluate these classifiers (K was set to 5). Also, grid search was used to find the optimal values of hyper-parameters. Table below shows the accuracy comparison between the LightTwinSVM and Scikit-learn's SVM. <br />
 
-| Datasets  | LightTwinSVM | Scikit-learn's SVM |
-| ------------- | ------------- | ------------- |
-| Pima-Indian  |  |
+| Datasets  | LightTwinSVM | Scikit-learn's SVM | Difference in Accuracy |
+| ------------- | ------------- | ------------- | ------------- |
+| Pima-Indian  | **78.91** | 78.26 | 0.65 |
+| Australian | **87.25** | 86.81 | 0.44 |
+| Haberman  | 76.12 | **76.80** | -0.68 |
+| Cleveland  | **85.14** | 84.82 | 0.32 |
+| Sonar  | **75.16** | 64.42 | 10.74 |
+| Heart-Statlog | **85.19** | **85.19** | 0 |
+| Hepatitis | **85.81** |83.23 | 2.58 |
+| WDBC | **98.24** |98.07 | 0.17 |
+| Spectf | **80.55** |79.78 | 0.81 |
+| Titanic | **82.04** |81.71 | 0.33 |
+| Mean | **83.44** |81.90 | 1.53 |
 
+From the above table, it can be found that LightTwinSVM is more efficient in terms of accuracy. Therefore, it outperforms Sklearn's SVM on most datasets. All in all, if you have used SVM for your task/project, the LightTwinSVM program may give you a better predication accuracy for your classification task. More information on this experiment can be found in [this blog post](https://mirblog.me/index.php/2018/12/28/a-accuracy-comparison-between-scikit-learns-svm-and-lighttwinsvm-program/).
 
 ## Acknowledgements
 Thanks to [idejie](https://github.com/idejie) for test and support on the MacOS. (Dec 8, 2018)
