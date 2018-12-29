@@ -7,6 +7,9 @@
 
 $startTime = (Get-Date)
 
+# Installing dependencies using pip
+pip install -r "requirments.txt" --user
+
 cd .\src\optimizer
 
 # Step 1:
