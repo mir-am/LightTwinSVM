@@ -52,6 +52,7 @@ In order to build and run the program, the following Python packages are needed:
 - [Scikit-learn](http://scikit-learn.org/stable/index.html)
 - [Pandas](https://pandas.pydata.org/)
 - [Pybind11](https://pybind11.readthedocs.io/en/stable/intro.html)
+- [Cython](https://cython.org/)(To build C++ extension module on Windows.)
 - [PyInstaller](https://www.pyinstaller.org/)(To generate a binary executable for Windows platform.)
 
 In order to build C++ extension module(Optimizer), the following tools and libraries are required:
