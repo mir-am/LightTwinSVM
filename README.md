@@ -83,7 +83,7 @@ Before proceeding further, make sure that all the required Python packages are i
 git clone https://github.com/mir-am/LightTwinSVM.git
 cd LightTwinSVM && .\win-setup.ps1
 ```
-When the installation is finished, a binary executable will be launched for using the program.
+When the installation is finished, a batch file "ltsvm.bat" will be created to run the program.
 
 ## User Guide
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
