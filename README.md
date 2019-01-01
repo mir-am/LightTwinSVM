@@ -52,6 +52,7 @@ In order to build and run the program, the following Python packages are needed:
 - [Scikit-learn](http://scikit-learn.org/stable/index.html)
 - [Pandas](https://pandas.pydata.org/)
 - [Pybind11](https://pybind11.readthedocs.io/en/stable/intro.html)
+- [Cython](https://cython.org/)(To build C++ extension module on Windows.)
 - [PyInstaller](https://www.pyinstaller.org/)(To generate a binary executable for Windows platform.)
 
 In order to build C++ extension module(Optimizer), the following tools and libraries are required:
@@ -82,7 +83,7 @@ Before proceeding further, make sure that all the required Python packages are i
 git clone https://github.com/mir-am/LightTwinSVM.git
 cd LightTwinSVM && .\win-setup.ps1
 ```
-When the installation is finished, a binary executable will be launched for using the program.
+When the installation is finished, a batch file "ltsvm.bat" will be created to run the program.
 
 ## User Guide
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
