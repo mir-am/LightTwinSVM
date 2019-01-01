@@ -17,10 +17,10 @@ cat << EOM > "ltsvm.sh"
 #!/bin/bash
 case $arg in
     "-n")
-    python3 src/main.py # LightTwinSVM program
+    python3 -m ltsvm # LightTwinSVM program
     ;;
     "-t")
-    python3 src/test_program.py # Unit tests
+    python3 tests/test_program.py # Unit tests
     ;;
     *)
     echo -e "Invalid argument.\n-n normal mode\n-t test mode"
@@ -151,7 +151,7 @@ then
             ((step++))
     	fi
 
-	ext_module="ltsvm/optimizer/clippdcd$(python3-config --extension-suffix)"
+	ext_module="ltsvm/optimizer/clipdcd$(python3-config --extension-suffix)"
 
 	if [ -e $ext_module ]
 	then
@@ -234,7 +234,7 @@ then
 		then
 			echo "Unit test started..."
 			
-			python3 ./ltsvm/test_program.py -v
+			python3 ./tests/test_program.py -v
 		fi
 		
 		echo -e "***************************************\n"
