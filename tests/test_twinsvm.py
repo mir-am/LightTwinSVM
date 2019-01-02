@@ -111,6 +111,38 @@ class TestTwinSVM(unittest.TestCase):
         self.assertEqual(ovotsvm_cls.get_params(), expected_output,
                          'set_params and get_params output don\'t match')
         
+    def test_tsvm_get_param_names(self):
+        
+        """
+        It checks the names of the hyper-parameters of TSVM estimator that returned
+        by its get_param_names
+        """
+        
+        self.assertEqual([TSVM('linear').get_params_names(),
+                          TSVM('RBF').get_params_names()],
+                          [['C1', 'C2'], ['C1', 'C2', 'gamma']])
+        
+    def test_mctsvm_get_param_names(self):
+        
+        """
+        It checks the names of the hyper-parameters of MCTSVM estimator that returned
+        by its get_param_names
+        """
+        
+        self.assertEqual([MCTSVM('linear').get_params_names(),
+                          MCTSVM('RBF').get_params_names()],
+                          [['C'], ['C', 'gamma']])
+        
+    def test_ovotsvm_get_param_names(self):
+        
+        """
+        It checks the names of the hyper-parameters of OVOTSVM estimator that returned
+        by its get_param_names
+        """
+        
+        self.assertEqual([OVO_TSVM('linear').get_params_names(),
+                          OVO_TSVM('RBF').get_params_names()],
+                          [['C1', 'C2'], ['C1', 'C2', 'gamma']])
         
         
 
