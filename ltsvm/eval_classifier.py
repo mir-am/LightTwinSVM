@@ -473,8 +473,8 @@ def initializer(user_input_obj):
                       user_input_obj.upper_b_u)
 
     # Dispaly headers
-    print("TSVM-%s    Dataset: %s    Total Search Elements: %d" % (user_input_obj.kernel_type, \
-          user_input_obj.filename, len(search_elements)))
+    print("%s-%s    Dataset: %s    Total Search Elements: %d" % (tsvm_obj.cls_name,
+          user_input_obj.kernel_type, user_input_obj.filename, len(search_elements)))
 
     result = grid_search(search_elements, validate.choose_validator())
 

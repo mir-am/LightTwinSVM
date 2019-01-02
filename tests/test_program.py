@@ -254,7 +254,7 @@ class TestProgram(unittest.TestCase):
     def test_linear_CV_gridsearch_MCTSVM(self):
 
         """
-        It checks linear kernel, Crossvalidation and grid search with MCTSVM
+        It checks linear kernel, cross-validation and grid search with MCTSVM
         """
 
         self.input_mc.kernel_type = 'linear'
@@ -266,7 +266,7 @@ class TestProgram(unittest.TestCase):
     def test_RBF_CV_gridsearch_MCTSVM(self):
 
         """
-        It checks RBF kernel, Crossvalidation and grid search with MCTSVM
+        It checks RBF kernel, cross-validation and grid search with MCTSVM
         """
 
         self.input_mc.kernel_type = 'RBF'
@@ -294,7 +294,30 @@ class TestProgram(unittest.TestCase):
         ovo_tsvm_obj = OVO_TSVM('RBF')
         ovo_tsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
         ovo_tsvm_obj.predict(self.input_mc.X_train)
+        
+    def test_linear_CV_gridsearch_OVO_TSVM(self):
+        
+        """
+        It checks linear kernel, cross-validation and grid search with OVO-TSVM
+        """
+        
+        self.input_mc.kernel_type = 'linear'
+        self.input_mc.class_type = 'ovo'
+        self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
+        print_test_info(self.input_mc)
+
+    def test_RBF_CV_gridsearch_OVO_TSVM(self):
+        
+        """
+        It checks RBF kernel, cross-validation and grid search with OVO-TSVM
+        """
+        
+        self.input_mc.kernel_type = 'RBF'
+        self.input_mc.class_type = 'ovo'
+        self.input_mc.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input_mc)
 
 if __name__ == '__main__':
 
