@@ -20,7 +20,7 @@ case $arg in
     python3 -m ltsvm # LightTwinSVM program
     ;;
     "-t")
-    python3 tests/test_program.py # Unit tests
+    python3 -m unittest discover -s tests # Unit tests
     ;;
     *)
     echo -e "Invalid argument.\n-n normal mode\n-t test mode"
@@ -42,7 +42,7 @@ py_intp=$(python3 -c 'import sys; sys.exit(0 if sys.version_info[0] == 3 and sys
 if [ $? == 0 ]
 then
 
-	echo -e "Python 3.4 or newer detected on your system..."
+	echo -e "Python 3.5 or newer detected on your system..."
 	((step++))
 	
 	# Check wether pip is installed.
@@ -155,7 +155,7 @@ then
 
 	if [ -e $ext_module ]
 	then
-		echo "Found ClippDCD optimizer (C++ extension module.)"
+		echo "Found ClipDCD optimizer (C++ extension module.)"
 		
 		((step++))
 	else
@@ -234,7 +234,7 @@ then
 		then
 			echo "Unit test started..."
 			
-			python3 ./tests/test_program.py -v
+			python3 -m unittest discover -s tests
 		fi
 		
 		echo -e "***************************************\n"
@@ -245,6 +245,6 @@ then
 	fi
 
 else
-	echo "Could not detect Python 3 interpreter. Please install Python 3.4 or newer."
+	echo "Could not detect Python 3 interpreter. Please install Python 3.5 or newer."
 fi
 
