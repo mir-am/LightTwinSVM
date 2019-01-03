@@ -1,0 +1,56 @@
+# This is the build script for AppVeyor CI
+# To build and test LightTwinSVM program on Windows OS
+ 
+environment:
+
+  matrix:
+    
+    - PYTHON: "C:\\Python37-x64"
+      PYTHON_VERSION: "3.7.1"
+      PYTHON_ARCH: "64"
+      
+install:
+  # Check currrent working directory
+  - "cd"
+
+  # Prepend Python to The PATH
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+  
+  # Check that we have the expected version and architecture for Python
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+  
+  # Upgrade to the latest version of pip
+  - "python -m pip install --upgrade pip"
+  - "pip --version"
+  
+  # Install dependencies for testing LightTwinSVM
+  - "pip install -r requirments.txt"
+  
+  # Install Cython for building extension module
+  - "pip install Cython"
+  
+  # Clone Armadillo library for building C++ extension moudle
+  # Armadillo is licensed under the Apache License, Version 2.0
+  - "git clone https://github.com/mir-am/armadillo-code .\\src\\optimizer\\armadillo-code"
+  
+build_script:
+  # Build C++ extension module (clipDCD optimizer)
+  - ps: |
+      $py_ext = (python -c "from distutils.sysconfig import get_config_var; print(get_config_var('EXT_SUFFIX'))")
+      pushd .\src\optimizer
+      python setup.py build_ext --inplace
+      mv "clippdcd$py_ext" ..\
+      popd
+   
+  # Adding BLAS and LAPACK libs to PATH   
+  - ps: |
+      $currentDir=(Get-Item -Path ".\").FullName
+      $newPath=Join-Path $currentDir "src\optimizer\armadillo-code\lib_win64\"
+      $env:Path += ';' + $newPath 
+      #echo $env:Path
+  
+test_script:
+  # Create a folder for saving test results
+  - "mkdir result"
+  - "python src\\test_program.py -f"

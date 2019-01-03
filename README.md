@@ -6,6 +6,7 @@
 <a href=""><img src="https://img.shields.io/pypi/pyversions/Django.svg" alt="Python Versions"></a>
 <a href="https://github.com/mir-am/LightTwinSVM/releases"><img src="https://img.shields.io/github/release/mir-am/LightTwinSVM/all.svg" alt="latest release version"></a>
 <a href="https://travis-ci.org/mir-am/LightTwinSVM.svg?branch=master"><img src="https://api.travis-ci.org/mir-am/LightTwinSVM.svg?branch=master" alt="Travis-CI"></a>
+[![Build status](https://ci.appveyor.com/api/projects/status/c625kl28aaqvuh9g?svg=true)](https://ci.appveyor.com/project/mir-am/lighttwinsvm)
 </p>
 <br />
 
