@@ -1,3 +1,4 @@
+# cython: language_level=3
 # LightTwinSVM Program - Simple and Fast
 # Version: 0.2.0-alpha - 2018-05-30
 # Developer: Mir, A. (mir-am@hotmail.com)
