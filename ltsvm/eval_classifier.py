@@ -426,10 +426,10 @@ def save_result(file_name, validator_obj, gs_result, output_path):
     # (Name of validator, validator's attribute) - ('CV', 5-folds)
     validator_type, validator_attr = validator_obj.validator              
 
-    output_file = os.path.join(output_path, "%s_%s_%s_%s_%s.xlsx") % (validator_obj.obj_TSVM.cls_name,
-                              validator_obj.obj_TSVM.kernel, "%d-F-CV" %
-                              validator_attr if validator_type == 'CV' else 'Tr%d-Te%d' % \
-                  (100 - validator_attr, validator_attr), file_name, datetime.now().strftime('%Y-%m-%d %H-%M'))
+    output_file = os.path.join(output_path, "TSVM_%s_%s_%s_%s.xlsx") % (validator_obj.obj_TSVM.kernel_t, \
+                  "%d-F-CV" % validator_attr if validator_type == 'CV' else 'Tr%d-Te%d' % \
+                  ((1.0 - validator_attr) * 100, validator_attr * 100),
+                  file_name, datetime.now().strftime('%Y-%m-%d %H-%M'))
 
     excel_file = pd.ExcelWriter(output_file, engine='xlsxwriter')
     

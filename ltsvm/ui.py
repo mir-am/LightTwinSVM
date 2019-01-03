@@ -271,7 +271,7 @@ License: GNU General Public License v3.0
 
                         continue
 
-                    user_input.test_method_tuple = (test_method, 100 - train_set_percent)
+                    user_input.test_method_tuple = (test_method, (100 - train_set_percent) / 100)
 
                 else:
 
