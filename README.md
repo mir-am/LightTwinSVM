@@ -26,7 +26,7 @@ The main features of the program are the following:
 - **Fast optimization algorithm:** The clipDCD algorithm was improved and is implemented in C++ for solving optimization problems of TwinSVM.
 - **Linear**, **RBF** kernel and Rectangular are supported.
 - Binary and **Multi-class classification** (One-vs-All & One-vs-One) are supported.
-- The OVO estimator is **Scikit-learn compatible**. Hence Sklearn's methods such as GridSearchCV and cross_val_score can be used.
+- The OVO estimator is **compatible with scikit-learn** tools such as GridSearchCV, cross_val_score, etc.
 - The classifier can be evaluated using either **K-fold cross-validation** or **Training/Test** split.
 - It supports **grid search** over C and gamma parameters.
 - **CSV** and **LIBSVM** data files are supported.
@@ -43,7 +43,7 @@ Currently, supported operating systems are as follows. Choose your OS from list 
 - [Debian-based Linux systems](#linux--mac-os-x) (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10, Ubuntu 18.04 and Linux Mint 18)
 - [RPM-based Linux systems](#linux--mac-os-x) (Fedora)
 - [Mac OS X](#linux--mac-os-x)
-- [Microsoft Windows](#windows) (It's experimental.)
+- [Microsoft Windows](#windows)
 
 ### Dependencies
 First of all, [Python](https://www.python.org/) 3.5 interpreter or newer is required. Python 3 is usually installed by default on most Linux distributions.
