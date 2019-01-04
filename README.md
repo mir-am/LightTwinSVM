@@ -87,6 +87,7 @@ cd LightTwinSVM && .\win-setup.ps1
 When the installation is finished, a batch file "ltsvm.bat" will be created to run the program.
 
 ## User Guide
+### An exmaple of using command line interface
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
 **Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. CSV and LIBSVM files are supported. It is highly recommended to normalize your dataset. <br />
 ![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)<br />
@@ -118,6 +119,14 @@ Step 4/4:Type the range of C penalty parameter for grid search:
 After completing the above steps, the exhaustive search will be started. When the search process is completed, a detailed classification result will be saved in a spreadsheet file. In this file, all the common evalaution metrics(e.g Accuracy, Recall, Precision and F1) are provided.<br />
 A instance of spreadsheet file containing classification result can be seen [here](https://github.com/mir-am/LightTwinSVM/blob/misc/TSVM_RBF_5-F-CV_pima-indian_2018-05-23%2013:21.csv).
  
+### Tutorials
+LightTwinSVM can be imported as a Python package in your project. Currently, a Jupyter notebook is avaliable [here](https://github.com/mir-am/LightTwinSVM/tree/master/docs/notebooks), which is "A Step-by-Step Guide on How to Use Multi-class TwinSVM".
+
+To run the notebooks, make sure that Jupyter is installed on your system. If not, use the following command to install it:
+```
+pip3 install jupyter
+```
+For more details, check out [Jupyter documentation](https://jupyter.readthedocs.io/en/latest/index.html).
 
 ## Dataset Format
 - **LIBSVM** data files are supported. Note that the extension of this file should be '*.libsvm'.
