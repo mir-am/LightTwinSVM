@@ -82,7 +82,7 @@ Set-Content -Path "ltsvm.bat" -Value "python -m ltsvm"
 
 $currentPath = (Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
 $currentDir = (Get-Item -Path ".\").FullName
-$libPath = Join-Path $currentDir "src\optimizer\armadillo-code\lib_win64\"
+$libPath = Join-Path $currentDir "ltsvm\optimizer\armadillo-code\lib_win64\"
 #$newPath = $currentDir + ';' + $libPath
 $updatedPath = $currentPath + $libPath
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $updatedPath
