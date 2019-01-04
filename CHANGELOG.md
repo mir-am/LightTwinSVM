@@ -21,6 +21,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Search space is now created using ParameterGrid of Scikit-learn.
 - Validator class returns classification results as a Python dictionary.
 
+### Fixed
+- Wrong test size for Train/Test split was fixed.
+
 ## [0.4.0-alpha] - 2018-06-08
 ### Added
 - Experimental support for Rectangular kenrnel.

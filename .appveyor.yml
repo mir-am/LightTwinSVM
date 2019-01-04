@@ -38,19 +38,19 @@ build_script:
   # Build C++ extension module (clipDCD optimizer)
   - ps: |
       $py_ext = (python -c "from distutils.sysconfig import get_config_var; print(get_config_var('EXT_SUFFIX'))")
-      pushd .\src\optimizer
+      pushd .\ltsvm\optimizer
       python setup.py build_ext --inplace
-      mv "clippdcd$py_ext" ..\
+      mv "clipdcd$py_ext" ..\
       popd
    
   # Adding BLAS and LAPACK libs to PATH   
   - ps: |
       $currentDir=(Get-Item -Path ".\").FullName
-      $newPath=Join-Path $currentDir "src\optimizer\armadillo-code\lib_win64\"
+      $newPath=Join-Path $currentDir "ltsvm\optimizer\armadillo-code\lib_win64\"
       $env:Path += ';' + $newPath 
       #echo $env:Path
   
 test_script:
   # Create a folder for saving test results
   - "mkdir result"
-  - "python src\\test_program.py -f"
+  - "python -m unittest discover -s tests"

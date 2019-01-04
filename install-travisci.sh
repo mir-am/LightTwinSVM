@@ -34,8 +34,6 @@ pip install -r requirments.txt
 # Armadillo is licensed under the Apache License, Version 2.0
 git clone https://github.com/mir-am/armadillo-code.git temp
 
-
-
 # Building C++ extension module on Linux and OS X
 if [[ "$TRAVIS_OS_NAME" == "linux" ]]
 then
