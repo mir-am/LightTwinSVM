@@ -8,6 +8,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.5.0] - 2019-01-01
+### Added
+- The multi-class method of One-vs-All (OVA) was implemented.
+- The multi-class method of One-vs-One (OVO) was implemented.
+- The OVO estimator is scikit-learn compatible classifier.
+- An option was added to command-line interface to choose between OVA and OVO schemes.
+- LightTwinSVM is now Python package and its estimators and utilities can be imported in other Python projects.
+- [API] get_param_names was added to esitmators' classes. It returns the hyper-parameters of the estimator.
+
+### Changed
+- Search space is now created using ParameterGrid of Scikit-learn.
+- Validator class returns classification results as a Python dictionary.
+
+### Fixed
+- Wrong test size for Train/Test split was fixed.
+
 ## [0.4.0-alpha] - 2018-06-08
 ### Added
 - Experimental support for Rectangular kenrnel.

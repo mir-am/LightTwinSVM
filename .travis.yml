@@ -1,5 +1,4 @@
 # LightTwinSVM Program - Simple and Fast
-# Version: 0.2.0-alpha - 2018-05-30
 # Developer: Mir, A. (mir-am@hotmail.com)
 # License: GNU General Public License v3.0
 
@@ -24,7 +23,7 @@ matrix:
       sudo: true
       python: '3.7'
       
-  allow_failures:  
+  allow_failures:
     - os: osx
       language: generic
       env: PYENV_VERSION=3.6.7
@@ -44,8 +43,8 @@ addons:
 
 before_install:
   - chmod +x install-travisci.sh
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo $'#!/bin/bash\npython3 src/test_program.py -f' > ltsvm_test.sh; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $'#!/bin/bash\npython src/test_program.py -f' > ltsvm_test.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo $'#!/bin/bash\npython3 -m unittest discover -s tests' > ltsvm_test.sh; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then echo $'#!/bin/bash\npython -m unittest discover -s tests' > ltsvm_test.sh; fi
   - chmod +x ltsvm_test.sh
   
 install: ./install-travisci.sh

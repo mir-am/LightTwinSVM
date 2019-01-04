@@ -17,10 +17,10 @@ cat << EOM > "ltsvm.sh"
 #!/bin/bash
 case $arg in
     "-n")
-    python3 src/main.py # LightTwinSVM program
+    python3 -m ltsvm # LightTwinSVM program
     ;;
     "-t")
-    python3 src/test_program.py # Unit tests
+    python3 -m unittest discover -s tests # Unit tests
     ;;
     *)
     echo -e "Invalid argument.\n-n normal mode\n-t test mode"
@@ -42,7 +42,7 @@ py_intp=$(python3 -c 'import sys; sys.exit(0 if sys.version_info[0] == 3 and sys
 if [ $? == 0 ]
 then
 
-	echo -e "Python 3.4 or newer detected on your system..."
+	echo -e "Python 3.5 or newer detected on your system..."
 	((step++))
 	
 	# Check wether pip is installed.
@@ -151,11 +151,11 @@ then
             ((step++))
     	fi
 
-	ext_module="src/clippdcd$(python3-config --extension-suffix)"
+	ext_module="ltsvm/optimizer/clipdcd$(python3-config --extension-suffix)"
 
 	if [ -e $ext_module ]
 	then
-		echo "Found ClippDCD optimizer (C++ extension module.)"
+		echo "Found ClipDCD optimizer (C++ extension module.)"
 		
 		((step++))
 	else
@@ -174,12 +174,12 @@ then
         if [ "$OSTYPE" == "linux-gnu" ]
         then
             # Compiles C++ extension module
-	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack
+	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack
 
         elif [ "$OSTYPE" == "darwin"* ]
         then
 
-	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./src/optimizer/pybind_clippdcd.cpp -o ./src/clippdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
 
         fi
 		
@@ -234,7 +234,7 @@ then
 		then
 			echo "Unit test started..."
 			
-			python3 ./src/test_program.py -v
+			python3 -m unittest discover -s tests
 		fi
 		
 		echo -e "***************************************\n"
@@ -245,6 +245,6 @@ then
 	fi
 
 else
-	echo "Could not detect Python 3 interpreter. Please install Python 3.4 or newer."
+	echo "Could not detect Python 3 interpreter. Please install Python 3.5 or newer."
 fi
 

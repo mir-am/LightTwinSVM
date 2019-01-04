@@ -17,7 +17,7 @@ pip install -r "requirments.txt" --user
 pip install Cython --user
 echo "Step 1 completed..."
 
-cd .\src\optimizer
+cd .\ltsvm\optimizer
 
 echo "Step 2: Need to clone Armadillo C++ library"
 
@@ -42,7 +42,7 @@ echo "Step3: Generate C++ extension module (clipDCD optimizer)"
 # Name of Python extension module
 $py_ext = (python -c "from distutils.sysconfig import get_config_var; print(get_config_var('EXT_SUFFIX'))")
 
-if (Test-Path -Path "..\clippdcd$py_ext"){
+if (Test-Path -Path "clipdcd$py_ext"){
     
     echo "Found C++ extension module. No need to build again."
 
@@ -50,8 +50,6 @@ if (Test-Path -Path "..\clippdcd$py_ext"){
 
     # Generate C++ extension module (Optimizer) using Cython
     python setup.py build_ext --inplace
-
-    mv "clippdcd$py_ext" ..\
 
 }
 
@@ -80,7 +78,7 @@ echo "Step 3 completed... (Generated extension module)"
 echo "Step 4: Adding Libraries and program to the PATH...."
 
 # A batch script for running LightTwinSVM in CMD
-Set-Content -Path "ltsvm.bat" -Value "python src\main.py"
+Set-Content -Path "ltsvm.bat" -Value "python -m ltsvm"
 
 $currentPath = (Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
 $currentDir = (Get-Item -Path ".\").FullName
@@ -93,6 +91,15 @@ echo "Step 4 completed"
 $elapsedTime = (((Get-Date) - $startTime).TotalSeconds).ToString("0.000")
 echo "The installation finished in $elapsedTime seconds."
 echo "To launch the program, run ltsvm.bat in the root of LightTwinSVM project using PowerShell or CMD."
+
+# Ask users to run unit tests
+$confirm = Read-Host "Would you like to run unit tests for checking program installation? [y/n]"
+
+if($confirm -eq 'y'){
+
+   python -m unittest discover -s tests
+
+}
 
 #cd .\dist
 

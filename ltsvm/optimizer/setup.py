@@ -20,15 +20,15 @@ from Cython.Build import cythonize
 import numpy as np
 
 
-setup(name='clippdcd',
+setup(name='clipdcd',
       version='0.2.0',
       author='Mir, A.',
       author_email='mir-am@hotmail.com',
       url='https://github.com/mir-am/LightTwinSVM',
-      description='ClippDCD opimizer implemented in C++ and improved by Mir, A.',
+      description='ClipDCD opimizer implemented in C++ and improved by Mir, A.',
       ext_modules=cythonize(Extension(
-        "clippdcd",
-        sources=["clippdcd.pyx", "clippdcd_opt.cpp"],
+        "clipdcd",
+        sources=["clipdcd.pyx", "clippdcd_opt.cpp"],
         language="c++",
         libraries=['lapack_win64_MT', 'blas_win64_MT'],
         library_dirs=['.\\armadillo-code\\lib_win64'],

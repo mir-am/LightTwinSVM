@@ -12,9 +12,9 @@ User interface of LightTwinSVM program is implemented in this module.
 
 """
 
-
-from eval_classifier import initializer
-from dataproc import read_data, read_libsvm
+from ltsvm import __version__, RELEASE_DATE
+from ltsvm.eval_classifier import initializer
+from ltsvm.dataproc import read_data, read_libsvm
 from tkinter import Tk, filedialog
 from os import path
 import time
@@ -87,11 +87,12 @@ def program_ui():
 
     # Printing general info on program
     print("""LightTwinSVM Program - Simple and Fast
-Version: 0.2.0-alpha - 2018-05-30
+Version: %s - %s
 Developer: Mir, A. (mir-am@hotmail.com)
 Paper's authors: Khemchandani, R. & Chandra, S.
 License: GNU General Public License v3.0
-*************************************************\n""")
+*************************************************\n""" % (__version__,
+ RELEASE_DATE))
 
     input("Press Enter to start the program...\n")
 
@@ -165,6 +166,32 @@ License: GNU General Public License v3.0
                 continue
 
             break
+        
+        if user_input.class_type == 'multiclass':
+        
+            # Let user choose type of multi-class (OVO or OVA)
+            while True:
+                
+                print("Step 1.1/4: Select a multi-class method:(Just type the number. e.g 1)\n1-One-vs-All(Faster)\n2-One-vs-One(More accurate)")
+                
+                mc_choice = input("-> ")
+                
+                if '1' in mc_choice:
+                    
+                    user_input.class_type = 'ova'
+                    
+                elif '2' in mc_choice:
+                    
+                    user_input.class_type = 'ovo'
+                    
+                else:
+    
+                    print("Wrong input! Try again.")
+    
+                    continue
+                    
+                break
+            
 
         # Step 2: Select a kernel function type
         while True:

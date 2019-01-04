@@ -12,10 +12,14 @@ In this module, unit test is defined for checking the integrity of installation.
 
 """
 
-from eval_classifier import Validator, initializer
-from ui import UserInput
-from dataproc import read_data, read_libsvm
-from twinsvm import TSVM, MCTSVM, OVO_TSVM
+# A temprory workaround to import LightTwinSVM for running tests
+import sys
+sys.path.append('./')
+
+from ltsvm.eval_classifier import Validator, initializer
+from ltsvm.ui import UserInput
+from ltsvm.dataproc import read_data, read_libsvm
+from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
 import unittest
 
 
@@ -70,7 +74,7 @@ class TestProgram(unittest.TestCase):
         self.input_mc.lower_b_c, self.input_mc.upper_b_c = -2, 2
         self.input_mc.lower_b_u, self.input_mc.upper_b_u = -2, 2
         self.input_mc.filename = 'UnitTest_' + self.input_mc.filename
-        self.input_mc.class_type = 'multiclass'
+        #self.input_mc.class_type = 'multiclass'
         self.input.result_path = './result'
 
         self.k_folds = 5
@@ -95,7 +99,7 @@ class TestProgram(unittest.TestCase):
         """
 
         # Default arguments
-        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier = TSVM(kernel='RBF')
         tsvm_classifier.fit(self.input.X_train, self.input.y_train)
         tsvm_classifier.predict(self.input.X_train)
 
@@ -110,7 +114,7 @@ class TestProgram(unittest.TestCase):
                              self.k_folds), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1})
 
     def test_RBF_Validator_CV(self):
 
@@ -118,12 +122,12 @@ class TestProgram(unittest.TestCase):
         It applies cross validation on non-Linear TSVM
         """
 
-        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier = TSVM(kernel='RBF')
         validate = Validator(self.input.X_train, self.input.y_train, ('CV', \
                              self.k_folds), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1, 'gamma':1})
 
     def test_linear_Validator_ttsplit(self):
 
@@ -131,24 +135,24 @@ class TestProgram(unittest.TestCase):
         It applies train/test split on Linear TSVM
         """
 
-        tsvm_classifier = TSVM(kernel_type='linear')
+        tsvm_classifier = TSVM(kernel='linear')
         validate = Validator(self.input.X_train, self.input.y_train, ('t_t_split', \
                              self.train_set_size), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1})
 
     def test_RBF_Validator_ttsplit(self):
 
         """
         It applies train/test split in non-linear TSVM
         """
-        tsvm_classifier = TSVM(kernel_type='RBF')
+        tsvm_classifier = TSVM(kernel='RBF')
         validate = Validator(self.input.X_train, self.input.y_train, ('t_t_split', \
                              self.train_set_size), tsvm_classifier)
 
         func = validate.choose_validator()
-        func()
+        func({'C1':1, 'C2':1, 'gamma':1})
 
     def test_linear_CV_gridsearch(self):
 
@@ -250,10 +254,11 @@ class TestProgram(unittest.TestCase):
     def test_linear_CV_gridsearch_MCTSVM(self):
 
         """
-        It checks linear kernel, Crossvalidation and grid search with MCTSVM
+        It checks linear kernel, cross-validation and grid search with MCTSVM
         """
 
         self.input_mc.kernel_type = 'linear'
+        self.input_mc.class_type = 'ova'
         self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input_mc)
@@ -261,10 +266,11 @@ class TestProgram(unittest.TestCase):
     def test_RBF_CV_gridsearch_MCTSVM(self):
 
         """
-        It checks RBF kernel, Crossvalidation and grid search with MCTSVM
+        It checks RBF kernel, cross-validation and grid search with MCTSVM
         """
 
         self.input_mc.kernel_type = 'RBF'
+        self.input_mc.class_type = 'ova'
         self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
         print_test_info(self.input_mc)
@@ -288,7 +294,30 @@ class TestProgram(unittest.TestCase):
         ovo_tsvm_obj = OVO_TSVM('RBF')
         ovo_tsvm_obj.fit(self.input_mc.X_train, self.input_mc.y_train)
         ovo_tsvm_obj.predict(self.input_mc.X_train)
+        
+    def test_linear_CV_gridsearch_OVO_TSVM(self):
+        
+        """
+        It checks linear kernel, cross-validation and grid search with OVO-TSVM
+        """
+        
+        self.input_mc.kernel_type = 'linear'
+        self.input_mc.class_type = 'ovo'
+        self.input_mc.test_method_tuple = ('CV', self.k_folds)
 
+        print_test_info(self.input_mc)
+
+    def test_RBF_CV_gridsearch_OVO_TSVM(self):
+        
+        """
+        It checks RBF kernel, cross-validation and grid search with OVO-TSVM
+        """
+        
+        self.input_mc.kernel_type = 'RBF'
+        self.input_mc.class_type = 'ovo'
+        self.input_mc.test_method_tuple = ('CV', self.k_folds)
+
+        print_test_info(self.input_mc)
 
 if __name__ == '__main__':
 

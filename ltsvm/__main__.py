@@ -14,10 +14,10 @@ Module: main.py
 #**********Warnings************
 import warnings
 # Silence warnings about NumPy
-warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore")
 #*******************************
 
-from ui import program_ui
+from ltsvm.ui import program_ui
 
 
 def main():
