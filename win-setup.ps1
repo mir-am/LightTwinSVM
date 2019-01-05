@@ -86,6 +86,11 @@ $libPath = Join-Path $currentDir "ltsvm\optimizer\armadillo-code\lib_win64\"
 #$newPath = $currentDir + ';' + $libPath
 $updatedPath = $currentPath + $libPath
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH -Value $updatedPath
+
+# Add libs to temporary env path in PowerShell so that 
+# the program can be launched in the current session
+$env:Path += ';' + $libPath
+
 echo "Step 4 completed"
 
 $elapsedTime = (((Get-Date) - $startTime).TotalSeconds).ToString("0.000")
