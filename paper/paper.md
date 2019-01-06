@@ -29,7 +29,7 @@ Classification is a widely-used learning method in machine learning. The task of
 
 ![Geometric illustration of SVM classifier.](figs/SVM.png)
 
-Over the past decade, researchers have proposed new classifiers based on the SVM [@nayak2015]. Of these extensions of SVM, twin support vector machine (TwinSVM) [@jayadeva2007] has received more attention from scholars in the field of SVM research. This may be due to the novel idea of TwinSVM which is doing classification using two non-parallel hyperplanes. Each of which is as close as possible to samples of its own class and far from samples of the other class. To show the central idea of TwinSVM graphically, Figure 2 shows the geometric interpretation of TwinSVM classifier.
+Over the past decade, researchers have proposed new classifiers based on the SVM [@nayak2015]. Of these extensions of SVM, twin support vector machine (TwinSVM) [@jayadeva2007] has received more attention from scholars in the field of SVM research. This may be due to the novel idea of TwinSVM which is doing classification using two non-parallel hyperplanes. Each of which is as close as possible to samples of its own class and far from samples of the other class. To show the central idea of TwinSVM graphically, Figure 2 shows the geometric illustration of TwinSVM classifier.
 
 ![Geometric illustration of TwinSVM classifier.](figs/TwinSVM.png)
 
@@ -39,11 +39,11 @@ Even though TwinSVM is a popular classification algorithm in the field of SVM re
 
 # LightTwinSVM
 
-`LightTwinSVM` program is a simple and fast implementation of TwinSVM classifier. It is mostly written in Python and its main design goals are simplicity and speed. Also, this program is free, open source, and licensed under the terms of [GNU GPL v3](https://opensource.org/licenses/GPL-3.0). `LightTwinSVM` is built on top of `NumPy` [@walt2011], `Scikit-learn` [@pedregosa2011scikit], and `pandas` [@mckinney2011pandas].
+`LightTwinSVM` program is a simple and fast implementation of TwinSVM classifier. It is mostly written in Python and its main design goals are simplicity and speed. Also, this program is free, open source, and licensed under the terms of GNU GPL v3^[https://opensource.org/licenses/GPL-3.0]. `LightTwinSVM` is built on top of `NumPy` [@walt2011], `Scikit-learn` [@pedregosa2011scikit], and `pandas` [@mckinney2011pandas].
 
 `LightTwinSVM` program can be used by both researchers in the field of SVM research and by students in courses on pattern recognition and machine learning. Moreover, this software can be applied to a wide variety of research applications such as text classification, image or video recognition, medical diagnosis, and bioinformatics. For example, `LightTwinSVM` was used for the numerical experiments in our previous research paper [@mir2018]. 
 
-The main features of `LightTwinSVM` are the following:
+The main features of the `LightTwinSVM` program are the following:
 
 - To make its usage simple, a **command-line application** was created to help users solve classification tasks step-by-step.
 - Since speed is one of the design goals, the **clipDCD optimization algorithm** [@peng2014] is employed which is a simple and fast external optimizer. It was improved and implemented in C++.
@@ -55,9 +55,10 @@ The main features of `LightTwinSVM` are the following:
 - **CSV** and **LIBSVM** formats are supported for importing datasets.
 - Detailed classification results are saved in a spreadsheet file so that results can be analyzed and interpreted.
 
-In order to show the efficiency of `LightTwinSVM` program, we conducted experiments and compared it with the implementation of SVM in `Scikit-learn` on [UCI](http://archive.ics.uci.edu/ml/datasets.html) benchmark datasets. Table below shows the accuracy comparison between `LightTwinSVM` and `Scikit-learn`'s SVM.
+In order to show the efficiency of `LightTwinSVM` program, we conducted experiments and compared it with the implementation of SVM in `Scikit-learn` on UCI^[http://archive.ics.uci.edu/ml/datasets.html] benchmark datasets. Table 1 shows the accuracy comparison between `LightTwinSVM` and `Scikit-learn`'s SVM.
 
-<center>
+
+Table: The accuracy comparison between `LightTwinSVM` and `Scikit-learn`'s SVM
 | Datasets  | LightTwinSVM | Scikit-learn's SVM | Difference in Accuracy |
 | ------------- | ------------- | ------------- | ------------- |
 | Pima-Indian  | **78.91** | 78.26 | 0.65 |
@@ -71,7 +72,7 @@ In order to show the efficiency of `LightTwinSVM` program, we conducted experime
 | Spectf | **80.55** |79.78 | 0.81 |
 | Titanic | **82.04** |81.71 | 0.33 |
 | Mean | **83.44** |81.90 | 1.53 |
-</center>
+
 
 From the above table, it can be seen that `LightTwinSVM` outperforms `Scikit-learn`'s SVM on most datasets. For instance, the accuracy difference in Sonar dataset is as high as 10.74% which is a significant result. However, one may notice that the difference in accuracy between the two classifiers is not very large. To show whether a significant difference exists, statistical tests are often used in research papers on classification [@demsar2006]. Due to the limited space, comprehensive experiments with statistical tests are skipped in this paper. In summary, the experiment indicates that the `LightTwinSVM` program can be used for classification tasks and it may produce a better prediction accuracy.
 
