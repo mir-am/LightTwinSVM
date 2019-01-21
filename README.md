@@ -16,7 +16,8 @@
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
 6. [FAQ](#frequently-asked-questions)
-7. [Numerical Experiments](#numerical-experiments) 
+7. [Donations](#donation)
+8. [Numerical Experiments](#numerical-experiments) 
 
 ## Intro
 LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
@@ -150,6 +151,9 @@ To report a problem or bug, please provide the following information:<br />
 ## Frequently Asked Questions
 - What is the main idea of TwinSVM classifier? <br />
 TwinSVM does classification by using two non-parallel hyperplanes as opposed to a single hyperplane in the standard SVM. In TwinSVM, each hyperplane is as close as possible to samples of its own class and far away from samples of other class. To know more about TwinSVM and its optimization problems, you can read [this blog post](https://mirblog.me/index.php/2018/12/07/a-brief-intro-to-twin-support-vector-machine-classifier/ "A brief Introduction to TwinSVM classifier").
+
+## Donations
+If you have used the LightTwinSVM program and found it helpful, please consider making a donation to support this work. It also motivates me to maintain and develop new features for the program.
 
 ## Numerical Experiments
 In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy, experiments were conducted to compare it with scikit-learn's SVM on several UCI benchmark datasets. Similar to most research papers on classification, K-fold cross-validation is used to evaluate these classifiers (K was set to 5). Also, grid search was used to find the optimal values of hyper-parameters. Table below shows the accuracy comparison between the LightTwinSVM and Scikit-learn's SVM. <br />
