@@ -460,7 +460,7 @@ def initializer(user_input_obj):
 
     elif user_input_obj.class_type == 'ovo':
 
-        tsvm_obj = OVO_TSVM(user_input_obj.kernel_type)
+        tsvm_obj = OVO_TSVM(user_input_obj.kernel_type, user_input_obj.rect_kernel)
         
     elif user_input_obj.class_type == 'ova':
         

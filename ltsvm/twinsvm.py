@@ -308,7 +308,7 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
     such as cross_val_score and GridSearchCV can be used for OVO_TSVM
     """    
     
-    def __init__(self, kernel='linear', C1=1, C2=1, gamma=1):
+    def __init__(self, kernel='linear', rect_kernel=1, C1=1, C2=1, gamma=1):
         
         """
         Parameters:
@@ -321,6 +321,7 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         """
         
         self.kernel = kernel
+        self.rect_kernel = rect_kernel
         self.C1 = C1
         self.C2 = C2
         self.gamma = gamma
@@ -404,8 +405,8 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
                 sub_prob_y_i_j[sub_prob_y_i_j == j] = -1
                 sub_prob_y_i_j[sub_prob_y_i_j == i] = 1
                 
-                self.bin_TSVM_models_[p] = TSVM(self.kernel, 1, self.C1, self.C2, \
-                               self.gamma)
+                self.bin_TSVM_models_[p] = TSVM(self.kernel, self.rect_kernel,
+                                     self.C1, self.C2, self.gamma)
                 
                 self.bin_TSVM_models_[p].fit(sub_prob_X_i_j, sub_prob_y_i_j)
                 

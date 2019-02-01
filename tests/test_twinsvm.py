@@ -89,7 +89,8 @@ class TestTwinSVM(unittest.TestCase):
         It checks that set_params and get_params works correctly for OVO-TSVM-Linear
         """
         
-        expected_output = {'C2': 2, 'gamma': 1, 'kernel': 'linear', 'C1': 0.5}
+        expected_output = {'C2': 2, 'gamma': 1, 'kernel': 'linear', 'C1': 0.5,
+                           'rect_kernel': 1}
         
         ovotsvm_cls = OVO_TSVM('linear')
         ovotsvm_cls.set_params(**{'C1': 0.5, 'C2': 2})
@@ -103,7 +104,8 @@ class TestTwinSVM(unittest.TestCase):
         It checks that set_params and get_params works correctly for OVO-TSVM-RBF
         """
         
-        expected_output = {'C2': 2, 'kernel': 'RBF', 'gamma': 0.125, 'C1': 0.5}
+        expected_output = {'C2': 2, 'kernel': 'RBF', 'gamma': 0.125, 'C1': 0.5,
+                           'rect_kernel': 1}
         
         ovotsvm_cls = OVO_TSVM('RBF')
         ovotsvm_cls.set_params(**{'C1': 0.5, 'C2': 2, 'gamma': 0.125})
