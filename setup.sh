@@ -43,6 +43,8 @@ if [ $? == 0 ]
 then
 
 	echo -e "Python 3.5 or newer detected on your system..."
+        echo "Python version: $(python3 --version)"
+        echo "OS: $OSTYPE"
 	((step++))
 	
 	# Check wether pip is installed.
@@ -175,16 +177,20 @@ then
         then
             # Compiles C++ extension module
 	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack
+            echo "The C++ extension module generated successfully on your Linux system."
+            ((step++))
 
         elif [ "$OSTYPE" == "darwin"* ]
         then
 
 	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+            echo "The C++ extension module generated successfully on your MacOS system."
+            ((step++))
+        else
 
-        fi
-		
-		echo "The C++ extension moudle is generated..."
-		((step++))
+	    echo "Failed to generate the C++ extension module..."
+	fi
+
 	fi
 	
 	echo -e "***************************************\n"
@@ -241,7 +247,7 @@ then
 		echo -e "To run the program, execute the shell script \"ltsvm.sh\" at this address:\n$(pwd)"
 	
 	else
-		echo "The installation failed... Number of compeleted steps: $step"	
+		echo "The installation failed... Number of steps completed: $step"	
 	fi
 
 else
