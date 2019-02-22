@@ -58,11 +58,14 @@ In order to build and run the program, the following Python packages are needed:
 - [PyInstaller](https://www.pyinstaller.org/)(To generate a binary executable for Windows platform.)
 
 In order to build C++ extension module(Optimizer), the following tools and libraries are required:
-- [GNU C++ Compiler](https://gcc.gnu.org/)
+- [GNU C++ Compiler](https://gcc.gnu.org/) (For Linux systems)
+- [Apple XCode](https://developer.apple.com/xcode/) (For OSX systems)
+- [Visual Studio](https://visualstudio.microsoft.com/) (For Windows systems)
 - [Armadillo C++ Linear Algebra Library](http://arma.sourceforge.net/)
 - [LAPACK](http://www.netlib.org/lapack/) and [BLAS](http://www.netlib.org/blas/) Library
 
 
+### Setup script (Recommended)
 ### Linux & Mac OS X
 **A shell script is created to help users download required dependencies and install program automatically.** However, make sure that [Git](https://git-scm.com/) and GNU C++ compiler is installed on your system.
 
@@ -86,6 +89,9 @@ git clone https://github.com/mir-am/LightTwinSVM.git
 cd LightTwinSVM && .\win-setup.ps1
 ```
 When the installation is finished, a batch file "ltsvm.bat" will be created to run the program.
+
+### Building manually
+It is highly recommended to install the LightTwinSVM program automatically using the setup script. If for some reasons you still want to build the program manually, a step-by-step guide is provided [here](https://github.com/mir-am/LightTwinSVM/wiki/Building-the-LightTwinSVM-manually-on-Linux-and-OSX-systems) for Linux and OSX systems.
 
 ## User Guide
 ### An exmaple of using command line interface
