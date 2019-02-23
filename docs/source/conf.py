@@ -12,21 +12,24 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
+import os
+import sys
+
+# Making source files of the LightTwinSVM's package available in sys.path
+sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'ltsvm'))
 # sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
 
 project = 'LightTwinSVM'
-copyright = '2018, Mir, A.'
+copyright = '2019, Mir, A.'
 author = 'Mir, A.'
 
 # The short X.Y version
-version = ''
+version = '0.5.0'
 # The full version, including alpha/beta/rc tags
-release = ''
+release = '0.5.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -42,7 +45,15 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
+	'sphinx.ext.autosummary',
 ]
+
+autodoc_mock_imports = ["ltsvm", "twinsvm"]
+autodoc_member_order = 'bysource'
+# Default flags used by autodoc directives
+autodoc_default_flags = ['members', 'show-inheritance']
+# Generate autodoc stubs with summaries from code
+autosummary_generate = True
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
