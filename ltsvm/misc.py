@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-LightTwinSVM Program - Simple and Fast
-Version: 0.2.0-alpha - 2018-05-30
-Developer: Mir, A. (mir-am@hotmail.com)
-License: GNU General Public License v3.0
+# LightTwinSVM Program - Simple and Fast
+# Version: 0.5.0 - 2019-01-01
+# Developer: Mir, A. (mir-am@hotmail.com)
+# License: GNU General Public License v3.0
 
-Module: misc.py
+"""
 In this module, several miscellaneous functions are defined for using in other modules.
 Such as date time formatting and customized progress bar
 """

@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-LightTwinSVM Program - Simple and Fast
-Version: 0.2.0-alpha - 2018-05-30
-Developer: Mir, A. (mir-am@hotmail.com)
-License: GNU General Public License v3.0
+# LightTwinSVM Program - Simple and Fast
+# Version: 0.5.0 - 2019-01-01
+# Developer: Mir, A. (mir-am@hotmail.com)
+# License: GNU General Public License v3.0
 
-Module: eval_classifier.py
+"""
 In this module, methods are defined for evluating TwinSVM perfomance such as cross validation
 train/test split, grid search and generating the detailed result.
 """

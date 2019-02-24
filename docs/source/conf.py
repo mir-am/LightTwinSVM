@@ -17,6 +17,7 @@ import sys
 
 # Making source files of the LightTwinSVM's package available in sys.path
 sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'ltsvm'))
+sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 # sys.path.insert(0, os.path.abspath('.'))
 
 
