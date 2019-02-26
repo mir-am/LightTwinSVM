@@ -183,7 +183,7 @@ then
         elif [ "$OSTYPE" == "darwin"* ]
         then
 
-	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+	    g++ -O3 -Wall -shared -std=c++11 -undefined dynamic_lookup `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
             echo "The C++ extension module generated successfully on your MacOS system."
             ((step++))
         else

@@ -49,7 +49,7 @@ g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]
 then
 echo $(python-config --extension-suffix)
-g++ -O3 -Wall -shared -std=c++11 -fPIC `python -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
+g++ -O3 -Wall -shared -std=c++11 -undefined dynamic_lookup `python -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
 fi
 
 # Creates result directory for saving unit test's output
