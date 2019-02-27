@@ -20,7 +20,7 @@ pyenv install $PYENV_VERSION
 # Manually adding to path!!
 export PYENV_VERSION=$PYENV_VERSION
 export PATH="/Users/travis/.pyenv/shims:${PATH}"
-pyenv-virtualenv venv
+pyenv virtualenv venv
 source venv/bin/activate
 
 pip install --upgrade pip
@@ -55,3 +55,8 @@ fi
 # Creates result directory for saving unit test's output
 mkdir "result"
 
+# For OSX, unit tests should be ran here. Because of virtualenv!
+if [[ "$TRAVIS_OS_NAME" == "osx" ]]
+then
+python -m unittest discover -s tests
+fi
