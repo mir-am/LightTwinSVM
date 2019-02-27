@@ -43,7 +43,7 @@ addons:
 before_install:
   - chmod +x install-travisci.sh
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then echo $'#!/bin/bash\npython3 -m unittest discover -s tests' > ltsvm_test.sh; fi
-  - chmod +x ltsvm_test.sh
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then chmod +x ltsvm_test.sh; fi
   
 install: ./install-travisci.sh
 
