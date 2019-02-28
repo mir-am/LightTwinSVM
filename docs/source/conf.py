@@ -14,12 +14,22 @@
 #
 import os
 import sys
+from unittest.mock import MagicMock
 
 # Making source files of the LightTwinSVM's package available in sys.path
 sys.path.insert(0, os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'ltsvm'))
 sys.path.insert(0, os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))))
 # sys.path.insert(0, os.path.abspath('.'))
 
+# Mocking C/C++ extension modules
+# For fixing build error of API documentation
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        return MagicMock()
+    
+MOCK_MODULES = ['ltsvm.optimizer.clipdcd']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 # -- Project information -----------------------------------------------------
 
@@ -49,7 +59,8 @@ extensions = [
 	'sphinx.ext.autosummary',
 ]
 
-autodoc_mock_imports = ["ltsvm", "twinsvm"]
+# auto_mock doesn't work and readthedocs fails to build API docs.
+#autodoc_mock_imports = ["ltsvm", "twinsvm"]
 autodoc_member_order = 'bysource'
 # Default flags used by autodoc directives
 autodoc_default_flags = ['members', 'show-inheritance']
