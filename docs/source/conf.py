@@ -57,6 +57,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.viewcode',
 	'sphinx.ext.autosummary',
+    'numpydoc', # Handles NumPy docstrings
 ]
 
 # auto_mock doesn't work and readthedocs fails to build API docs.

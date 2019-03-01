@@ -28,16 +28,51 @@ from ltsvm.optimizer import clipdcd
 
 
 class TSVM(BaseEstimator):
+    
+    """
+    Twin Support Vector Machine for binary classification.
+    
+    Parameters
+    ----------
+    kernel : str, optional (default='linear')
+        Type of the kernel function which is either 'linear' or 'RBF'.
+    
+    rect_kernel : float, optional (default=1.0)
+        Percentage of training samples for Rectangular kernel.
+        
+    C1 : float, optional (default=1.0)
+        Penalty parameter of first optimization problem.
+        
+    C2 : float, optional (default=1.0)
+        Penalty parameter of second optimization problem.
+        
+    gamma : float, optional (default=1.0)
+        Parameter of the RBF kernel function.
+    
+    Attributes
+    ----------
+    mat_C_t : array-like, shape = [n_samples, n_samples]
+        A matrix that contains kernel values.
+        
+    cls_name : str
+        Name of the classifier.
+    
+    w1 : array-like, shape=[n_features]
+        Weight vector of class +1's hyperplane.
+        
+    b1 : float
+        Bias of class +1's hyperplane.
+        
+    w2 : array-like, shape=[n_features]
+        Weight vector of class -1's hyperplane.
+    
+    b2 : float
+        Bias of class -1's hyperplane.
+    
+    """
 
     def __init__(self, kernel='linear', rect_kernel=1, C1=2**0, C2=2**0, \
                  gamma=2**0):
-
-        """
-        Input:
-            Kernel_type: 1->Linear, 2->RBF(Gaussion)
-            c1, c2: Penalty parameters
-            gamma: RBF function parameter
-        """
 
         self.C1 = C1
         self.C2 = C2
@@ -53,7 +88,13 @@ class TSVM(BaseEstimator):
     def get_params_names(self):
         
         """
-        It returns the names of hyper-parameters of this classifier.
+        For retrieving the names of hyper-parameters of this classifier.
+        
+        Returns
+        -------
+        parameters : list of str, {['C1', 'C2'], ['C1', 'C2', 'gamma']}
+            Returns the names of the hyperparameters which are same as
+            the class' attributes.
         """
         
         return ['C1', 'C2'] if self.kernel == 'linear' else ['C1', 'C2', 'gamma']
@@ -61,15 +102,18 @@ class TSVM(BaseEstimator):
     def fit(self, X_train, y_train):
 
         """
-        It trains TwinSVM classfier on given data
-        Input:    
-            X_train: Training samples
-            y_train: Samples' category
-        output:
-
-            w1, w2: Coordinates of two non-parallel hyperplanes
-            b1, b2: Biases
-            """
+        It fits the binary TwinSVM model according to the given training data.
+        
+        Parameters
+        ----------
+        X_train : array-like, shape (n_samples, n_features) 
+           Training feature vectors, where n_samples is the number of samples
+           and n_features is the number of features. 
+           
+        y_train : array-like, shape(n_samples,)
+            Target values or class labels.
+           
+        """
 
         # Matrix A or class 1 samples
         mat_A = X_train[y_train == 1]
@@ -134,9 +178,18 @@ class TSVM(BaseEstimator):
     def predict(self, X_test):
 
         """
-            Predictes class of test samples
-            Input:
-                X_test: Test samples    
+        Performs classification on samples in X using the TwinSVM model.
+        
+        Parameters
+        ----------
+        X_test : array-like, shape (n_samples, n_features)
+            Feature vectors of test data.
+                
+        Returns
+        -------
+        output : array, shape (n_samples,)
+            Predicted class lables of test data.
+            
         """
 
         # Calculate prependicular distances for new data points 
@@ -161,18 +214,38 @@ class TSVM(BaseEstimator):
 def rbf_kernel(x, y, u):
 
     """
-        It transforms samples into higher dimension  
-        Input:
-            x,y: Samples
-            u: Gamma parameter      
-        Output:
-            Samples with higher dimension
+    It transforms samples into higher dimension using Gaussian (RBF) kernel.
+    
+    Parameters
+    ----------
+    x, y : array-like, shape (n_features,)
+        A feature vector or sample.
+    
+    u : float
+        Parameter of the RBF kernel function.
+        
+    Returns
+    -------
+    float
+        Value of kernel matrix for feature vector x and y.
     """
 
     return np.exp(-2 * u) * np.exp(2 * u * np.dot(x, y))
 
 
 class HyperPlane:
+    
+    """
+    Its object represents a hyperplane
+    
+    Attributes
+    ----------
+    w : array-like, shape (n_features,)
+        Weight vector. If the RBF kernel is used, the shape will be (n_samples,)
+        
+    b : float
+        Bias.
+    """
 
     def __init__(self):
 
@@ -183,18 +256,32 @@ class HyperPlane:
 class MCTSVM(BaseEstimator):
 
     """
-    Multi Class Twin Support Vector Machine
-    One-vs-All Scheme
+    Multi-class Twin Support Vector Machine (One-vs-All Scheme)
+    
+    Parameters
+    ----------
+    kernel : str, optional (default='linear')
+        Type of the kernel function which is either 'linear' or 'RBF'.
+    
+    C : float, optional (default=1.0)
+        Penalty parameter.
+        
+    gamma : float, optional (default=1.0)
+        Parameter of the RBF kernel function.
+        
+    Attributes
+    ----------
+    classifiers : dict
+        Stores an intance of :class:`HyperPlane` class for each binary classifier.
+        
+    mat_D_t : list of array-like objects
+        Stores kernel matrix for each binary classifier.
+        
+    cls_name : str
+        Name of the classifier.
     """
 
     def __init__(self, kernel='linear', C=2**0, gamma=2**0):
-
-        """
-        Input:
-            kernel_type: Type of kernel function (Linear or RBF)
-            c: Penalty parameter
-            gamma: parameter of RBF function
-        """
 
         self.kernel = kernel
         self.C = C
@@ -206,7 +293,13 @@ class MCTSVM(BaseEstimator):
     def get_params_names(self):
         
         """
-        It returns the names of hyper-parameters of this classifier.
+        For retrieving the names of hyper-parameters of this classifier.
+        
+        Returns
+        -------
+        parameters : list of str, {['C'], ['C', 'gamma']}
+            Returns the names of the hyperparameters which are same as
+            the class' attributes.
         """
         
         return ['C'] if self.kernel == 'linear' else ['C', 'gamma']
@@ -214,9 +307,16 @@ class MCTSVM(BaseEstimator):
     def fit(self, X_train, y_train):
 
         """
-        Input:
-            X_train: Training samples
-            y_train: Lables of training samples
+        It fits the OVA-TwinSVM model according to the given training data.
+        
+        Parameters
+        ----------
+        X_train : array-like, shape (n_samples, n_features) 
+           Training feature vectors, where n_samples is the number of samples
+           and n_features is the number of features. 
+           
+        y_train : array-like, shape(n_samples,)
+            Target values or class labels.
         """
 
         num_classes = np.unique(y_train)
@@ -275,9 +375,17 @@ class MCTSVM(BaseEstimator):
     def predict(self, X_test):
 
         """
-        Predictes class of test samples
-            Input:
-                X_test: Test samples
+        Performs classification on samples in X using the OVA-TwinSVM model.
+        
+        Parameters
+        ----------
+        X_test : array-like, shape (n_samples, n_features)
+            Feature vectors of test data.
+                
+        Returns
+        -------
+        output : array, shape (n_samples,)
+            Predicted class lables of test data.
         """
 
         # Perpendicular distance from each hyperplane
@@ -301,24 +409,40 @@ class MCTSVM(BaseEstimator):
 class OVO_TSVM(BaseEstimator, ClassifierMixin):
 
     """
-    Multi Class Twin Support Vector Machine
-    One-vs-One Scheme
-    This classifier is scikit-learn compatible, which means scikit-learn features
-    such as cross_val_score and GridSearchCV can be used for OVO_TSVM
+    Multi Class Twin Support Vector Machine (One-vs-One Scheme)
+    
+    The :class:`OVO_TSVM` classifier is scikit-learn compatible, which means
+    scikit-learn tools such as `cross_val_score <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.cross_val_score.html>`_ 
+    and `GridSearchCV <https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.GridSearchCV.html>`_
+    can be used for an instance of :class:`OVO_TSVM`
+    
+    Parameters
+    ----------
+    kernel : str, optional (default='linear')
+        Type of the kernel function which is either 'linear' or 'RBF'.
+        
+    C1 : float, optional (default=1.0)
+        Penalty parameter of first optimization problem for each binary
+        :class:`TSVM` classifier.
+        
+    C2 : float, optional (default=1.0)
+        Penalty parameter of second optimization problem for each binary
+        :class:`TSVM` classifier.
+        
+    gamma : float, optional (default=1.0)
+        Parameter of the RBF kernel function.
+        
+    Attributes
+    ----------
+    cls_name : str
+        Name of the classifier.
+    
+    bin_TSVM_models_ : list
+        Stores intances of each binary :class:`TSVM` classifier.
     """    
     
     def __init__(self, kernel='linear', C1=1, C2=1, gamma=1):
-        
-        """
-        Parameters:
-            kernel: Type of kernel function. 'linear' or 'RBF'
-            C_1, C_2: float, (default=1)
-                      Penalty parameter
-            gamma: float, (default=1.0)
-                   Kernel coefficient for RBF function
-                
-        """
-        
+               
         self.kernel = kernel
         self.C1 = C1
         self.C2 = C2
@@ -328,7 +452,13 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
     def get_params_names(self):
         
         """
-        It returns the names of hyper-parameters of this classifier.
+        For retrieving the names of hyper-parameters of this classifier.
+        
+        Returns
+        -------
+        parameters : list of str, {['C1', 'C2'], ['C1', 'C2', 'gamma']}
+            Returns the names of the hyperparameters which are same as
+            the class' attributes.
         """
         
         return ['C1', 'C2'] if self.kernel == 'linear' else ['C1', 'C2', 'gamma']
@@ -343,7 +473,6 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         self.classes_, y = np.unique(y_, return_inverse=True)
         
         return np.asarray(y, dtype=np.int)
-    
     
     def _validate_for_predict(self, X):
         
@@ -365,16 +494,23 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         
         return X
     
-    
     def fit(self, X, y):
         
-        
         """
-        Given training set, it creates a SVM model
+        It fits the OVO-TwinSVM model according to the given training data.
         
-        Parameters:
-            X_train: Training samples, (n_samples, n_features)
-            y_train: Target values, (n_samples, )
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features) 
+            Training feature vectors, where n_samples is the number of samples
+            and n_features is the number of features.
+           
+        y : array-like, shape(n_samples,)
+            Target values or class labels.
+            
+        Returns
+        -------
+        self : object
         """
         
         y = self._validate_targets(y)
@@ -417,14 +553,17 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
     def predict(self, X):
         
         """
-        Predicits lables of test samples
+        Performs classification on samples in X using the OVO-TwinSVM model.
         
-        Parameters:
-            X_test: test samples, (n_samples, n_features)
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Feature vectors of test data.
         
-        Returns:
-            y_pred: array, (n_samples,)
-        
+        Returns
+        -------
+        y_pred : array, shape (n_samples,)
+            Predicted class lables of test data.
         """
         
         X = self._validate_for_predict(X)
@@ -460,8 +599,6 @@ class OVO_TSVM(BaseEstimator, ClassifierMixin):
         return self.classes_.take(np.asarray(max_votes, dtype=np.int))
                 
         
-        
-    
 if __name__ == '__main__':
     
 #    from ltsvm.dataproc import read_data
