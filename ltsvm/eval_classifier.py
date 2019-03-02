@@ -7,10 +7,9 @@
 # License: GNU General Public License v3.0
 
 """
-In this module, methods are defined for evluating TwinSVM perfomance such as cross validation
-train/test split, grid search and generating the detailed result.
+In this module, classes and methods are defined for evluating the performance of the
+TwinSVM model. Also, a method for saving detailed classification result.
 """
-
 
 from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
 from ltsvm.misc import progress_bar_gs, time_fmt
@@ -27,14 +26,51 @@ import os
 def eval_metrics(y_true, y_pred):
 
     """
-        Input:
-            
-            y_true: True label of samples
-            y_pred: Prediction of classifier for test samples
+    It evaluates the performance of the TwinSVM model based on common evaluation
+    metrics such Accuracy, Recall, Precision, and F1-measure.
     
-        output: Elements of confusion matrix and Evalaution metrics such as
-        accuracy, precision, recall and F1 score
-    
+    Parameters
+    ----------
+    y_true : array-like 
+        Target values of samples.
+        
+    y_pred : array-like 
+        Predicted class lables.
+        
+    Returns
+    -------
+    tp : int
+        True positive.
+        
+    tn : int
+        True negative.
+        
+    fp : int
+        False positive.
+        
+    fn : int
+        False negative.
+        
+    accuracy : float
+        Overall accuracy of the model.
+        
+    recall_p : float
+        Recall of positive class.
+        
+    precision_p : float
+        Precision of positive class.
+        
+    f1_p : float
+        F1-measure of positive class.
+        
+    recall_n : float
+        Recall of negative class.
+        
+    precision_n : float
+        Precision of negative class.
+        
+    f1_n : float
+        F1-measure of negative class.
     """        
     
     # Elements of confusion matrix
@@ -102,20 +138,28 @@ def eval_metrics(y_true, y_pred):
 class Validator:
 
     """
-    It applies a test method such as cross validation on a classifier like TSVM
+    It evaluates the TwinSVM model based on a evaluation method.
+    
+    Parameters
+    ----------
+    X_train : array-like, shape (n_samples, n_features)
+        Training feature vectors, where n_samples is the number of samples
+        and n_features is the number of features.
+        
+    y_train : array-like, shape (n_samples,)
+        Target values or class labels.
+        
+    validator_type : tuple
+        A two-element tuple which contains type of evaluation method and its
+        parameter. Example: ('CV', 5) -> 5-fold cross-validation,
+        ('t_t_split', 30) -> 30% of samples for test set.
+        
+    obj_tsvm : object
+        A TwinSVM model. It can be an instace of :class:`TSVM`, :class:`MCTSVM`,
+        or :class:`OVO_TSVM`.
     """
 
     def __init__(self, X_train, y_train, validator_type, obj_tsvm):
-
-        """
-        It constructs and returns a validator 
-        Input:
-            X_train: Samples in dataset (2-d NumPy array)
-            y_train: Labels of samples in dataset (1-d NumPy array)
-            validator_type: Type of test methodology and its parameter.(Tuple - ('CV', 5))
-            obj_tsvm:  Instance of TSVM classifier. (TSVM class)
-
-        """
 
         self.train_data = X_train
         self.labels_data = y_train
@@ -125,13 +169,24 @@ class Validator:
     def cv_validator(self, dict_param):
 
         """
-        It applies cross validation on instance of Binary TSVM classifier
-        Input:
-            dict_param: A dictionary of hyper-parameters (dict)
+        It evaluates the TwinSVM model using the cross-validaion method.
+        
+        Parameters
+        ----------
+        dict_param : dict 
+            Values of hyper-parameters for the TwinSVM model.
             
-        output:
-            Evaluation metrics such as accuracy, precision, recall and F1 score
-            for each class.
+        Returns
+        -------
+        float
+            Mean accuracy of the model.
+            
+        float
+            Standard deviation of accuracy.
+            
+        dict
+            Evaluation metrics such as Recall, Percision and F1-measure for both
+            classes as well as elements of the confusion matrix.
         """
         
         # Set parameters of TSVM classifer
@@ -197,11 +252,24 @@ class Validator:
     def split_tt_validator(self, dict_param):
         
         """
-        It trains TwinSVM classifier on random training set and tests the classifier
-        on test set.
-        output:
-            Evaluation metrics such as accuracy, precision, recall and F1 score
-            for each class.
+        It evaluates the TwinSVM model using the train/test split method.
+        
+        Parameters
+        ----------
+        dict_param : dict
+            Values of hyper-parameters for the TwinSVM model.
+            
+        Returns
+        -------
+        float
+            accuracy of the model.
+            
+        float
+            Zero standard deviation.
+            
+        dict
+            Evaluation metrics such as Recall, Percision and F1-measure for both
+            classes as well as elements of the confusion matrix.
         """
 
         # Set parameters of TSVM classifer
