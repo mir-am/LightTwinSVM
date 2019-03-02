@@ -6,7 +6,7 @@
 # License: GNU General Public License v3.0
 
 """
-In this module, functions for reading and processing datasets are defined.
+In this module, functions for reading and pre-processing datasets are defined.
 """
 
 
@@ -19,8 +19,18 @@ import csv
 def conv_str_fl(data):
     
     """
-        It converts string data to float for computation.
+    It converts string data to float for computation.
     
+    Parameters
+    ----------
+    data : array-like, shape (n_samples, n_features)
+        Training samples, where n_samples is the number of samples
+        and n_features is the number of features.
+        
+    Returns
+    -------
+    array-like
+        A numerical dataset which is suitable for futher computation.
     """
     
     temp_data = np.zeros(data.shape)
@@ -39,20 +49,29 @@ def conv_str_fl(data):
 def read_data(filename, header=True):
     
     """
-        It converts CSV file to NumPy arrays for further operations like training
+    It converts a CSV dataset to NumPy arrays for further operations
+    like training the TwinSVM classifier.
         
-        Input:
-            file_name: Path to the dataset file
-            ignore_header: Ignoring first row of dataset because of header names
+    Parameters
+    ----------
+    filename : str
+        Path to the dataset file.
+        
+    header : boolean, optional (default=True)
+        Ignores first row of dataset which contains header names.
             
-        output:
-            data_samples: Training samples in NumPy array
-            data_labels: labels of samples in NumPy array
-            file_name: Name of dataset
-    
+    Returns
+    -------
+    data_train : array-like, shape (n_samples, n_features) 
+        Training samples in NumPy array.
+        
+    data_labels : array-like, shape(n_samples,) 
+        Class labels of training samples.
+        
+    file_name : str
+        Dataset's filename.
     """
     
-
     data = open(filename, 'r')
     
     data_csv = csv.reader(data, delimiter=',')
@@ -84,19 +103,28 @@ def read_data(filename, header=True):
 def read_libsvm(filename):
 
 	"""
-	It reads LIBSVM data files for doing classification with TwinSVM
-	Input:
-		file_name: Path to the dataset file
+   It reads `LIBSVM <https://www.csie.ntu.edu.tw/~cjlin/libsvmtools/datasets/>`_
+   data files for doing classification using the TwinSVM model.
+    
+   Parameters
+   ---------- 
+   filename : str 
+       Path to the LIBSVM data file.
 	
-	output:
-    	data_samples: Training samples in NumPy array
-    	data_labels: labels of samples in NumPy array
-        file_name: Name of dataset
-	"""
+   Returns
+   -------
+   array-like 
+       Training samples.
+       
+   array-like
+       Class labels of training samples.
+       
+   str
+       Dataset's filename
+   """
 
 	libsvm_data = load_svmlight_file(filename)
 	file_name = splitext(split(filename)[-1])[0]
 	
 	# Converting sparse CSR matrix to NumPy array
 	return libsvm_data[0].toarray(), libsvm_data[1].astype(np.int), file_name
-
