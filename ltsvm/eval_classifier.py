@@ -7,8 +7,8 @@
 # License: GNU General Public License v3.0
 
 """
-In this module, classes and methods are defined for evluating the performance of the
-TwinSVM model. Also, a method for saving detailed classification result.
+In this module, classes and methods are defined for evluating the performance
+of the TwinSVM model. Also, a method for saving detailed classification result.
 """
 
 from ltsvm.twinsvm import TSVM, MCTSVM, OVO_TSVM
@@ -26,8 +26,8 @@ import os
 def eval_metrics(y_true, y_pred):
 
     """
-    It evaluates the performance of the TwinSVM model based on common evaluation
-    metrics such Accuracy, Recall, Precision, and F1-measure.
+    It computes common evaluation metrics such as Accuracy, Recall, Precision,
+    F1-measure, and elements of the confusion matrix.
     
     Parameters
     ----------
@@ -138,7 +138,7 @@ def eval_metrics(y_true, y_pred):
 class Validator:
 
     """
-    It evaluates the TwinSVM model based on a evaluation method.
+    It evaluates the TwinSVM model based on the specified evaluation method.
     
     Parameters
     ----------
@@ -155,8 +155,8 @@ class Validator:
         ('t_t_split', 30) -> 30% of samples for test set.
         
     obj_tsvm : object
-        A TwinSVM model. It can be an instace of :class:`TSVM`, :class:`MCTSVM`,
-        or :class:`OVO_TSVM`.
+        A TwinSVM model. It can be an instace of :class:`TSVM <twinsvm.TSVM>`,
+        :class:`MCTSVM <twinsvm.TSVM>`, or :class:`OVO_TSVM <twinsvm.TSVM>`.
     """
 
     def __init__(self, X_train, y_train, validator_type, obj_tsvm):
@@ -169,7 +169,7 @@ class Validator:
     def cv_validator(self, dict_param):
 
         """
-        It evaluates the TwinSVM model using the cross-validaion method.
+        It evaluates the TwinSVM model using the cross-validation method.
         
         Parameters
         ----------
@@ -262,7 +262,7 @@ class Validator:
         Returns
         -------
         float
-            accuracy of the model.
+            Accuracy of the model.
             
         float
             Zero standard deviation.
@@ -297,7 +297,23 @@ class Validator:
     def cv_validator_mc(self, dict_param):
 
         """
-        It applies cross validation on instance of multiclass TSVM classifier
+        It evaluates the multi-class TwinSVM model using the cross-validation.
+        
+        Parameters
+        ----------
+        dict_param : dict 
+            Values of hyper-parameters for the multiclss TwinSVM model.
+            
+        Returns
+        -------
+        float
+            Accuracy of the model.
+            
+        float
+            Zero standard deviation.
+            
+        dict
+            Evaluation metrics such as Recall, Percision and F1-measure.
         """
 
         # Set parameters of multiclass TSVM classifer
@@ -343,7 +359,13 @@ class Validator:
     def choose_validator(self):
 
         """
-        It returns choosen validator method.
+        It selects the appropriate evaluation method based on the input
+        paramters.
+        
+        Returns
+        -------
+        object
+            An evaluation method for assesing the model's performance.
         """
 
         if isinstance(self.obj_TSVM, TSVM):  # Binary TSVM
@@ -367,13 +389,44 @@ def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
                  rbf_ubound, step=1):
 
     """
-    It generates combination of search elements for grid search
-    Input:
-        kernel_type: kernel function which is either linear or RBF
-        c_l_bound, c_u_bound: Range of C penalty parameter for grid search(e.g 2^-5 to 2^+5)
-        rbf_lbound, rbf_ubound: Range of gamma parameter
-    Output:
-        return search elements for grid search (List)
+    It generates all combination of search elements based on the given range of 
+    hyperparameters.
+    
+    Parameters
+    ----------
+    kernel_type : str, {'linear', 'RBF'}
+        Type of the kernel function which is either 'linear' or 'RBF'.
+        
+    class_type : str, {'binary', 'ovo', 'ova'}
+        Type of classification.
+    
+    c_l_bound : int
+        Lower bound for C penalty parameter.
+    
+    c_u_bound : int
+        Upper bound for C penalty parameter.
+        
+    rbf_lbound : int
+        Lower bound for gamma parameter which is the hyperparameter of the RBF
+        kernel function.
+          
+    rbf_ubound : int
+        Upper bound for gamma parameter.
+    
+    step : int, optinal (default=1)
+        Step size to increase power of 2. 
+    
+    Returns
+    -------
+    list
+        Search elements.
+        
+    Examples
+    --------
+    >>> from ltsvm import eval_classifier
+    >>> eval_classifier.search_space('RBF', 'binary', -1, 1, -1, 1)
+    [{'C1': 0.5, 'C2': 0.5, 'gamma': 0.5}...
+    {'C1': 1.0, 'C2': 1.0, 'gamma': 0.5}... {'C1': 2.0, 'C2': 2.0, 'gamma': 2.0}]
     """
 
     c_range = [2**i for i in np.arange(c_l_bound, c_u_bound+1, step,
@@ -397,16 +450,22 @@ def search_space(kernel_type, class_type, c_l_bound, c_u_bound, rbf_lbound, \
 def grid_search(search_space, func_validator):
 
     """
-        It applies grid search which finds C and gamma paramters for obtaining
-        best classification accuracy.
+    It does grid search to find the optimcal values of hyperparameters for the
+    TwinSVM model, which results in the best classfication accuracy.
     
-        Input:
-           search_space: search_elements (List)
-           func_validator: Validator function
+    Parameters
+    ----------
+    search_space : list
+        All combination of search elements.
+    
+    func_validator : object
+        An evaluation method for assesing the TwinSVM model's performance.
             
-        output:
-            returns classification result (List)
-    
+    Returns
+    -------
+    list
+        Classification results of the TwinSVM classifier using different set of
+        hyperparameters.
     """
 
     # Store 
@@ -469,17 +528,28 @@ def grid_search(search_space, func_validator):
 def save_result(file_name, validator_obj, gs_result, output_path):
 
     """
-        It saves detailed result in spreadsheet file(Excel).
+    It saves the detailed classification results in a spreadsheet file (Excel).
 
-        Input:
-            file_name: Name of spreadsheet file
-            col_names: Column names for spreadsheet file
-            gs_result = result produced by grid search
-            output_path: Path to store the spreadsheet file.
+    Parameters
+    ----------
+    file_name : str
+        Name of the spreadsheet file.
+        
+    validator_obj : object
+        The evaluation method that was used for the assesment of the TwinSVM
+        classifier.
+    
+    gs_result : list 
+        Classification results of the TwinSVM classifier using different set of
+        hyperparameters.
+        
+    output_path : str
+        Path at which the spreadsheet file will be saved.
 
-        output:
-            returns path of spreadsheet file
-
+    Returns
+    -------
+    str
+        Path to the saved spreadsheet (Excel) file.
     """
 
     column_names = {'binary': {'CV': ['accuracy', 'acc_std', 'recall_p', 'r_p_std', 'precision_p', 'p_p_std', \
@@ -516,9 +586,20 @@ def save_result(file_name, validator_obj, gs_result, output_path):
 def initializer(user_input_obj):
 
     """
-    It gets user input and passes function and classes arguments to run the program
-    Input:
-        user_input_obj: User input (UserInput class)
+    It passes a user's input to the functions and classes for solving a
+    classification task. The steps that this function performs can be summarized
+    as follows:
+        
+    #. Specifies a TwinSVM classifier based on the user's input.
+    #. Chooses an evaluation method for assessment of the classifier.
+    #. Computes all the combination of search elements.
+    #. Computes the evaluation metrics for all the search element using grid search.
+    #. Saves the detailed classification results in a spreadsheet file (Excel).
+    
+    Parameters
+    ----------
+    user_input_obj : object 
+        An instance of :class:`UserInput` class which holds the user input.
     """
 
     if user_input_obj.class_type == 'binary':
@@ -540,7 +621,7 @@ def initializer(user_input_obj):
                       user_input_obj.lower_b_c, user_input_obj.upper_b_c, user_input_obj.lower_b_u, \
                       user_input_obj.upper_b_u)
 
-    # Dispaly headers
+    # Display headers
     print("%s-%s    Dataset: %s    Total Search Elements: %d" % (tsvm_obj.cls_name,
           user_input_obj.kernel_type, user_input_obj.filename, len(search_elements)))
 
