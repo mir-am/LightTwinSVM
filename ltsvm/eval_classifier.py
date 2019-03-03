@@ -156,7 +156,7 @@ class Validator:
         
     obj_tsvm : object
         A TwinSVM model. It can be an instace of :class:`TSVM <twinsvm.TSVM>`,
-        :class:`MCTSVM <twinsvm.TSVM>`, or :class:`OVO_TSVM <twinsvm.TSVM>`.
+        :class:`MCTSVM <twinsvm.MCTSVM>`, or :class:`OVO_TSVM <twinsvm.OVO_TSVM>`.
     """
 
     def __init__(self, X_train, y_train, validator_type, obj_tsvm):

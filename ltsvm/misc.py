@@ -7,8 +7,8 @@
 # License: GNU General Public License v3.0
 
 """
-In this module, several miscellaneous functions are defined for using in other modules.
-Such as date time formatting and customized progress bar
+In this module, several miscellaneous functions are defined for using
+in other module, such as date time formatting and customized progress bar.
 """
 
 import itertools
@@ -22,11 +22,21 @@ try:
                          cmap=plt.cm.Blues):
     
         """
-        This function plots a confusion matrix
-        Input:
-            cm: A 2-d numpy array that contains confusion matrix
-            classes: Labels of classes
-            title(str): Title of confusion matrix at the top
+        It plots a confusion matrix for a given 2d-array.
+        
+        Parameters
+        ----------
+        cm : array-like, shape (n_samples, n_features)
+             The elements of the confusion matrix.
+            
+        classes : array-like, shape (n_samples,) 
+            Unique class labels.    
+        
+        title : str 
+            Title of the confusion matrix.
+            
+        cmap : object
+            Colormap for confusion matrix. Its default value is blue.
         """
         
         # Normalizing confusion matrix
@@ -59,7 +69,17 @@ except ImportError:
 def time_fmt(t_delta):
     
     """
-    It convets datetime objects to formatted string
+    It converts datetime objects to formatted string.
+    
+    Parameters
+    ----------
+    t_delta : object
+        The difference between two dates or time.
+        
+    Returns
+    -------
+    str
+        A readable formatted-datetime string.
     """
    
     hours, remainder = divmod(t_delta, 3600)
@@ -71,19 +91,42 @@ def time_fmt(t_delta):
 def progress_bar_gs(iteration, total, e_time, accuracy, best_acc, prefix='', \
                     suffix='', decimals=1, length=25, fill='#'):
     """
-    A customized progress bar for grid search
-    Input:
-        iteration: currrent iteration
-        total: total iteration
-        e_time: Elapsed time
-        accuracy: Current accuracy and its std (Tuple)
-        best_acc: Best accuracy and its std (Tuple)
-        prefix: prefix string
-        suffix: suffix string
-        decimals: number of decimals in percent
-        length: character length of bar
-        fill: bar fill character
+    It shows a customizable progress bar for grid search.
+    
+    Parameters
+    ----------
+    iteration : int
+        Current iteration.
+    
+    total : int
+        Maximumn number of iterations.
+        
+    e_time : str
+        Elapsed time.
+
+    accuracy : tuple
+        The accuracy and its std at current iteration (acc, std).
+        
+    best_acc : tuple 
+        The best accuracy and its std that were obtained at current iteration
+        (best_acc, std).
+        
+    prefix : str, optional (default='') 
+        Prefix string.
+        
+    suffix : str, optional (default='') 
+        Suffix string.
+        
+    decimals : int, optinal (default=1)
+        Number of decimal places for percentage of completion.
+        
+    length : int, optional (default=25) 
+        Character length of the progress bar.
+    
+    fill : str, optional (default='#') 
+        Bar fill character.
     """ 
+    
     percent = ("{0:." + str(decimals) + "f}").format(100 * (iteration / float(total)))
     fill_length = int(length * iteration // total)
     bar = fill * fill_length + '-' * (length - fill_length)
