@@ -13,7 +13,12 @@
 
 1. [Introduction](#intro)
 2. [Installation Guide](#installation-guide)
+   - [Setup script](#setup-script-recommended)
+   - [Building manually](#building-manually)
 3. [User Guide](#user-guide)
+   - [Usage example](#an-exmaple-of-using-command-line-interface)
+   - [Tutorials](#tutorials)
+   - [API documentation](#api-documentation)
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
 6. [FAQ](#frequently-asked-questions)
@@ -44,7 +49,7 @@ Peng, X., Chen, D., & Kong, L. (2014). A clipping dual coordinate descent algori
 Currently, supported operating systems are as follows. Choose your OS from list below for detailed install instructions.
 - [Debian-based Linux systems](#linux--mac-os-x) (Ubuntu 14.04, Ubuntu 16.04, Ubuntu 17.10, Ubuntu 18.04 and Linux Mint 18)
 - [RPM-based Linux systems](#linux--mac-os-x) (Fedora)
-- [Mac OS X](#linux--mac-os-x)
+- [Mac OSX](#linux--mac-os-x)
 - [Microsoft Windows](#windows)
 
 ### Dependencies
@@ -135,6 +140,11 @@ To run the notebooks, make sure that Jupyter is installed on your system. If not
 pip3 install jupyter
 ```
 For more details, check out [Jupyter documentation](https://jupyter.readthedocs.io/en/latest/index.html).
+
+### API documentation
+Aside from the program's command line interface, you may want to use the LightTwinSVM's Python package for your project. All you have to do is to copy-paste the "[ltsvm](https://github.com/mir-am/LightTwinSVM/tree/master/ltsvm)" folder (the **installed version**) into the root folder of your project. Next, you can import "ltsvm" package in a module of your interest.
+
+You can read about the documentation of the LightTwinSVM's estimators and tools [here](https://lighttwinsvm.readthedocs.io/en/latest/index.html). 
 
 ## Dataset Format
 - **LIBSVM** data files are supported. Note that the extension of this file should be '*.libsvm'.

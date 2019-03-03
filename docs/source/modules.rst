@@ -1,4 +1,4 @@
-Modules of LightTwinSVM's package
+API documentation
 ===============
 
 This page contains the list of the project's modules
