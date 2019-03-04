@@ -21,9 +21,10 @@
    - [API documentation](#api-documentation)
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
-6. [FAQ](#frequently-asked-questions)
-7. [Donations](#donations)
-8. [Numerical Experiments](#numerical-experiments) 
+6. [Contributing](#contributing) 
+7. [FAQ](#frequently-asked-questions)
+8. [Donations](#donations)
+9. [Numerical Experiments](#numerical-experiments) 
 
 ## Intro
 LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
@@ -164,6 +165,9 @@ To report a problem or bug, please provide the following information:<br />
 1. Error messages<br />
 2. Output of the program.<br />
 3. Explain how to reproduce the problem if possible.
+
+## Contributing
+Thanks for considering contribution to the LightTwinSVM project. Contributions are highly appreciated and welcomed. For guidance on how to contribute to the LightTwinSVM, please see the [contributing guideline]().
 
 ## Frequently Asked Questions
 - What is the main idea of TwinSVM classifier? <br />
