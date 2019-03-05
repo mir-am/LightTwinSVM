@@ -167,7 +167,7 @@ To report a problem or bug, please provide the following information:<br />
 3. Explain how to reproduce the problem if possible.
 
 ## Contributing
-Thanks for considering contribution to the LightTwinSVM project. Contributions are highly appreciated and welcomed. For guidance on how to contribute to the LightTwinSVM, please see the [contributing guideline]().
+Thanks for considering contribution to the LightTwinSVM project. Contributions are highly appreciated and welcomed. For guidance on how to contribute to the LightTwinSVM, please see the [contributing guideline](https://github.com/mir-am/LightTwinSVM/blob/master/CONTRIBUTING.md).
 
 ## Frequently Asked Questions
 - What is the main idea of TwinSVM classifier? <br />
