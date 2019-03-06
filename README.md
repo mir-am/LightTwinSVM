@@ -197,6 +197,6 @@ In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy,
 
 From the above table, it can be found that LightTwinSVM is more efficient in terms of accuracy. Therefore, it outperforms Sklearn's SVM on most datasets. All in all, if you have used SVM for your task/project, the LightTwinSVM program may give you a better predication accuracy for your classification task. More information on this experiment can be found in [this blog post](https://mirblog.me/index.php/2018/12/28/a-accuracy-comparison-between-scikit-learns-svm-and-lighttwinsvm-program/).
 
-## Acknowledgements
+## Acknowledgments
 - For test and experiment with the LightTwinSVM program, Wine and Pima-Indian datasets are included in the project from [UCI](https://archive.ics.uci.edu/ml/index.php) machine learning repository. 
 - Thanks to [idejie](https://github.com/idejie) for test and support on the MacOS. (Dec 8, 2018)
