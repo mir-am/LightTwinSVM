@@ -124,7 +124,7 @@ then
 	# In order to build C++ extension module, LAPACK and BLAS library should be present.
 	echo -e "Step 3:\nChecks existence of LAPACK and BLAS..."
 
-    	if [ "$OSTYPE" == "linux-gnu" ]
+    	if [[ "$OSTYPE" == "linux-gnu" ]];
     	then
 
 	    lapack=$(ldconfig -p | grep liblapack)
@@ -147,7 +147,7 @@ then
 
 	    fi
 
-    	elif [ "$OSTYPE" == "darwin"* ]
+    	elif [[ "$OSTYPE" == "darwin"* ]];
     	then
             echo "A MacOS system is detected. So Accelerate Framework will be used for compiling C++ extension."
             ((step++))
@@ -173,14 +173,14 @@ then
 		fi
 
         # Check OS type for compiling on Linux and MacOS systems
-        if [ "$OSTYPE" == "linux-gnu" ]
+        if [[ "$OSTYPE" == "linux-gnu" ]];
         then
             # Compiles C++ extension module
 	    g++ -O3 -Wall -shared -std=c++11 -fPIC `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -lblas -llapack
             echo "The C++ extension module generated successfully on your Linux system."
             ((step++))
 
-        elif [ "$OSTYPE" == "darwin"* ]
+        elif [[ "$OSTYPE" == "darwin"* ]];
         then
 
 	    g++ -O3 -Wall -shared -std=c++11 -undefined dynamic_lookup `python3 -m pybind11 --includes` ./ltsvm/optimizer/pybind_clippdcd.cpp -o ./ltsvm/optimizer/clipdcd`python3-config --extension-suffix` -I ./temp/include -DARMA_DONT_USE_WRAPPER -framework Accelerate
