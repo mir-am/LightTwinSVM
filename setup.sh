@@ -67,7 +67,7 @@ then
 	echo "***************************************"
 	echo -e "Step 2:\nInstalls required Python packages to run the program..."
 	
-	pip3 install -r "requirments.txt" --user
+	pip3 install -r "requirements.txt" --user
 	
 	((step++))
 	

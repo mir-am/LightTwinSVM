@@ -13,7 +13,7 @@ $startTime = (Get-Date)
 # Step 1:
 # Installing dependencies using pip
 echo "Step 1: Installing dependencies for Python..."
-pip install -r "requirments.txt" --user
+pip install -r "requirements.txt" --user
 pip install Cython --user
 echo "Step 1 completed..."
 

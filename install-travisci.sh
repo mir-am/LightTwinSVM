@@ -28,7 +28,7 @@ python --version
 pip --version
 fi
 
-pip install -r requirments.txt
+pip install -r requirements.txt
 
 # clones Armadillo which is a C++ Linear Algebra library
 # Armadillo is licensed under the Apache License, Version 2.0
