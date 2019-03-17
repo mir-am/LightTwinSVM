@@ -21,7 +21,7 @@ bibliography: paper.bib
 ---
 
 # Abstract
-This paper presents the `LightTwinSVM` program and its features. It is a simple and fast implementation of twin support vector machine  algorithm (TwinSVM). Numerical experiments on benchmark datasets shows the effectiveness of the `LightTwinSVM` program in terms of accuracy. This program can be used by researchers, students, and practitioners to solve classifications tasks.
+This paper presents the `LightTwinSVM` program and its features. It is a simple and fast implementation of twin support vector machine algorithm (TwinSVM). Numerical experiments on benchmark datasets show the effectiveness of the `LightTwinSVM` program in terms of accuracy. This program can be used by researchers, students, and practitioners to solve classifications tasks.
 
 # Introduction
 
@@ -78,7 +78,7 @@ From the Table \ref{tab:1}, it can be seen that `LightTwinSVM` outperforms `scik
 
 The source code of `LightTwinSVM`, its installation guide and usage example can be found at [https://github.com/mir-am/LightTwinSVM](https://github.com/mir-am/LightTwinSVM).
 
-# Acknowledgements
+# Acknowledgments
 This research work was carried out at the machine learning lab of IranDoc Institution. We would like to thank the director of IranDoc Institution for providing us with research facilities.
 
 # References
