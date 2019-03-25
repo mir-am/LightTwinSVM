@@ -55,28 +55,31 @@ The main features of the `LightTwinSVM` program are the following:
 - **CSV** and **LIBSVM** formats are supported for importing datasets.
 - Detailed classification results are saved in a spreadsheet file so that results can be analyzed and interpreted.
 
-In order to show the efficiency of `LightTwinSVM` program, we conducted experiments and compared it with the implementation of SVM in `scikit-learn` on the UCI^[http://archive.ics.uci.edu/ml/datasets.html] benchmark datasets. Table \ref{tab:1} shows the accuracy comparison between `LightTwinSVM` and `scikit-learn`'s SVM.
+The source code of `LightTwinSVM`, its installation guide and usage example can be found at [https://github.com/mir-am/LightTwinSVM](https://github.com/mir-am/LightTwinSVM).
 
+# Numerical Experiments
+
+In this section, we conducted experiments to show the efficiency of `LightTwinSVM` program, and compared it with the implementation of SVM in `scikit-learn` on the UCI^[http://archive.ics.uci.edu/ml/datasets.html] benchmark datasets. To evaluate the classifiers' performance, 5-fold cross-validation is used. For both standard SVM and TwinSVM, the penalty parameter $C$ was selected from the set $\{2^{i} \mid i=-10,-9,\dots,5 \}$. Moreover, the RBF kernel was used and its parameter $\gamma$ was chosen over the range $\{2^{i} \mid  i=-15,-14,\dots,5\}$. Since the classification performance of standard SVM and TwinSVM depends heavily on the optimal choice of hyper-parameters, grid search is used to find the optimal values of hyper-parameters.
+
+To analyze the classification performance of `LightTwinSVM` and `scikit-learn`'s SVM, the results on benchmark datasets are summarized in Table \ref{tab:1}.
 
 Table: The accuracy comparison between `LightTwinSVM` and `scikit-learn`'s SVM\label{tab:1}
 
        Datasets                    LightTwinSVM              scikit-learn's SVM        Difference in Accuracy   
 --------------------------  --------------------------  --------------------------  -------------------------- 
-      Pima-Indian                    **78.91**                    78.26                        0.65 
-      Australian                     **87.25**                    86.81                        0.44 
-      Haberman                       76.12                        **76.80**                    -0.68 
-      Cleveland                      **85.14**                    84.82                        0.32 
-      Sonar                          **75.16**                    64.42                        10.74 
-      Heart-Statlog                  **85.19**                    **85.19**                    0 
-      Hepatitis                      **85.81**                    83.23                        2.58 
-      WDBC                           **98.24**                    98.07                        0.17 
-      Spectf                         **80.55**                    79.78                        0.81 
-      Titanic                        **82.04**                    81.71                        0.33 
-      Mean                           **83.44**                    81.90                        1.53 
+      Pima-Indian             **78.91**$$\pm$$**3.73**         78.26$$\pm$$2.62                    0.65 
+      Australian              **87.25**$$\pm$$**2.27**         86.81$$\pm$$3.22                    0.44 
+      Haberman                    76.12$$\pm$$4.79          **76.80**$$\pm$$**2.68**               -0.68 
+      Cleveland               **85.14**$$\pm$$**5.45**         84.82$$\pm$$4.04                    0.32 
+      Sonar                   **84.62**$$\pm$$**4.89**         64.42$$\pm$$6.81                    20.2 
+      Heart-Statlog           **85.56**$$\pm$$**2.96**         85.19$$\pm$$2.62                    0.37
+      Hepatitis               **86.45**$$\pm$$**5.16**         83.23$$\pm$$3.55                    3.22 
+      WDBC                    **98.24**$$\pm$$**1.36**         98.07$$\pm$$0.85                    0.17 
+      Spectf                  **81.68**$$\pm$$**5.35**         79.78$$\pm$$0.19                    1.9 
+      Titanic                     81.93$$\pm$$2.59          **82.27**$$\pm$$**1.83**               -0.34 
+      Mean Accuracy                  **84.59**                      81.94                           2.65 
 
-From the Table \ref{tab:1}, it can be seen that `LightTwinSVM` outperforms `scikit-learn`'s SVM on most datasets. For instance, the accuracy difference in Sonar dataset is as high as 10.74% which is a significant result. However, one may notice that the difference in accuracy between the two classifiers is not very large. To show whether a significant difference exists, statistical tests are often used in research papers on classification [@demsar2006]. Due to the limited space, comprehensive experiments with statistical tests are skipped in this paper. In summary, the experiment indicates that the `LightTwinSVM` program can be used for classification tasks and it may produce a better prediction accuracy.
-
-The source code of `LightTwinSVM`, its installation guide and usage example can be found at [https://github.com/mir-am/LightTwinSVM](https://github.com/mir-am/LightTwinSVM).
+From the Table \ref{tab:1}, it can be seen that `LightTwinSVM` outperforms `scikit-learn`'s SVM on most datasets. For instance, the accuracy difference in Sonar dataset is as high as 20.2% which is a significant result. However, in consideration of the mean accuracy, one may notice that the difference in accuracy between the two classifiers is not very large. To show whether a significant difference exists, statistical tests are often used in research papers on classification [@demsar2006]. Due to the limited space, comprehensive experiments with statistical tests are skipped in this paper. In summary, the experiment indicates that the `LightTwinSVM` program can be used for classification tasks and it may produce a better prediction accuracy.
 
 # Acknowledgments
 This research work was carried out at the machine learning lab of IranDoc Institution. We would like to thank the director of IranDoc Institution for providing us with research facilities.
