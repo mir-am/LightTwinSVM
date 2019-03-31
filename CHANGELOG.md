@@ -7,6 +7,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.6.0] - 2019-03-31
+### Added
+- The JOSS paper was added to the repository.
+- The [donation section](https://github.com/mir-am/LightTwinSVM#donations) and its button was added to README file.
+- Added more debug info to the Bash script (setup.sh file).
+- Added a [step-by-step guide](https://github.com/mir-am/LightTwinSVM/wiki/Building-the-LightTwinSVM-manually-on-Linux-and-OSX-systems) on how to build the LightTwinSVM manually.
+- A [contributing guide](https://github.com/mir-am/LightTwinSVM/blob/master/CONTRIBUTING.md) was added to the project's wiki.
+
+### Fixed
+- BLAS libraries' path was fixed in PowerShell script.
+- The optimizer can now be imported in the current session of PowerShell.
+- Fixed import errors for building docs using Sphinx.
+- Fixed compliation error of C++ extension module for OSX systems.
+- Fixed spell error of the requirements file.
+
+### Changed
+- API documentation revised according the the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) docstring guide.
+- The results of Numerical Experiments in the README file was updated. 
 
 ## [0.5.0] - 2019-01-01
 ### Added

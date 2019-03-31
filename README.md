@@ -192,11 +192,12 @@ In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy,
 | Hepatitis     |  **86.45**&plusmn;**5.16** |     83.23&plusmn;3.55      |           3.22            |
 | WDBC          |  **98.24**&plusmn;**1.36** |     98.07&plusmn;0.85      |           0.17            |
 | Spectf        |  **81.68**&plusmn;**5.35** |     79.78&plusmn;0.19      |           1.9             |
-| Titanic       |      81.93&plusmn;2.59     |   **82.27**&plusmn;1.83    |           -0.34           |
+| Titanic       |      81.93&plusmn;2.59     |  **82.27**&plusmn;**1.83** |           -0.34           |
 | Mean Accuracy |          **84.59**         |           81.94            |           2.65            |
 
 From the above table, it can be found that LightTwinSVM is more efficient in terms of accuracy. Therefore, it outperforms sklearn's SVM on most datasets. All in all, if you have used SVM for your task/project, the LightTwinSVM program may give you a better predication accuracy for your classification task. More information on this experiment can be found in the project's paper [here](https://github.com/mir-am/LightTwinSVM/tree/master/paper).
 
 ## Acknowledgments
-- For test and experiment with the LightTwinSVM program, Wine and Pima-Indian datasets are included in the project from [UCI](https://archive.ics.uci.edu/ml/index.php) machine learning repository. 
+- For test and experiment with the LightTwinSVM program, Wine and Pima-Indian datasets are included in the project from [UCI](https://archive.ics.uci.edu/ml/index.php) machine learning repository.
+- Thanks to [Stefan van der Walt](https://github.com/stefanv) and [Nicolas P. Rougier](https://github.com/rougier) for reviewing this project, which published in the Journal of Open Source Software. (March 31, 2019) 
 - Thanks to [idejie](https://github.com/idejie) for test and support on the MacOS. (Dec 8, 2018)
