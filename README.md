@@ -179,23 +179,23 @@ TwinSVM does classification by using two non-parallel hyperplanes as opposed to 
 If you have used the LightTwinSVM program and found it helpful, please consider making a donation via [Liberapay](https://liberapay.com/mir-am/) to support this work. It also motivates me to maintain and develop new features for the program.
 
 ## Numerical Experiments
-In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy, experiments were conducted to compare it with scikit-learn's SVM on several UCI benchmark datasets. Similar to most research papers on classification, K-fold cross-validation is used to evaluate these classifiers (K was set to 5). Also, grid search was used to find the optimal values of hyper-parameters. Table below shows the accuracy comparison between the LightTwinSVM and Scikit-learn's SVM. <br />
+In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy, experiments were conducted to compare it with [scikit-learn's SVM](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) on several UCI benchmark datasets. Similar to most research papers on classification, K-fold cross-validation is used to evaluate these classifiers (K was set to 5). Also, grid search was used to find the optimal values of hyper-parameters. Table below shows the accuracy comparison between the LightTwinSVM and scikit-learn's SVM. <br />
 
-| Datasets  | LightTwinSVM | Scikit-learn's SVM | Difference in Accuracy |
-| ------------- | ------------- | ------------- | ------------- |
-| Pima-Indian  | **78.91** | 78.26 | 0.65 |
-| Australian | **87.25** | 86.81 | 0.44 |
-| Haberman  | 76.12 | **76.80** | -0.68 |
-| Cleveland  | **85.14** | 84.82 | 0.32 |
-| Sonar  | **75.16** | 64.42 | 10.74 |
-| Heart-Statlog | **85.19** | **85.19** | 0 |
-| Hepatitis | **85.81** |83.23 | 2.58 |
-| WDBC | **98.24** |98.07 | 0.17 |
-| Spectf | **80.55** |79.78 | 0.81 |
-| Titanic | **82.04** |81.71 | 0.33 |
-| Mean | **83.44** |81.90 | 1.53 |
+| Datasets      |        LightTwinSVM        |   scikit-learn's SVM       |   Difference in Accuracy  |
+| ------------- | -------------------------- | -------------------------- | ------------------------- |
+| Pima-Indian   |  **78.91**&plusmn;**3.73** |     78.26&plusmn;2.62      |           0.65            |
+| Australian    |  **87.25**&plusmn;**2.27** |     86.81&plusmn;3.22      |           0.44            |
+| Haberman      |      76.12&plusmn;4.79     |  **76.80**&plusmn;**2.68** |           -0.68           |
+| Cleveland     |  **85.14**&plusmn;**5.45** |     84.82&plusmn;4.04      |           0.32            |
+| Sonar         |  **84.62**&plusmn;**4.89** |     64.42&plusmn;6.81      |           20.2            |
+| Heart-Statlog |  **85.56**&plusmn;**2.96** |     85.19&plusmn;2.62      |           0.37            |
+| Hepatitis     |  **86.45**&plusmn;**5.16** |     83.23&plusmn;3.55      |           3.22            |
+| WDBC          |  **98.24**&plusmn;**1.36** |     98.07&plusmn;0.85      |           0.17            |
+| Spectf        |  **81.68**&plusmn;**5.35** |     79.78&plusmn;0.19      |           1.9             |
+| Titanic       |      81.93&plusmn;2.59     |   **82.27**&plusmn;1.83    |           -0.34           |
+| Mean Accuracy |          **84.59**         |           81.94            |           2.65            |
 
-From the above table, it can be found that LightTwinSVM is more efficient in terms of accuracy. Therefore, it outperforms Sklearn's SVM on most datasets. All in all, if you have used SVM for your task/project, the LightTwinSVM program may give you a better predication accuracy for your classification task. More information on this experiment can be found in [this blog post](https://mirblog.me/index.php/2018/12/28/a-accuracy-comparison-between-scikit-learns-svm-and-lighttwinsvm-program/).
+From the above table, it can be found that LightTwinSVM is more efficient in terms of accuracy. Therefore, it outperforms sklearn's SVM on most datasets. All in all, if you have used SVM for your task/project, the LightTwinSVM program may give you a better predication accuracy for your classification task. More information on this experiment can be found in the project's paper [here](https://github.com/mir-am/LightTwinSVM/tree/master/paper).
 
 ## Acknowledgments
 - For test and experiment with the LightTwinSVM program, Wine and Pima-Indian datasets are included in the project from [UCI](https://archive.ics.uci.edu/ml/index.php) machine learning repository. 
