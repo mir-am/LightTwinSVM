@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # LightTwinSVM Program - Simple and Fast
-# Version: 0.5.0 - 2019-01-01
+# Version: 0.6.0 - 2019-03-31
 # Developer: Mir, A. (mir-am@hotmail.com)
 # License: GNU General Public License v3.0
 
