@@ -19,11 +19,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - BLAS libraries' path was fixed in PowerShell script.
 - The optimizer can now be imported in the current session of PowerShell.
 - Fixed import errors for building docs using Sphinx.
-- Fixed compliation error of C++ extension module for OSX systems.
+- Fixed compilation error of C++ extension module for OSX systems.
 - Fixed spell error of the requirements file.
 
 ### Changed
-- API documentation revised according the the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) docstring guide.
+- API documentation revised according to the [numpydoc](https://numpydoc.readthedocs.io/en/latest/format.html) docstring guide.
 - The results of Numerical Experiments in the README file was updated. 
 
 ## [0.5.0] - 2019-01-01
