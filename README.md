@@ -21,10 +21,11 @@
    - [API documentation](#api-documentation)
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
-6. [Contributing](#contributing) 
-7. [FAQ](#frequently-asked-questions)
-8. [Donations](#donations)
-9. [Numerical Experiments](#numerical-experiments) 
+6. [Citing LightTwinSVM]()
+7. [Contributing](#contributing) 
+8. [FAQ](#frequently-asked-questions)
+9. [Donations](#donations)
+10. [Numerical Experiments](#numerical-experiments) 
 
 ## Intro
 LightTwinSVM is a simple and fast implementation of standard Twin Support Vector Machine. It is licensed under the terms of GNU GPL v3. Anyone who is interested in machine learning and classification can use this program for their work/projects.
@@ -101,7 +102,7 @@ When the installation is finished, a batch file "ltsvm.bat" will be created to r
 It is highly recommended to install the LightTwinSVM program automatically using the setup script. If for some reasons you still want to build the program manually, a step-by-step guide is provided [here](https://github.com/mir-am/LightTwinSVM/wiki/Building-the-LightTwinSVM-manually-on-Linux-and-OSX-systems) for Linux and OSX systems.
 
 ## User Guide
-### An exmaple of using command line interface
+### An example of using command line interface
 LightTwinSVM is a simple console application. It has 4 steps for doing classification. Each step is explained below: <br />
 **Step 1:** Choose your dataset by pressing Enter key. A file dialog window will be shown to help you find and select your dataset. CSV and LIBSVM files are supported. It is highly recommended to normalize your dataset. <br />
 ![alt text](https://github.com/mir-am/LightTwinSVM/blob/misc/img/LightTwinSVM-dataset.png)<br />
@@ -165,6 +166,30 @@ To report a problem or bug, please provide the following information:<br />
 1. Error messages<br />
 2. Output of the program.<br />
 3. Explain how to reproduce the problem if possible.
+
+## Citing LightTwinSVM
+
+[![status](http://joss.theoj.org/papers/a56708efcbf27c12352670b4647d92ca/status.svg)](http://joss.theoj.org/papers/a56708efcbf27c12352670b4647d92ca)
+
+If you use the LightTwinSVM program in your research work, please cite the following paper:
+
+- Mir et al., (2019). LightTwinSVM: A Simple and Fast Implementation of Standard Twin Support Vector Machine Classifier. Journal of Open Source Software, 4(35), 1252, https://doi.org/10.21105/joss.01252
+
+BibTeX entry:
+
+```
+@article{ltsvm2019,
+    title     = {LightTwinSVM: A Simple and Fast Implementation of Standard Twin Support Vector Machine Classifier},
+    author    = {Mir, Amir M. and Nasiri, Jalal A.},
+    journal   = {Journal of Open Source Software},
+    volume    = {4},
+    issue     = {35},
+    pages     = {1252},
+    year      = {2019},
+    doi       = {10.21105/joss.01252},
+    url       = {https://doi.org/10.21105/joss.01252}
+}
+```
 
 ## Contributing
 Thanks for considering contribution to the LightTwinSVM project. Contributions are highly appreciated and welcomed. For guidance on how to contribute to the LightTwinSVM project, please see the [contributing guideline](https://github.com/mir-am/LightTwinSVM/blob/master/CONTRIBUTING.md).
