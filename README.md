@@ -21,7 +21,7 @@
    - [API documentation](#api-documentation)
 4. [Dataset Format](#dataset-format)
 5. [Support](#support)
-6. [Citing LightTwinSVM]()
+6. [Citing LightTwinSVM](#citing-lighttwinsvm)
 7. [Contributing](#contributing) 
 8. [FAQ](#frequently-asked-questions)
 9. [Donations](#donations)
@@ -89,9 +89,11 @@ After the successful installation, LightTwinSVM program should look like this in
 ![alt text](https://raw.githubusercontent.com/mir-am/LightTwinSVM/misc/img/LightTwinSVM.png)
 
 ### Windows
-First, download Git program from [here](https://git-scm.com/) if it's not installed on your system. Also, [**Visual Studio 2015**](https://visualstudio.microsoft.com/) or newer should be installed so that C++ extension module can be compiled.
+First, download Git program from [here](https://git-scm.com/) if it's not installed on your system. Also, [**Visual Studio 2015**](https://visualstudio.microsoft.com/) or newer should be installed so that C++ extension module can be compiled. Before proceeding further, make sure that all the required Python packages are installed. Dependencies are listed [here](#dependencies). 
 
-Before proceeding further, make sure that all the required Python packages are installed. Dependencies are listed [here](#dependencies). To install the program on Windows, open a PowerShell terminal and run the following commands:
+**A note for Windows users:** If this is the first time that you will run a PowerShell script, then you need to make sure that the ExecutionPolicy is set on your system. Otherwise, you cannot run the setup script on Windows. Please check out this [answer](https://stackoverflow.com/a/4038991) on Stack Overflow that helps you set the ExecutionPolicy.
+
+To install the program on Windows, open a PowerShell terminal and run the following commands:
 ```
 git clone https://github.com/mir-am/LightTwinSVM.git
 cd LightTwinSVM && .\win-setup.ps1
