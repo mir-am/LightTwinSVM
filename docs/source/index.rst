@@ -12,6 +12,7 @@ You can read API documentation, if you want to use the LightTwinSVM's estimators
    :caption: Contents:
 
    modules
+   clfresults
 
 Indices and tables
 ==================
