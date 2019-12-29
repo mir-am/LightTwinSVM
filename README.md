@@ -203,9 +203,9 @@ TwinSVM does classification by using two non-parallel hyperplanes as opposed to 
 
 ## Donations
 <a href="http://paypal.me/mir33">
-  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" align="left" height="64" width="64" />
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" align="left" height="80" width="192" />
 </a>
-
+<br />
 
 If you have used the LightTwinSVM program and found it helpful, please consider making a donation via [PayPal](http://paypal.me/mir33) to support this work. It also motivates me to maintain the program.
 
