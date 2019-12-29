@@ -8,6 +8,7 @@
 <a href='https://lighttwinsvm.readthedocs.io/en/latest/?badge=latest'><img src='https://readthedocs.org/projects/lighttwinsvm/badge/?version=latest' alt='Documentation Status' /></a>
 <a href="https://travis-ci.org/mir-am/LightTwinSVM"><img src="https://api.travis-ci.org/mir-am/LightTwinSVM.svg?branch=master" alt="Travis-CI"></a>
 <a href="https://ci.appveyor.com/project/mir-am/lighttwinsvm"><img src="https://ci.appveyor.com/api/projects/status/c625kl28aaqvuh9g?svg=true" alt="AppVeyor"></a>
+<a href='http://paypal.me/mir33'><img src='https://img.shields.io/badge/Donate-PayPal-green.svg' alt='donation' /></a>
 </p>
 <br />
 
@@ -201,9 +202,12 @@ Thanks for considering contribution to the LightTwinSVM project. Contributions a
 TwinSVM does classification by using two non-parallel hyperplanes as opposed to a single hyperplane in the standard SVM. In TwinSVM, each hyperplane is as close as possible to samples of its own class and far away from samples of other class. To know more about TwinSVM and its optimization problems, you can read [this blog post](https://mirblog.me/index.php/2018/12/07/a-brief-intro-to-twin-support-vector-machine-classifier/ "A brief Introduction to TwinSVM classifier").
 
 ## Donations
-[![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/mir-am/)
+<a href="http://paypal.me/mir33">
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" align="left" height="64" width="64" />
+</a>
 
-If you have used the LightTwinSVM program and found it helpful, please consider making a donation via [Liberapay](https://liberapay.com/mir-am/) to support this work. It also motivates me to maintain and develop new features for the program.
+
+If you have used the LightTwinSVM program and found it helpful, please consider making a donation via [PayPal](http://paypal.me/mir33) to support this work. It also motivates me to maintain the program.
 
 ## Numerical Experiments
 In order to indicate the effectiveness of the LightTwinSVM in terms of accuracy, experiments were conducted to compare it with [scikit-learn's SVM](https://scikit-learn.org/stable/modules/generated/sklearn.svm.SVC.html) on several UCI benchmark datasets. Similar to most research papers on classification, K-fold cross-validation is used to evaluate these classifiers (K was set to 5). Also, grid search was used to find the optimal values of hyper-parameters. Table below shows the accuracy comparison between the LightTwinSVM and scikit-learn's SVM. <br />
